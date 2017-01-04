@@ -1,5 +1,6 @@
 {% extends 'assets/default.html' %}
 {% load comments %}
+{% load markdown_deux_tags %}
 
 {% block content %}
 <div id="asset_{{asset.pk}}">
@@ -15,7 +16,7 @@
 {% if user == asset.author %}
 <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">Edit</a></p>
 {% endif %}
-<p class="notes">{{asset.notes}}</p>
+<p class="notes">{{asset.notes|markdown}}</p>
 <p class="tags">
 {% if asset.tags.all %}
   Tags:

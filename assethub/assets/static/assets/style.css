@@ -26,8 +26,17 @@ div#tagscloud {
   margin-left: 1em;
   border: #ccc thin solid;
   float: right;
+  clear: right;
 }
 
+div#postlink {
+  max-width: 30em;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: 1em;
+  border: #ccc thin solid;
+  float: right;
+}
 
 div.login {
   float: right;

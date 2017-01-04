@@ -1,5 +1,6 @@
 
 <div id="tagscloud">
+  <h3>Tags</h3>
   <ul>
     {% for tag in tags %}
     <li><a href="{% url 'by_tag' tag.slug %}">{{tag.name}}</a></li>

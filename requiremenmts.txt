@@ -5,4 +5,6 @@ django-taggit-autosuggest
 django-contrib-comments
 django-vote
 social-auth-app-django
+django-markdown-deux
+django-pagedown
 pytz

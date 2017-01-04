@@ -81,6 +81,10 @@ function unfollow(username) {
 }
 </script>
 
+{% if post_form %}
+{{post_form.media}}
+{% endif %}
+
 </head>
 
 <body>
@@ -110,6 +114,9 @@ function unfollow(username) {
 
 {% tree %}
 
+<div id="postlink">
+  <p><a href="{% url 'post_asset' %}">Post an asset</a></p>
+</div>
 {% tags %}
 
 <div id="content">
