@@ -58,6 +58,7 @@ class Asset(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    follows = models.ManyToManyField(User, blank=True, related_name="follower")
 
     def get_rating(self):
         return Asset.objects.filter(author=self.user).aggregate(Sum('num_votes'))['num_votes__sum']

@@ -11,8 +11,6 @@ from taggit.models import Tag
 from models import Asset, Component, Application
 from forms import AssetForm
 
-# Create your views here.
-
 def index(request):
     latest_assets = Asset.objects.order_by('-pub_date')[:30]
     context=dict(assets=latest_assets, title='Last uploads')
@@ -57,21 +55,10 @@ def by_component_tag(request, appslug, cslug, tslug):
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
-# class AssetView(generic.DetailView):
-#     model = Asset
-#     template_name = 'assets/asset.html'
-# 
-#     def get_context_data(self, **kwargs):
-#         context = super(AssetView, self).get_context_data(**kwargs)
-#         asset = get_object_or_404(Asset, pk=self.kwargs['pk'])
-#         context['title'] = asset.title
-#         return context
-
 def asset_details(request, pk):
     asset = get_object_or_404(Asset, pk=pk)
     context = dict(asset=asset, title=str(asset))
     return render(request, 'assets/asset.html', context)
-
 
 def vote(request, asset_id, direction):
     if request.method != 'POST':
