@@ -55,6 +55,30 @@ function vote(id, direction) {
              }, 'json'
             )
 }
+
+function follow(username) {
+        $.post('/accounts/profile/'+username+'/follow/', {HTTP_X_REQUESTED:'XMLHttpRequest'},
+             function(data) {
+                 if (data.success == true) {
+                     $('div#user_'+username+' .followtext').text("You are now following this user.");
+                 } else {
+                     alert('ERROR: ' + data.error_message);
+                 }
+             }, 'json'
+            )
+}
+
+function unfollow(username) {
+        $.post('/accounts/profile/'+username+'/unfollow/', {HTTP_X_REQUESTED:'XMLHttpRequest'},
+             function(data) {
+                 if (data.success == true) {
+                     $('div#user_'+username+' .followtext').text("Now you are not following this user.");
+                 } else {
+                     alert('ERROR: ' + data.error_message);
+                 }
+             }, 'json'
+            )
+}
 </script>
 
 </head>

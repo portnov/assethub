@@ -2,9 +2,22 @@
 
 {% block content %}
 
-<p>Login: {{user.username}}</p>
-<p>Name: {{user.get_full_name}}</p>
-<p>Rating: {{user.profile.get_rating}}</p>
+<div id="user_{{buddy.username}}">
+<p>Login: {{buddy.username}}</p>
+<p>Name: {{buddy.get_full_name}}</p>
+<p>Rating: {{buddy.profile.get_rating}}</p>
+
+{% if user != buddy %}
+{% if followed %}
+<p class="followtext">
+You are following this user.
+<a href="#" onclick="unfollow('{{buddy.username}}')">Do not follow this user</a></p>
+{% else %}
+<p class="followtext"><a href="#" onclick="follow('{{buddy.username}}')">Follow this user</a></p>
+{% endif %}
+{% else %}
+<p>This is you.</p>
+{% endif %}
 
 {% if most_rated_assets %}
 <h2>Most rated assets</h2>
@@ -17,7 +30,8 @@
     {% endfor %}
 </div>
 {%else%}
-  <p>This user did not post any assets yet.</p>
+  <p>This buddy did not post any assets yet.</p>
 {%endif%}
+</div>
 
 {% endblock %}

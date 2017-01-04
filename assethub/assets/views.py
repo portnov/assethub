@@ -12,8 +12,20 @@ from models import Asset, Component, Application
 from forms import AssetForm
 
 def index(request):
+    if request.user.is_authenticated:
+        return user_feed(request, request.user)
+    else:
+        return full_feed(request)
+
+def full_feed(request):
     latest_assets = Asset.objects.order_by('-pub_date')[:30]
     context=dict(assets=latest_assets, title='Last uploads')
+    return render(request, 'assets/index.html', context)
+
+def user_feed(request, user):
+    latest_assets = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')[:30]
+    title = "Feed for user {0}".format(user.get_full_name())
+    context=dict(assets=latest_assets, title=title)
     return render(request, 'assets/index.html', context)
 
 def by_tag(request, slug):
@@ -78,6 +90,24 @@ def vote(request, asset_id, direction):
     else:
         return HttpResponseForbidden()
 
+@login_required
+def follow(request, username):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
+    buddy = get_object_or_404(User, username=username)
+    request.user.profile.follows.add(buddy)
+    response = JsonResponse({'success': True})
+    return response
+
+@login_required
+def unfollow(request, username):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
+    buddy = get_object_or_404(User, username=username)
+    request.user.profile.follows.remove(buddy)
+    response = JsonResponse({'success': True})
+    return response
+
 def current_user_profile(request):
     if request.user.is_authenticated:
         return get_user_profile(request, request.user)
@@ -91,7 +121,8 @@ def user_profile(request, username):
 def get_user_profile(request, user):
     title = "{0}'s profile".format(user.username)
     most_rated_assets = user.asset_set.order_by('-num_votes')[:5]
-    context = dict(user=user, title=title, most_rated_assets=most_rated_assets)
+    followed = request.user.profile.does_follow(user)
+    context = dict(buddy=user, followed=followed, title=title, most_rated_assets=most_rated_assets)
     return render(request, "assets/profile.html", context)
 
 @login_required

@@ -63,6 +63,9 @@ class Profile(models.Model):
     def get_rating(self):
         return Asset.objects.filter(author=self.user).aggregate(Sum('num_votes'))['num_votes__sum']
 
+    def does_follow(self, name):
+        return self.follows.filter(username=name).exists()
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
