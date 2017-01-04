@@ -93,3 +93,10 @@ p.title {
 #id_honeypot {
     display: none;
 }
+
+div.pagination {
+  text-align: center;
+  clear: both;
+  margin-top: 5ex;
+  padding: 1em;
+}

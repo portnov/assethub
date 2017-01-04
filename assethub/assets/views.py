@@ -5,11 +5,25 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from taggit.models import Tag
 
 from models import Asset, Component, Application
 from forms import AssetForm
+
+PER_PAGE=30
+
+def get_page(request, list):
+    paginator = Paginator(list, PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        result = paginator.page(page)
+    except PageNotAnInteger:
+        result = paginator.page(1)
+    except EmptyPage:
+        result = paginator.page(paginator.num_pages)
+    return result
 
 def index(request):
     if request.user.is_authenticated:
@@ -18,14 +32,16 @@ def index(request):
         return full_feed(request)
 
 def full_feed(request):
-    latest_assets = Asset.objects.order_by('-pub_date')[:30]
-    context=dict(assets=latest_assets, title='Last uploads')
+    asset_list = Asset.objects.order_by('-pub_date')[:30]
+    assets = get_page(request, asset_list)
+    context=dict(assets=assets, title='Last uploads')
     return render(request, 'assets/index.html', context)
 
 def user_feed(request, user):
-    latest_assets = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')[:30]
+    asset_list = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')[:30]
+    assets = get_page(request, asset_list)
     title = "Feed for user {0}".format(user.get_full_name())
-    context=dict(assets=latest_assets, title=title)
+    context=dict(assets=assets, title=title)
     return render(request, 'assets/index.html', context)
 
 def by_tag(request, slug):
@@ -37,7 +53,8 @@ def by_tag(request, slug):
 
 def by_application(request, appslug):
     app = get_object_or_404(Application, slug=appslug)
-    assets = Asset.objects.filter(application=app).order_by('-pub_date')
+    asset_list = Asset.objects.filter(application=app).order_by('-pub_date')
+    assets = get_page(request, asset_list)
     title = "Assets for application {}".format(app.title)
     context = dict(assets = assets, application=app, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
@@ -46,14 +63,16 @@ def by_component(request, appslug, cslug):
     app = get_object_or_404(Application, slug=appslug)
     component = get_object_or_404(Component, application=app, slug=cslug)
     title = "{} assets".format(component)
-    assets = Asset.objects.filter(application=app, component=component).order_by('-pub_date')
+    asset_list = Asset.objects.filter(application=app, component=component).order_by('-pub_date')
+    assets = get_page(request, asset_list)
     context = dict(assets = assets, application=app, component=component, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
 def by_app_tag(request, appslug, tslug):
     app = get_object_or_404(Application, slug=appslug)
     tag = get_object_or_404(Tag, slug=tslug)
-    assets = Asset.objects.filter(application=app, tags=tag).order_by('-pub_date')
+    asset_list = Asset.objects.filter(application=app, tags=tag).order_by('-pub_date')
+    assets = get_page(request, asset_list)
     title = "Assets for application {0} with tag {1}".format(app.title, tag.name)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
@@ -62,7 +81,8 @@ def by_component_tag(request, appslug, cslug, tslug):
     app = get_object_or_404(Application, slug=appslug)
     component = get_object_or_404(Component, application=app, slug=cslug)
     tag = get_object_or_404(Tag, slug=tslug)
-    assets = Asset.objects.filter(application=app, component=component, tags=tag).order_by('-pub_date')
+    asset_list = Asset.objects.filter(application=app, component=component, tags=tag).order_by('-pub_date')
+    assets = get_page(request, asset_list)
     title = "{0} assets with tag {1}".format(component, tag.name)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)

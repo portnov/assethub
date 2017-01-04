@@ -21,6 +21,23 @@
     </div>
     {% endfor %}
 </div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if assets.has_previous %}
+            <a href="?page={{ assets.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ assets.number }} of {{ assets.paginator.num_pages }}.
+        </span>
+
+        {% if assets.has_next %}
+            <a href="?page={{ assets.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
 {%else%}
   <p>No assets available.</p>
 {%endif%}
