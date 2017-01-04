@@ -39,7 +39,7 @@ def by_application(request, appslug):
     app = get_object_or_404(Application, slug=appslug)
     assets = Asset.objects.filter(application=app).order_by('-pub_date')
     title = "Assets for application {}".format(app.title)
-    context = dict(assets = assets, application=app.title, title=title, logo=app.logo)
+    context = dict(assets = assets, application=app, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
 def by_component(request, appslug, cslug):
@@ -47,7 +47,7 @@ def by_component(request, appslug, cslug):
     component = get_object_or_404(Component, application=app, slug=cslug)
     title = "{} assets".format(component)
     assets = Asset.objects.filter(application=app, component=component).order_by('-pub_date')
-    context = dict(assets = assets, component=component, title=title, logo=app.logo)
+    context = dict(assets = assets, application=app, component=component, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
 def by_app_tag(request, appslug, tslug):

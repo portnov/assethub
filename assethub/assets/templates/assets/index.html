@@ -1,6 +1,17 @@
 {% extends 'assets/default.html' %}
+{% load markdown_deux_tags %}
 
 {% block content %}
+{% if application %}
+<div class="application-notes">
+{{application.notes|markdown}}
+</div>
+{% endif %}
+{% if component %}
+<div class="component-notes">
+  {{component.notes|markdown}}
+</div>
+{% endif %}
 {% if assets %}
 <div class="assets">
     {% for asset in assets %}
