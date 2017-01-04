@@ -12,7 +12,7 @@ from vote.managers import VotableManager
 from django.contrib.auth.models import User
 
 class Application(models.Model):
-    slug = models.CharField(max_length=32)
+    slug = models.SlugField(max_length=32, unique=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
     logo = models.ImageField(upload_to='logos/', null=True, blank=True)
@@ -22,7 +22,7 @@ class Application(models.Model):
 
 class Component(models.Model):
     application = models.ForeignKey('Application', on_delete=models.CASCADE)
-    slug = models.CharField(max_length=32)
+    slug = models.SlugField(max_length=32, unique=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
 
