@@ -32,13 +32,13 @@ def index(request):
         return full_feed(request)
 
 def full_feed(request):
-    asset_list = Asset.objects.order_by('-pub_date')[:30]
+    asset_list = Asset.objects.order_by('-pub_date')
     assets = get_page(request, asset_list)
     context=dict(assets=assets, title='Last uploads')
     return render(request, 'assets/index.html', context)
 
 def user_feed(request, user):
-    asset_list = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')[:30]
+    asset_list = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')
     assets = get_page(request, asset_list)
     title = "Feed for user {0}".format(user.get_full_name())
     context=dict(assets=assets, title=title)
