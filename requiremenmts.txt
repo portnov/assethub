@@ -1,0 +1,8 @@
+Django
+Pillow
+django-taggit
+django-taggit-autosuggest
+django-contrib-comments
+django-vote
+social-auth-app-django
+pytz

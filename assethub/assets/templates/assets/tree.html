@@ -1,0 +1,16 @@
+
+<div id="navtree">
+  <ul>
+    {% for app in applications %}
+    <li><a href="{% url 'by_application' app.slug %}">{{app.title}}</a>
+      {% if app.component_set.all %}
+      <ul>
+      {% for component in app.component_set.all %}
+      <li><a href="{% url 'by_component' app.slug component.slug %}">{{component.title}}</a></li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,23 @@
+{% extends 'assets/default.html' %}
+
+{% block content %}
+
+<p>Login: {{user.username}}</p>
+<p>Name: {{user.get_full_name}}</p>
+<p>Rating: {{user.profile.get_rating}}</p>
+
+{% if most_rated_assets %}
+<h2>Most rated assets</h2>
+<div class="assets">
+    {% for asset in most_rated_assets %}
+    <div class="asset">
+      <a href="{% url 'asset' asset.pk %}"><img src='{{asset.image.url}}' alt="{{asset.title}}"/></a>
+      <p class="title"><a href="{% url 'asset' asset.pk %}">{{asset.title}}</a></p>
+    </div>
+    {% endfor %}
+</div>
+{%else%}
+  <p>This user did not post any assets yet.</p>
+{%endif%}
+
+{% endblock %}

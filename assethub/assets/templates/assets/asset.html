@@ -1,0 +1,57 @@
+{% extends 'assets/default.html' %}
+{% load comments %}
+
+{% block content %}
+<div id="asset_{{asset.pk}}">
+<img src="{{asset.image.url}}" alt="{{asset.title}}"/>
+<p class="title">
+<a href="{% url 'by_application' asset.application.slug %}">{{asset.application.title}}</a>
+{% if asset.component %}
+<a href="{% url 'by_component' asset.application.slug asset.component.slug %}">{{asset.component.title}}</a>
+{% endif %}
+: {{asset.title}} by
+<a href="{% url 'user_profile' asset.author.username %}">{{asset.author.get_full_name}}</a>
+</p>
+{% if user == asset.author %}
+<p class="edit"><a href="{% url 'edit_asset' asset.pk %}">Edit</a></p>
+{% endif %}
+<p class="notes">{{asset.notes}}</p>
+<p class="tags">
+{% if asset.tags.all %}
+  Tags:
+  {% for tag in asset.tags.all %}
+    <a href="{% url 'by_tag' tag.slug %}">{{tag.name}}</a>
+    {% if not forloop.last %}, {% endif %}
+  {% endfor %}
+{% else %}
+No tags are assigned to this asset.
+{% endif %}
+</p>
+<p>Rating: <span class="num_votes">{{asset.num_votes}}</span>
+<a href="#" onclick="vote({{asset.pk}}, 'up')">Up</a>
+<a href="#" onclick="vote({{asset.pk}}, 'down')">Down</a>
+</p>
+<p class="download"><a href="{{asset.data.url}}">Download asset</a></p>
+</div>
+
+{% render_comment_list for asset %}
+
+{% if user.is_authenticated %}
+{% get_comment_form for asset as form %}
+    <form action="{% comment_form_target %}" method="post">
+    {% csrf_token %}
+    {{ form.comment }}
+    {{ form.honeypot }}
+    {{ form.content_type }}
+    {{ form.object_pk }}
+    {{ form.timestamp }}
+    {{ form.security_hash }}
+    <input type="submit" name="submit" value="Post">
+    <input type="submit" name="preview" value="Preview">
+    <input type="hidden" name="next" value="{% url 'asset' asset.pk %}" />
+    </form>
+{% else %}
+<p>Please <a href="{% url 'login' %}">log in</a> to leave a comment.</p>
+{% endif %}
+
+{% endblock %}

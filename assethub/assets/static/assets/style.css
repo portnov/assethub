@@ -1,0 +1,86 @@
+
+body {
+  font-family: "Ubuntu", Verdana, Arial, sans-serif;
+  margin: 0;
+}
+
+div#content {
+  max-width: 100em;
+  margin: 0 auto;
+  background: #f6f6f6;
+  overflow: hidden;
+}
+
+div#navtree {
+  max-width: 30em;
+  padding-right: 1em;
+  margin-right: 1em;
+  border: #ccc thin solid;
+  float: left;
+}
+
+div#tagscloud {
+  max-width: 30em;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: 1em;
+  border: #ccc thin solid;
+  float: right;
+}
+
+
+div.login {
+  float: right;
+  padding: 0.5em;
+  color: #f5e39e;
+}
+
+div.login a {
+  color: #f5e39e;
+}
+
+h1 {
+  background: #de7008;
+  color: #f5e39e;
+  padding: 1em;
+  margin: 0;
+}
+
+h2, h3, h4 {
+  color: #9e5205;
+}
+
+.logo {
+  float: left;
+  margin: 1ex;
+}
+
+.hidden {
+  display: none;
+}
+
+a:link, a:visited {
+  color: #777;
+}
+
+a:hover {
+  color: #b8a80d;
+}
+
+div.asset {
+  background: #ddd;
+  width: 350px;
+  min-height: 350px;
+  float: left;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+}
+
+p.title {
+  margin: 5px;
+}
+
+#id_honeypot {
+    display: none;
+}

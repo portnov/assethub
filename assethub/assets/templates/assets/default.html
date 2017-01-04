@@ -1,0 +1,103 @@
+{% load staticfiles %}
+{% load navigation %}
+{% load social_auth %}
+
+<!doctype html>
+<html>
+
+<head>
+  <meta name="google-signin-client_id" content="{% google_plus_client_id %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'assets/style.css' %}" />
+{% if title %}
+<title>{{title}}</title>
+{% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+function vote(id, direction) {
+        $.post('/vote/'+id+'/'+direction+'/', {HTTP_X_REQUESTED:'XMLHttpRequest'},
+             function(data) {
+                 if (data.success == true) {
+                     $('div#asset_'+id+' .num_votes').text(data.score);
+                 } else {
+                     alert('ERROR: ' + data.error_message);
+                 }
+             }, 'json'
+            )
+}
+</script>
+
+</head>
+
+<body>
+
+{% if logo %}
+<img class='logo' src='{{logo.url}}' height='80px'/>
+{% endif %}
+
+<div class="login">
+{% if user.is_authenticated %}
+<p>Hello, <a href="{% url 'current_user_profile' %}">{{user.get_full_name}}</a>!</p>
+{% if user.is_staff %}
+<p><a href="/admin/">Administration</a></p>
+{% endif %}
+<p><a href="{% url 'logout' %}">Log out</a></p>
+{% else %}
+<p><a href="{% url 'login' %}">Log in</a></p>
+{% endif %}
+</div>
+
+{% if title %}
+<h1>
+  <a href="/">/</a>
+{{title}}
+</h1>
+{% endif %}
+
+{% tree %}
+
+{% tags %}
+
+<div id="content">
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+{% block endscripts %}
+{% endblock %}
+
+</body>
+</html>
+

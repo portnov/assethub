@@ -1,0 +1,11 @@
+{% extends 'assets/default.html' %}
+
+{% block content %}
+<form action="{{form_action}}" method="post" enctype="multipart/form-data">
+<table>
+  {% csrf_token %}
+  {{ post_form.as_table }}
+  <tr><td><input type="submit" value="Post"/></td></tr>
+</table>
+</form>
+{% endblock %}
