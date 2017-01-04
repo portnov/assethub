@@ -3,3 +3,4 @@
 *.sqlite3
 data/
 thumbnails/
+secret_settings.py
