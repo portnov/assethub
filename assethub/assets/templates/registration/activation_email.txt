@@ -1,0 +1,13 @@
+
+Hello, {{user.username}}!
+
+Somebody requested to register this email as AssetHub user.
+To complete registration, follow the link:
+
+http://localhost:8000/accounts/activate/{{activation_key}}/
+
+If you did not request registration, just ignore this message.
+
+With best regards,
+AssetHub.
+

@@ -1,0 +1,6 @@
+
+EMAIL_HOST='mail.example.com'
+EMAIL_HOST_USER='username'
+EMAIL_HOST_PASSWORD='password'
+DEFAULT_FROM_EMAIL='from@example.com'
+

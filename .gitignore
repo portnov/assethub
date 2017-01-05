@@ -4,3 +4,4 @@
 data/
 thumbnails/
 secret_settings.py
+email_settings.py

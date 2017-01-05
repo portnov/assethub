@@ -44,7 +44,10 @@ def user_profile(request, username):
 def get_user_profile(request, user):
     title = "{0}'s profile".format(user.username)
     most_rated_assets = user.asset_set.order_by('-num_votes')[:5]
-    followed = request.user.profile.does_follow(user)
+    try:
+        followed = request.user.profile.does_follow(user)
+    except AttributeError:
+        followed = False
     context = dict(buddy=user, followed=followed, title=title, most_rated_assets=most_rated_assets)
     return render(request, "assets/profile.html", context)
 

@@ -2,6 +2,7 @@ pytz
 Pillow
 markdown
 Django
+django-registration
 django-taggit
 django-taggit-autosuggest
 django-contrib-comments
