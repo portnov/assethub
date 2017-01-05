@@ -13,6 +13,7 @@
 : {{asset.title}} by
 <a href="{% url 'user_profile' asset.author.username %}">{{asset.author.get_full_name}}</a>
 </p>
+<p>License: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
 {% if user == asset.author %}
 <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">Edit</a></p>
 {% endif %}
@@ -29,8 +30,10 @@ No tags are assigned to this asset.
 {% endif %}
 </p>
 <p>Rating: <span class="num_votes">{{asset.num_votes}}</span>
+{% if user != asset.author %}
 <a href="#" onclick="vote({{asset.pk}}, 'up')">Up</a>
 <a href="#" onclick="vote({{asset.pk}}, 'down')">Down</a>
+{% endif %}
 </p>
 <p class="download"><a href="{{asset.data.url}}">Download asset</a></p>
 </div>

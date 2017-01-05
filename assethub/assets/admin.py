@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from pagedown.widgets import PagedownWidget
 
-from models import Application, Component, Asset, Profile
+from models import Application, Component, Asset, Profile, License
 
 class ProfileInline(admin.StackedInline):
     model = Profile
@@ -23,10 +23,20 @@ class ApplicationForm(ModelForm):
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationForm
 
+class LicenseForm(ModelForm):
+    class Meta:
+        model = License
+        fields = ['slug', 'title', 'notes', 'text']
+        widgets = {'notes': PagedownWidget(), 'text': PagedownWidget()}
+
+class LicenseAdmin(admin.ModelAdmin):
+    form = LicenseForm
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Application, ApplicationAdmin)
 admin.site.register(Component)
 admin.site.register(Asset)
+admin.site.register(License, LicenseAdmin)
 

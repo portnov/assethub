@@ -16,6 +16,7 @@ class Application(models.Model):
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
     logo = models.ImageField(upload_to='logos/', null=True, blank=True)
+    # url
 
     def __str__(self):
         return self.title
@@ -29,10 +30,20 @@ class Component(models.Model):
     def __str__(self):
         return self.application.title + " " + self.title
 
+class License(models.Model):
+    slug = models.SlugField(max_length=32, primary_key=True)
+    title = models.CharField(max_length=255)
+    notes = models.TextField(null=True, blank=True)
+    text = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return "{0}: {1}".format(self.slug, self.title)
+
 class Asset(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     application = models.ForeignKey('Application', on_delete=models.CASCADE)
     component = models.ForeignKey('Component', on_delete=models.CASCADE, null=True)
+    license = models.ForeignKey('License', on_delete=models.SET_NULL, null=True, blank=False)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True)
     image = models.ImageField(upload_to='thumbnails/')

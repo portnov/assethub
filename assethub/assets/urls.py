@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^asset/(?P<pk>[0-9]+)/$', views.asset.asset_details, name='asset'),
     url(r'^asset/(?P<pk>[0-9]+)/edit/$', views.asset.edit_asset, name='edit_asset'),
     url(r'^vote/(?P<asset_id>[0-9]+)/(?P<direction>up|down)/$', views.asset.vote, name='vote'),
+    url(r'^license/(?P<slug>[-\w]+)/$', views.asset.license, name='license'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/follow/$', views.users.follow, name='follow_user'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/unfollow/$', views.users.unfollow, name='unfollow_user'),
     url(r'^accounts/profile/(?P<username>[-\w]+)$', views.users.user_profile, name='user_profile'),

@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from taggit.models import Tag
 
-from assets.models import Asset, Component, Application
+from assets.models import Asset, Component, Application, License
 from assets.forms import AssetForm
 from assets.views.common import get_page
 
@@ -134,4 +134,9 @@ def edit_asset(request, pk):
     title = "Edit an asset"
     context = dict(post_form=form, title=title, form_action=reverse('edit_asset', args=[pk]))
     return render(request, 'assets/post.html', context)
+
+def license(request, slug):
+    license = get_object_or_404(License, slug=slug)
+    context = dict(license=license, title=str(license))
+    return render(request, 'assets/license.html', context)
 
