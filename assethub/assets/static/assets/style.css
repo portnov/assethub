@@ -48,6 +48,10 @@ div.login a {
   color: #f5e39e;
 }
 
+div.login p {
+  line-height: 0.5;
+}
+
 div.gravatar-profile {
   float: right;
   padding: 1ex;
