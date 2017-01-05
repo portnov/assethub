@@ -13,7 +13,9 @@
 : {{asset.title}} by
 <a href="{% url 'user_profile' asset.author.username %}">{{asset.author.get_full_name}}</a>
 </p>
+{% if asset.license %}
 <p>License: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
+{% endif %}
 {% if user == asset.author %}
 <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">Edit</a></p>
 {% endif %}
