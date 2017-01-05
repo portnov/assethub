@@ -4,8 +4,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 from pagedown.widgets import PagedownWidget
+from modeltranslation.admin import TranslationAdmin
 
 from models import Application, Component, Asset, Profile, License
+import assets.translation
 
 class ProfileInline(admin.StackedInline):
     model = Profile
@@ -20,8 +22,11 @@ class ApplicationForm(ModelForm):
         fields = ['slug', 'title', 'url', 'notes', 'logo']
         widgets = {'notes': PagedownWidget()}
 
-class ApplicationAdmin(admin.ModelAdmin):
+class ApplicationAdmin(TranslationAdmin):
     form = ApplicationForm
+
+class ComponentAdmin(TranslationAdmin):
+    pass
 
 class LicenseForm(ModelForm):
     class Meta:
@@ -36,7 +41,7 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Application, ApplicationAdmin)
-admin.site.register(Component)
+admin.site.register(Component, ComponentAdmin)
 admin.site.register(Asset)
 admin.site.register(License, LicenseAdmin)
 

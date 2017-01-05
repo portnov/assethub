@@ -111,7 +111,7 @@ def by_component_version(request, appslug, cslug, verstring):
 
 def asset_details(request, pk):
     asset = get_object_or_404(Asset, pk=pk)
-    context = dict(asset=asset, title=str(asset), application=asset.application, component=asset.component)
+    context = dict(asset=asset, title=unicode(asset), application=asset.application, component=asset.component)
     return render(request, 'assets/asset.html', context)
 
 def vote(request, asset_id, direction):

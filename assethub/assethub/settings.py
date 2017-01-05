@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'modeltranslation',
     'django_gravatar',
     'markdown_deux',
     'pagedown',
@@ -143,7 +144,14 @@ USE_I18N = True
 USE_L10N = True
 
 LOCALE_PATHS = (BASE_DIR + "/locale", )
-print LOCALE_PATHS
+LANGUAGES = (
+        ('en', 'English'),
+        ('ru', 'Russian'),
+    )
+DEFAULT_LANGUAGE='en'
+MODELTRANSLATION_DEFAULT_LANGUAGE='en'
+MODELTRANSLATION_TRANSLATION_REGISTRY='assets.translation'
+MODELTRANSLATION_AUTO_POPULATE=True
 
 USE_TZ = True
 
