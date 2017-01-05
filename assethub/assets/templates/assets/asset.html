@@ -12,7 +12,11 @@
       <a href="{% url 'by_component' asset.application.slug asset.component.slug %}">{{asset.component.title}}</a>
       {% endif %}
     : {{asset.title}} by
-    {% user_link asset.author %}
+    {% if asset.original_author %}
+      {{asset.original_author}}
+    {% else %}
+      {% user_link asset.author %}
+    {% endif %}
   </p>
   {% if asset.license %}
   <p>License: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
@@ -38,6 +42,10 @@
   <a href="#" onclick="vote({{asset.pk}}, 'down')">Down</a>
   {% endif %}
   </p>
+  {% if asset.version %}
+  <p>Asset version: {{asset.version}}</p>
+  {% endif %}
+  <p>Compatible application versions: {{asset.get_app_versions}}</p>
   <p class="download"><a href="{{asset.data.url}}">Download asset</a></p>
   {% if asset.component.install_instructions %}
   <div class="install-instructions">

@@ -15,7 +15,7 @@ class AssetForm(ModelForm):
 
     class Meta:
         model = Asset
-        fields = ['license', 'original_author', 'creation_date', 'title', 'notes', 'image', 'data', 'url', 'version', 'tags']
+        fields = ['license', 'original_author', 'creation_date', 'title', 'notes', 'image', 'data', 'url', 'version', 'app_version_min', 'app_version_max', 'tags']
         widgets = {'notes': PagedownWidget()}
 
     def clean_image(self):

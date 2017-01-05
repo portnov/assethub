@@ -13,3 +13,5 @@ django-pagedown
 djangorestframework
 django-filter
 django-gravatar2
+django-versionfield2
+

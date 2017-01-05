@@ -5,11 +5,12 @@ from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
+
 
 from taggit_autosuggest.managers import TaggableManager
 from vote.managers import VotableManager
-
-from django.contrib.auth.models import User
+from versionfield import VersionField
 
 class Application(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
@@ -54,13 +55,24 @@ class Asset(models.Model):
     data = models.FileField(upload_to='data/')
     url = models.URLField(null=True, blank=True)
     pub_date = models.DateTimeField('Published')
-    version = models.CharField(max_length=10, null=True, blank=True)
+    version = VersionField(null=True, blank=True, number_bits=[8,8,8,8])
+    app_version_min = VersionField(verbose_name="Minimum compatible application version", null=True, blank=True, number_bits=[8,8,8,8])
+    app_version_max = VersionField(verbose_name="Maximum compatible application version", null=True, blank=True, number_bits=[8,8,8,8])
     tags = TaggableManager(blank=True)
     num_votes = models.PositiveIntegerField(default=0)
     votes = VotableManager(extra_field='num_votes')
 
     def get_tags(self):
         return ", ".join([tag.name for tag in self.tags.all()])
+
+    def get_app_versions(self):
+        if not self.app_version_min and not self.app_version_max:
+            return "any"
+        if self.app_version_min and not self.app_version_max:
+            return ">= {}".format(self.app_version_min)
+        if not self.app_version_min and self.app_version_max:
+            return "<= {}".format(self.app_version_max)
+        return ">= {0} and <= {1}".format(self.app_version_min, self.app_version_max)
 
     def __str__(self):
         result = ""
