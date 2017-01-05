@@ -17,7 +17,7 @@ class UserAdmin(BaseUserAdmin):
 class ApplicationForm(ModelForm):
     class Meta:
         model = Application
-        fields = ['slug', 'title', 'notes', 'logo']
+        fields = ['slug', 'title', 'url', 'notes', 'logo']
         widgets = {'notes': PagedownWidget()}
 
 class ApplicationAdmin(admin.ModelAdmin):

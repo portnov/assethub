@@ -12,18 +12,18 @@ from vote.managers import VotableManager
 from django.contrib.auth.models import User
 
 class Application(models.Model):
-    slug = models.SlugField(max_length=32, unique=True)
+    slug = models.SlugField(max_length=32, primary_key=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
     logo = models.ImageField(upload_to='logos/', null=True, blank=True)
-    # url
+    url = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.title
 
 class Component(models.Model):
     application = models.ForeignKey('Application', on_delete=models.CASCADE)
-    slug = models.SlugField(max_length=32, unique=True)
+    slug = models.SlugField(max_length=32, primary_key=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
 
@@ -50,7 +50,7 @@ class Asset(models.Model):
     data = models.FileField(upload_to='data/')
     url = models.URLField(null=True, blank=True)
     pub_date = models.DateTimeField('Published')
-    version = models.CharField(max_length=10, null=True)
+    version = models.CharField(max_length=10, null=True, blank=True)
     tags = TaggableManager(blank=True)
     num_votes = models.PositiveIntegerField(default=0)
     votes = VotableManager(extra_field='num_votes')
