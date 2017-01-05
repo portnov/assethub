@@ -26,6 +26,8 @@ class Component(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
+    upload_instructions = models.TextField(null=True, blank=True)
+    install_instructions = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.application.title + " " + self.title

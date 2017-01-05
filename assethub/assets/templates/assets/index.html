@@ -4,11 +4,13 @@
 
 {% block content %}
 {% if application %}
+<h2>Application: <a href="{{application.url}}">{{application}}</a></h2>
 <div class="application-notes">
 {{application.notes|markdown}}
 </div>
 {% endif %}
 {% if component %}
+<h2>Component: <a href="{% url 'by_component' application.slug component.slug %}">{{component.title}}</a></h2>
 <div class="component-notes">
   {{component.notes|markdown}}
 </div>
