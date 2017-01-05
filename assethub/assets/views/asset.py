@@ -6,8 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 from taggit.models import Tag
+from versionfield.utils import convert_version_string_to_int
 
 from assets.models import Asset, Component, Application, License
 from assets.forms import AssetForm
@@ -76,6 +78,33 @@ def by_component_tag(request, appslug, cslug, tslug):
     asset_list = Asset.objects.filter(application=app, component=component, tags=tag).order_by('-pub_date')
     assets = get_page(request, asset_list)
     title = "{0} assets with tag {1}".format(component, tag.name)
+    context = dict(assets = assets, title=title, logo=app.logo)
+    return render(request, 'assets/index.html', context)
+
+def by_version(request, appslug, verstring):
+    try:
+        version = convert_version_string_to_int(verstring, [8,8,8,8])
+    except (ValueError, NotImplementedError):
+        raise Http404
+
+    app = get_object_or_404(Application, slug=appslug)
+    asset_list = Asset.objects.filter(Q(application=app) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
+    assets = get_page(request, asset_list)
+    title = "Assets for application {0} compatible with version {1}".format(app, verstring)
+    context = dict(assets = assets, title=title, logo=app.logo)
+    return render(request, 'assets/index.html', context)
+
+def by_component_version(request, appslug, cslug, verstring):
+    try:
+        version = convert_version_string_to_int(verstring, [8,8,8,8])
+    except (ValueError, NotImplementedError):
+        raise Http404
+
+    app = get_object_or_404(Application, slug=appslug)
+    component = get_object_or_404(Component, slug=cslug)
+    asset_list = Asset.objects.filter(Q(application=app) & Q(component=component) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
+    assets = get_page(request, asset_list)
+    title = "{0} assets compatible with version {1}".format(component, verstring)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
