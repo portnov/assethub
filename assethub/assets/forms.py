@@ -3,6 +3,7 @@ from django import forms
 from django.forms import ModelForm
 from django.db import models
 from django.core.files.images import get_image_dimensions
+from django.contrib.auth.models import User
 
 from pagedown.widgets import PagedownWidget
 
@@ -27,4 +28,8 @@ class AssetForm(ModelForm):
                raise forms.ValidationError("The image is too large: {0}x{1}; maximum size allowed is {2}px".format(w,h,MAX_IMAGE_SIZE))
         return image
 
+class ProfileForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
 

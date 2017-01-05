@@ -21,6 +21,7 @@ You are following this user.
 {% endif %}
 {% else %}
 <p>This is you.</p>
+<p><a href="{% url 'edit_profile' %}">Edit your profile details</a></p>
 {% endif %}
 <p><a href="{% url 'user_feed' buddy.username %}">Go to {{buddy.get_full_name}}'s feed</a></p>
 

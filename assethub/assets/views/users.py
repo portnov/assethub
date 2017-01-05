@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from taggit.models import Tag
 
 from assets.models import Asset, Component, Application
-from assets.forms import AssetForm
+from assets.forms import AssetForm, ProfileForm
 from assets.views.common import get_page
 
 @login_required
@@ -56,4 +56,20 @@ def get_users_list(request):
     users = get_page(request, users_list)
     context = dict(users=users, title = "List of users")
     return render(request, "assets/users.html", context)
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            new_user = form.save()
+            new_user.save()
+            return HttpResponseRedirect(reverse('user_profile', args=[user.username]))
+    else:
+        form = ProfileForm(instance=user)
+
+    title = "Edit profile"
+    context = dict(form=form, title=title, form_action=reverse('edit_profile'))
+    return render(request, 'assets/edit_profile.html', context)
 
