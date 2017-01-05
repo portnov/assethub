@@ -1,6 +1,7 @@
 *.pyc
 *.swp
 *.sqlite3
+*.mo
 data/
 thumbnails/
 secret_settings.py

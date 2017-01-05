@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
@@ -34,14 +35,14 @@ def get_user_feed(request, username):
 def user_feed(request, user):
     asset_list = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')
     assets = get_page(request, asset_list)
-    title = "Feed for user {0}".format(user.get_full_name())
+    title = _("Feed for user {0}").format(user.get_full_name())
     context=dict(assets=assets, title=title)
     return render(request, 'assets/index.html', context)
 
 def by_tag(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
     assets = Asset.objects.filter(tags=tag).order_by('-pub_date')
-    title = "Assets with tag {}".format(tag.name)
+    title = _("Assets with tag {}").format(tag.name)
     context = dict(assets = assets, tag=tag.name, title=title)
     return render(request, 'assets/index.html', context)
 
@@ -49,14 +50,14 @@ def by_application(request, appslug):
     app = get_object_or_404(Application, slug=appslug)
     asset_list = Asset.objects.filter(application=app).order_by('-pub_date')
     assets = get_page(request, asset_list)
-    title = "Assets for application {}".format(app.title)
+    title = _("Assets for application {}").format(app.title)
     context = dict(assets = assets, application=app, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
 def by_component(request, appslug, cslug):
     app = get_object_or_404(Application, slug=appslug)
     component = get_object_or_404(Component, application=app, slug=cslug)
-    title = "{} assets".format(component)
+    title = _("{} assets").format(component)
     asset_list = Asset.objects.filter(application=app, component=component).order_by('-pub_date')
     assets = get_page(request, asset_list)
     context = dict(assets = assets, application=app, component=component, title=title, logo=app.logo)
@@ -67,7 +68,7 @@ def by_app_tag(request, appslug, tslug):
     tag = get_object_or_404(Tag, slug=tslug)
     asset_list = Asset.objects.filter(application=app, tags=tag).order_by('-pub_date')
     assets = get_page(request, asset_list)
-    title = "Assets for application {0} with tag {1}".format(app.title, tag.name)
+    title = _("Assets for application {0} with tag {1}").format(app.title, tag.name)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
@@ -77,7 +78,7 @@ def by_component_tag(request, appslug, cslug, tslug):
     tag = get_object_or_404(Tag, slug=tslug)
     asset_list = Asset.objects.filter(application=app, component=component, tags=tag).order_by('-pub_date')
     assets = get_page(request, asset_list)
-    title = "{0} assets with tag {1}".format(component, tag.name)
+    title = _("{0} assets with tag {1}").format(component, tag.name)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
@@ -90,7 +91,7 @@ def by_version(request, appslug, verstring):
     app = get_object_or_404(Application, slug=appslug)
     asset_list = Asset.objects.filter(Q(application=app) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
     assets = get_page(request, asset_list)
-    title = "Assets for application {0} compatible with version {1}".format(app, verstring)
+    title = _("Assets for application {0} compatible with version {1}").format(app, verstring)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
@@ -104,7 +105,7 @@ def by_component_version(request, appslug, cslug, verstring):
     component = get_object_or_404(Component, slug=cslug)
     asset_list = Asset.objects.filter(Q(application=app) & Q(component=component) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
     assets = get_page(request, asset_list)
-    title = "{0} assets compatible with version {1}".format(component, verstring)
+    title = _("{0} assets compatible with version {1}").format(component, verstring)
     context = dict(assets = assets, title=title, logo=app.logo)
     return render(request, 'assets/index.html', context)
 
@@ -151,7 +152,7 @@ def post_asset(request, appslug, cslug):
         form.application = application
         form.component = component
 
-    title = "Post an asset"
+    title = _("Post an asset")
     context = dict(post_form=form, title=title, application=application, component=component, form_action=reverse('post_asset', args=[appslug, cslug]))
     return render(request, 'assets/post.html', context)
 
@@ -170,7 +171,7 @@ def edit_asset(request, pk):
     else:
         form = AssetForm(instance=asset)
 
-    title = "Edit an asset"
+    title = _("Edit an asset")
     context = dict(post_form=form, title=title, form_action=reverse('edit_asset', args=[pk]))
     return render(request, 'assets/post.html', context)
 

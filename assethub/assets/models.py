@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 
 from taggit_autosuggest.managers import TaggableManager
 from vote.managers import VotableManager
@@ -31,7 +31,7 @@ class Component(models.Model):
     install_instructions = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.application.title + " " + self.title
+        return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title)
 
 class License(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
@@ -40,25 +40,25 @@ class License(models.Model):
     text = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return "{0}: {1}".format(self.slug, self.title)
+        return pgettext_lazy("license title", "{0}: {1}").format(self.slug, self.title)
 
 class Asset(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    application = models.ForeignKey('Application', on_delete=models.CASCADE)
-    component = models.ForeignKey('Component', on_delete=models.CASCADE, null=True)
-    license = models.ForeignKey('License', on_delete=models.SET_NULL, null=True, blank=False)
-    original_author = models.CharField(max_length=255, null=True, blank=True)
-    creation_date = models.DateTimeField('Originally created', null=True, blank=True)
-    title = models.CharField(max_length=255)
-    notes = models.TextField(null=True)
-    image = models.ImageField(upload_to='thumbnails/')
-    data = models.FileField(upload_to='data/')
-    url = models.URLField(null=True, blank=True)
-    pub_date = models.DateTimeField('Published')
-    version = VersionField(null=True, blank=True, number_bits=[8,8,8,8])
-    app_version_min = VersionField(verbose_name="Minimum compatible application version", null=True, blank=True, number_bits=[8,8,8,8])
-    app_version_max = VersionField(verbose_name="Maximum compatible application version", null=True, blank=True, number_bits=[8,8,8,8])
-    tags = TaggableManager(blank=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("author"))
+    application = models.ForeignKey('Application', on_delete=models.CASCADE, verbose_name=_("application"))
+    component = models.ForeignKey('Component', on_delete=models.CASCADE, null=True, verbose_name=_("component"))
+    license = models.ForeignKey('License', on_delete=models.SET_NULL, null=True, blank=False, verbose_name=_("license"))
+    original_author = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("original author"))
+    creation_date = models.DateTimeField(null=True, blank=True, verbose_name=_("Originally created"))
+    title = models.CharField(max_length=255, verbose_name=_("title"))
+    notes = models.TextField(null=True, verbose_name=_("description"))
+    image = models.ImageField(upload_to='thumbnails/', verbose_name=_("thumbnail"))
+    data = models.FileField(upload_to='data/', verbose_name=_("data file"))
+    url = models.URLField(null=True, blank=True, verbose_name=_("URL"))
+    pub_date = models.DateTimeField(verbose_name=_("date published"))
+    version = VersionField(null=True, blank=True, number_bits=[8,8,8,8], verbose_name=_("asset version"))
+    app_version_min = VersionField(verbose_name=_("Minimum compatible application version"), null=True, blank=True, number_bits=[8,8,8,8])
+    app_version_max = VersionField(verbose_name=_("Maximum compatible application version"), null=True, blank=True, number_bits=[8,8,8,8])
+    tags = TaggableManager(blank=True, verbose_name=_("tags"))
     num_votes = models.PositiveIntegerField(default=0)
     votes = VotableManager(extra_field='num_votes')
 

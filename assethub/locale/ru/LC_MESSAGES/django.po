@@ -1,0 +1,146 @@
+# AssetHub
+# Copyright (C) 2017 Ilya Portnov
+# This file is distributed under the same license as the AssetHub package.
+# Ilya Portnov <portnov84@rambler.ru>, 2017
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-05 19:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: assets/forms.py:29
+#, python-brace-format
+msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
+msgstr "Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
+
+#: assets/models.py:34
+#, python-brace-format
+msgctxt "component title"
+msgid "{0} {1}"
+msgstr "{1} {0}"
+
+#: assets/models.py:43
+#, python-brace-format
+msgctxt "license title"
+msgid "{0}: {1}"
+msgstr "{0}: {1}"
+
+#: assets/models.py:46
+msgid "author"
+msgstr "автор"
+
+#: assets/models.py:47
+msgid "application"
+msgstr "приложение"
+
+#: assets/models.py:48
+msgid "component"
+msgstr "компонент"
+
+#: assets/models.py:49
+msgid "license"
+msgstr "лицензия"
+
+#: assets/models.py:50
+msgid "original author"
+msgstr "автор оригинала"
+
+#: assets/models.py:51
+msgid "Originally created"
+msgstr "изначально создан"
+
+#: assets/models.py:52
+msgid "title"
+msgstr "название"
+
+#: assets/models.py:53
+msgid "description"
+msgstr "описание"
+
+#: assets/models.py:54
+msgid "thumbnail"
+msgstr "миниатюра"
+
+#: assets/models.py:55
+msgid "data file"
+msgstr "файл с данными"
+
+#: assets/models.py:56
+msgid "URL"
+msgstr "URL"
+
+#: assets/models.py:57
+msgid "date published"
+msgstr "дата публикации"
+
+#: assets/models.py:58
+msgid "asset version"
+msgstr "версия файла"
+
+#: assets/models.py:59
+msgid "Minimum compatible application version"
+msgstr "минимальная совместимая версия приложения"
+
+#: assets/models.py:60
+msgid "Maximum compatible application version"
+msgstr "Максимальная совместимая версия приложения"
+
+#: assets/models.py:61
+msgid "tags"
+msgstr "теги"
+
+#: assets/views/asset.py:38
+#, python-brace-format
+msgid "Feed for user {0}"
+msgstr "Лента пользователя {0}"
+
+#: assets/views/asset.py:45
+msgid "Assets with tag {}"
+msgstr "Файлы с тегом {}"
+
+#: assets/views/asset.py:53
+msgid "Assets for application {}"
+msgstr "Файлы для приложения {}"
+
+#: assets/views/asset.py:60
+msgid "{} assets"
+msgstr "Файлы {}"
+
+#: assets/views/asset.py:71
+#, python-brace-format
+msgid "Assets for application {0} with tag {1}"
+msgstr "Файлы для приложения {0} с тегом {1}"
+
+#: assets/views/asset.py:81
+#, python-brace-format
+msgid "{0} assets with tag {1}"
+msgstr "Файлы {0} с тегом {1}"
+
+#: assets/views/asset.py:94
+#, python-brace-format
+msgid "Assets for application {0} compatible with version {1}"
+msgstr "Файлы для приложения {0}, совместимые с версией {1}"
+
+#: assets/views/asset.py:108
+#, python-brace-format
+msgid "{0} assets compatible with version {1}"
+msgstr "Файлы {0}, совместимые с версией {1}"
+
+#: assets/views/asset.py:155
+msgid "Post an asset"
+msgstr "Поместить файл"
+
+#: assets/views/asset.py:174
+msgid "Edit an asset"
+msgstr "Редактировать файл"
