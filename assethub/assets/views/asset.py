@@ -25,6 +25,10 @@ def full_feed(request):
     context=dict(assets=assets, title='Last uploads')
     return render(request, 'assets/index.html', context)
 
+def get_user_feed(request, username):
+    user = get_object_or_404(User, username=username)
+    return user_feed(request, user)
+
 def user_feed(request, user):
     asset_list = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')
     assets = get_page(request, asset_list)

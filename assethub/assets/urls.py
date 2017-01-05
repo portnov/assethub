@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^license/(?P<slug>[-\w]+)/$', views.asset.license, name='license'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/follow/$', views.users.follow, name='follow_user'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/unfollow/$', views.users.unfollow, name='unfollow_user'),
+    url(r'^accounts/profile/(?P<username>[-\w]+)/feed/$', views.asset.get_user_feed, name='user_feed'),
     url(r'^accounts/profile/(?P<username>[-\w]+)$', views.users.user_profile, name='user_profile'),
     url(r'^accounts/profile/$', views.users.current_user_profile, name='current_user_profile'),
     url(r'^accounts/$', views.users.get_users_list, name='users_list'),
