@@ -1,6 +1,7 @@
 {% extends 'assets/default.html' %}
-{% load comments %}
 {% load markdown_deux_tags %}
+{% load comments %}
+{% load social_auth %}
 
 {% block content %}
 <div id="asset_{{asset.pk}}">
@@ -11,7 +12,7 @@
       <a href="{% url 'by_component' asset.application.slug asset.component.slug %}">{{asset.component.title}}</a>
       {% endif %}
     : {{asset.title}} by
-    <a href="{% url 'user_profile' asset.author.username %}">{{asset.author.get_full_name}}</a>
+    {% user_link asset.author %}
   </p>
   {% if asset.license %}
   <p>License: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>

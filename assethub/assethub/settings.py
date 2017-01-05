@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_gravatar',
     'markdown_deux',
     'pagedown',
     'rest_framework',

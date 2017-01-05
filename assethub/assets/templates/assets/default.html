@@ -95,7 +95,7 @@ function unfollow(username) {
 
 <div class="login">
 {% if user.is_authenticated %}
-<p>Hello, <a href="{% url 'current_user_profile' %}">{{user.get_full_name}}</a>!</p>
+<p>Hello, {% user_link user %}!</p>
 {% if user.is_staff %}
 <p><a href="/admin/">Administration</a></p>
 {% endif %}

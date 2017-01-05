@@ -11,3 +11,4 @@ django-markdown-deux
 django-pagedown
 djangorestframework
 django-filter
+django-gravatar2

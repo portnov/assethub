@@ -1,11 +1,12 @@
 {% extends 'assets/default.html' %}
 {% load navigation %}
+{% load social_auth %}
 
 {% block content %}
 <div class="users-list">
   <ul>
   {% for user in users %}
-  <li><a href="{% url 'user_profile' user.username %}">{{user.get_full_name}}</a></li>
+  <li>{% user_link user %}</li>
   {% endfor %}
   </ul>
 </div>

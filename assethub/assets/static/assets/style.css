@@ -48,6 +48,12 @@ div.login a {
   color: #f5e39e;
 }
 
+div.gravatar-profile {
+  float: right;
+  padding: 1ex;
+  border: #ccc thin solid;
+}
+
 h1 {
   background: #de7008;
   color: #f5e39e;

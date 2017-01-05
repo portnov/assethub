@@ -1,8 +1,12 @@
 {% extends 'assets/default.html' %}
+{% load gravatar %}
 
 {% block content %}
 
 <div id="user_{{buddy.username}}">
+  <div class="gravatar-profile">
+    {% gravatar buddy.email 64 %}
+  </div>
 <p>Login: {{buddy.username}}</p>
 <p>Name: {{buddy.get_full_name}}</p>
 <p>Rating: {{buddy.profile.get_rating}}</p>
