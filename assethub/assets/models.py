@@ -46,6 +46,8 @@ class Asset(models.Model):
     application = models.ForeignKey('Application', on_delete=models.CASCADE)
     component = models.ForeignKey('Component', on_delete=models.CASCADE, null=True)
     license = models.ForeignKey('License', on_delete=models.SET_NULL, null=True, blank=False)
+    original_author = models.CharField(max_length=255, null=True, blank=True)
+    creation_date = models.DateTimeField('Originally created', null=True, blank=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True)
     image = models.ImageField(upload_to='thumbnails/')
