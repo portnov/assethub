@@ -1,5 +1,6 @@
 {% extends 'assets/default.html' %}
 {% load markdown_deux_tags %}
+{% load navigation %}
 
 {% block content %}
 {% if application %}
@@ -22,21 +23,7 @@
     {% endfor %}
 </div>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if assets.has_previous %}
-            <a href="?page={{ assets.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ assets.number }} of {{ assets.paginator.num_pages }}.
-        </span>
-
-        {% if assets.has_next %}
-            <a href="?page={{ assets.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-</div>
+{% pagination assets %}
 
 {%else%}
   <p>No assets available.</p>

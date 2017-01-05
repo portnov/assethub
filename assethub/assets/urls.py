@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^accounts/profile/(?P<username>[-\w]+)/unfollow/$', views.unfollow, name='unfollow_user'),
     url(r'^accounts/profile/(?P<username>[-\w]+)$', views.user_profile, name='user_profile'),
     url(r'^accounts/profile/$', views.current_user_profile, name='current_user_profile'),
+    url(r'^accounts/$', views.get_users_list, name='users_list'),
     url(r'^post/$', views.post_asset, name='post_asset'),
     url(r'^(?P<appslug>[-\w]+)/$', views.by_application, name='by_application'),
     url(r'^(?P<appslug>[-\w]+)/tag/(?P<tslug>[-\w]+)/$', views.by_app_tag, name='by_app_tag'),

@@ -145,6 +145,12 @@ def get_user_profile(request, user):
     context = dict(buddy=user, followed=followed, title=title, most_rated_assets=most_rated_assets)
     return render(request, "assets/profile.html", context)
 
+def get_users_list(request):
+    users_list = User.objects.order_by('username')
+    users = get_page(request, users_list)
+    context = dict(users=users, title = "List of users")
+    return render(request, "assets/users.html", context)
+
 @login_required
 def post_asset(request):
     if request.method == "POST":

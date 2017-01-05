@@ -17,3 +17,7 @@ def tags():
     tags = Tag.objects.all()
     return {'tags': tags}
 
+@register.inclusion_tag('assets/pagination.html')
+def pagination(objects):
+    return {'objects': objects}
+
