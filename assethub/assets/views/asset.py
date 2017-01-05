@@ -77,7 +77,7 @@ def by_component_tag(request, appslug, cslug, tslug):
 
 def asset_details(request, pk):
     asset = get_object_or_404(Asset, pk=pk)
-    context = dict(asset=asset, title=str(asset))
+    context = dict(asset=asset, title=str(asset), application=asset.application, component=asset.component)
     return render(request, 'assets/asset.html', context)
 
 def vote(request, asset_id, direction):
@@ -99,21 +99,27 @@ def vote(request, asset_id, direction):
         return HttpResponseForbidden()
 
 @login_required
-def post_asset(request):
+def post_asset(request, appslug, cslug):
+    application = get_object_or_404(Application, slug=appslug)
+    component = get_object_or_404(Component, slug=cslug)
     if request.method == "POST":
         form = AssetForm(request.POST, request.FILES)
         if form.is_valid():
             new_asset = form.save(commit=False)
             new_asset.author = request.user
             new_asset.pub_date = timezone.now()
+            new_asset.application = application
+            new_asset.component = component
             new_asset.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse('asset', args=[new_asset.pk]))
     else:
         form = AssetForm()
+        form.application = application
+        form.component = component
 
     title = "Post an asset"
-    context = dict(post_form=form, title=title, form_action=reverse('post_asset'))
+    context = dict(post_form=form, title=title, application=application, component=component, form_action=reverse('post_asset', args=[appslug, cslug]))
     return render(request, 'assets/post.html', context)
 
 @login_required

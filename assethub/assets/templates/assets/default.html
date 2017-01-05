@@ -114,9 +114,13 @@ function unfollow(username) {
 
 {% tree %}
 
-<div id="postlink">
-  <p><a href="{% url 'post_asset' %}">Post an asset</a></p>
-</div>
+{% if application %}
+  {% if component %}
+  <div id="postlink">
+    <p><a href="{% url 'post_asset' application.slug component.slug %}">Post an asset</a></p>
+  </div>
+  {% endif %}
+{% endif %}
 {% tags %}
 
 <div id="content">

@@ -1,6 +1,19 @@
 {% extends 'assets/default.html' %}
+{% load markdown_deux_tags %}
 
 {% block content %}
+{% if application %}
+<p>Application: <a href="{% url 'by_application' application.slug %}">{{application.title}}</a></p>
+{% endif %}
+{% if component %}
+<p>Component: <a href="{% url 'by_component' application.slug component.slug %}">{{component.title}}</a></p>
+{% endif %}
+{% if component.upload_instructions %}
+<div class="upload-instructions">
+  <h3>Upload instructions</h3>
+  {{component.upload_instructions|markdown}}
+</div>
+{% endif %}
 <form action="{{form_action}}" method="post" enctype="multipart/form-data">
 <table>
   {% csrf_token %}
