@@ -18,6 +18,6 @@ def asset_title(asset, as_link):
     return {'asset': asset, 'as_link': as_link}
 
 @register.inclusion_tag('assets/asset_common.html')
-def asset_common(asset, verbose):
-    return {'asset': asset, 'verbose': verbose}
+def asset_common(user, asset, verbose):
+    return {'user': user, 'asset': asset, 'verbose': verbose}
 

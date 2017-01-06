@@ -24,7 +24,7 @@
       <a href="{% url 'asset' asset.pk %}"><img class="thumbnail" src='{{asset.image.url}}' alt="{{asset.title}}"/></a>
       <div class="thumbnail-description">
         <p class="title">{% asset_title asset True %}</p>
-        {% asset_common asset False %}
+        {% asset_common user asset False %}
       </div>
     </div>
     {% endfor %}
