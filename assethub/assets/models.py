@@ -22,7 +22,7 @@ class Application(models.Model):
     url = models.URLField(null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.title.encode('utf-8')
 
 class Component(models.Model):
     application = models.ForeignKey('Application', on_delete=models.CASCADE)
@@ -33,7 +33,7 @@ class Component(models.Model):
     install_instructions = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title)
+        return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title).encode('utf-8')
 
 class License(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)

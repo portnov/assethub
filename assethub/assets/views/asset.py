@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest, JsonResponse, HttpResponseRedirect
 from django.views import generic
@@ -13,7 +15,7 @@ from taggit.models import Tag
 from versionfield.utils import convert_version_string_to_int
 
 from assets.models import Asset, Component, Application, License
-from assets.forms import AssetForm
+from assets.forms import AssetForm, SearchForm
 from assets.views.common import get_page
 
 def show_assets_list(request, assets_list, **kwargs):
@@ -21,33 +23,62 @@ def show_assets_list(request, assets_list, **kwargs):
     context=dict(assets=assets, **kwargs)
     return render(request, 'assets/index.html', context)
 
-def show_assets_list_by(request, appslug=None, cslug=None, tslug=None, follower=None, verstring=None, order_by='-pub_date', **kwargs):
+def show_assets_list_by(request,
+            appslug=None, app=None,
+            cslug=None, component=None,
+            tslug=None,
+            follower=None,
+            verstring=None, version=None,
+            asset_version=None,
+            license=None,
+            asset_title=None,
+            author=None,
+            original_author=None,
+            order_by='-pub_date', **kwargs):
     qry = Q()
-    app = None
-    component = None
     auto_title = []
     if appslug is not None:
         app = get_object_or_404(Application, slug=appslug)
+    if app is not None:
         auto_title.append(_("application {}").format(app.title))
         qry = qry & Q(application=app)
     if cslug is not None and app is not None:
         component = get_object_or_404(Component, application=app, slug=cslug)
+    if component is not None:
         auto_title.append(_("component {}").format(component.title))
         qry = qry & Q(component=component)
     if tslug is not None:
         tag = get_object_or_404(Tag, slug=tslug)
         auto_title.append(_("tag {}").format(tag.name))
         qry = qry & Q(tags=tag)
+    if asset_title:
+        auto_title.append(_("title contains `{}'").format(asset_title))
+        qry = qry & Q(title__contains=asset_title)
+    if author is not None:
+        auto_title.append(_("author is {}").format(author.get_full_name()))
+        qry = qry & Q(author=author)
+    if original_author:
+        auto_title.append(_("original author {}").format(original_author))
+        qry = qry & Q(original_author__contains=original_author)
+    if license is not None:
+        auto_title.append(_("license {}").format(license))
+        qry = qry & Q(license=license)
     if follower is not None:
         qry = qry & Q(author__follower=follower.profile)
-        auto_title.append(_("from users followed by {}").format(follower.get_full_name))
+        auto_title.append(_("from users followed by {}").format(follower.get_full_name()))
     if verstring is not None and app is not None:
         try:
             version = convert_version_string_to_int(verstring, [8,8,8,8])
         except (ValueError, NotImplementedError):
             raise Http404
-        auto_title.append(_("compatible with application version {}").format(verstring))
+    if version is not None and app is not None:
+        if not verstring:
+            verstring = str(version)
+        auto_title.append(_("compatible with application version {}").format(version))
         qry = qry & (Q(application=app) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
+    if asset_version is not None:
+        auto_title.append(_("version is {}").format(asset_version))
+        qry = qry & Q(version=asset_version)
 
     asset_list = Asset.objects.filter(qry).order_by(order_by)
 
@@ -170,4 +201,25 @@ def license(request, slug):
     license = get_object_or_404(License, slug=slug)
     context = dict(license=license, title=str(license))
     return render(request, 'assets/license.html', context)
+
+def show__advanced_search_results(request, form):
+    return show_assets_list_by(request,
+                    app=form.cleaned_data['application'],
+                    component=form.cleaned_data['component'],
+                    version=form.cleaned_data['app_version'],
+                    asset_version=form.cleaned_data['version'],
+                    asset_title=form.cleaned_data['title'],
+                    original_author=form.cleaned_data['original_author'],
+                    author=form.cleaned_data['author'],
+                    license=form.cleaned_data['license']
+                )
+
+def advanced_search(request):
+    form = SearchForm(request.GET)
+    if form.has_changed() and form.is_valid():
+        return show_advanced_search_results(request, form)
+
+    title = _("Search for assets")
+    context = dict(form=form, title=title)
+    return render(request, 'assets/search.html', context)
 
