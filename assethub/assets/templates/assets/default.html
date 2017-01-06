@@ -123,6 +123,14 @@ function unfollow(username) {
   </div>
   {% endif %}
 {% endif %}
+
+<div id="searchbox">
+  <form action="{% url 'simple_search' %}" method="get">
+    {{simple_search_form.query}}
+    <input type="submit" value="{% trans 'search' %}"/>
+  </form>
+</div>
+
 {% tags %}
 
 <div id="content">

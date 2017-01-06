@@ -33,13 +33,14 @@ div#tagscloud {
   clear: right;
 }
 
-div#postlink {
+div#postlink, div#searchbox {
   max-width: 30em;
   padding-left: 1em;
   padding-right: 1em;
   margin-left: 1em;
   border: #222 thin solid;
   float: right;
+  clear: right;
 }
 
 div.login {

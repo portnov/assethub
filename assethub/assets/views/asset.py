@@ -15,7 +15,7 @@ from taggit.models import Tag
 from versionfield.utils import convert_version_string_to_int
 
 from assets.models import Asset, Component, Application, License
-from assets.forms import AssetForm, SearchForm
+from assets.forms import AssetForm, AdvancedSearchForm, SimpleSearchForm
 from assets.views.common import get_page
 
 def show_assets_list(request, assets_list, **kwargs):
@@ -23,10 +23,10 @@ def show_assets_list(request, assets_list, **kwargs):
     context=dict(assets=assets, **kwargs)
     return render(request, 'assets/index.html', context)
 
-def show_assets_list_by(request,
+def search_assets_by(request,
             appslug=None, app=None,
             cslug=None, component=None,
-            tslug=None,
+            tslug=None, tags=None,
             follower=None,
             verstring=None, version=None,
             asset_version=None,
@@ -51,6 +51,10 @@ def show_assets_list_by(request,
         tag = get_object_or_404(Tag, slug=tslug)
         auto_title.append(_("tag {}").format(tag.name))
         qry = qry & Q(tags=tag)
+    if tags is not None:
+        tags_title = ", ".join([tag.name for tag in tags])
+        auto_title.append(_("tags {}").format(tags_title))
+        qry = qry & Q(tags__in=tags)
     if asset_title:
         auto_title.append(_("title contains `{}'").format(asset_title))
         qry = qry & Q(title__contains=asset_title)
@@ -100,7 +104,7 @@ def index(request):
         return full_feed(request)
 
 def full_feed(request):
-    return show_assets_list_by(request, title=_('Last uploads'))
+    return search_assets_by(request, title=_('Last uploads'))
 
 def get_user_feed(request, username):
     user = get_object_or_404(User, username=username)
@@ -108,28 +112,28 @@ def get_user_feed(request, username):
 
 def user_feed(request, user):
     title = _("Feed for user {0}").format(user.get_full_name())
-    return show_assets_list_by(request, follower=user, title=title)
+    return search_assets_by(request, follower=user, title=title)
 
 def by_tag(request, slug):
-    return show_assets_list_by(request, tslug=slug)
+    return search_assets_by(request, tslug=slug)
 
 def by_application(request, appslug):
-    return show_assets_list_by(request, appslug=appslug)
+    return search_assets_by(request, appslug=appslug)
 
 def by_component(request, appslug, cslug):
-    return show_assets_list_by(request, appslug=appslug, cslug=cslug)
+    return search_assets_by(request, appslug=appslug, cslug=cslug)
 
 def by_app_tag(request, appslug, tslug):
-    return show_assets_list_by(request, appslug=appslug, tslug=tslug)
+    return search_assets_by(request, appslug=appslug, tslug=tslug)
 
 def by_component_tag(request, appslug, cslug, tslug):
-    return show_assets_list_by(request, appslug=appslug, tslug=tslug)
+    return search_assets_by(request, appslug=appslug, tslug=tslug)
 
 def by_version(request, appslug, verstring):
-    return show_assets_list_by(request, appslug=appslug, verstring=verstring)
+    return search_assets_by(request, appslug=appslug, verstring=verstring)
 
 def by_component_version(request, appslug, cslug, verstring):
-    return show_assets_list_by(request, appslug=appslug, cslug=cslug, verstring=verstring)
+    return search_assets_by(request, appslug=appslug, cslug=cslug, verstring=verstring)
 
 def asset_details(request, pk):
     asset = get_object_or_404(Asset, pk=pk)
@@ -202,22 +206,48 @@ def license(request, slug):
     context = dict(license=license, title=str(license))
     return render(request, 'assets/license.html', context)
 
-def show__advanced_search_results(request, form):
-    return show_assets_list_by(request,
-                    app=form.cleaned_data['application'],
-                    component=form.cleaned_data['component'],
-                    version=form.cleaned_data['app_version'],
-                    asset_version=form.cleaned_data['version'],
-                    asset_title=form.cleaned_data['title'],
-                    original_author=form.cleaned_data['original_author'],
-                    author=form.cleaned_data['author'],
-                    license=form.cleaned_data['license']
+def show_advanced_search_results(request, query):
+    return search_assets_by(request,
+                    app=query['application'],
+                    component=query['component'],
+                    version=query['app_version'],
+                    asset_version=query['version'],
+                    asset_title=query['title'],
+                    original_author=query['original_author'],
+                    author=query['author'],
+                    license=query['license']
                 )
 
+def show_simple_search_results(request, query):
+    qry = Q(title__contains=query)
+    qry = qry | Q(application__slug=query)
+    qry = qry | Q(component__slug=query)
+    qry = qry | Q(author__username__contains=query)
+    qry = qry | Q(original_author__contains=query)
+    try:
+        tag = Tag.objects.get(slug=query)
+    except Tag.DoesNotExist:
+        tag = None
+    else:
+        qry = qry | Q(tags=tag)
+    
+    asset_list = Asset.objects.filter(qry).order_by('-pub_date')
+    title = _("Search results")
+    return show_assets_list(request, asset_list, title=title)
+
 def advanced_search(request):
-    form = SearchForm(request.GET)
+    form = AdvancedSearchForm(request.GET)
     if form.has_changed() and form.is_valid():
-        return show_advanced_search_results(request, form)
+        return show_advanced_search_results(request, form.cleaned_data)
+
+    title = _("Search for assets")
+    context = dict(form=form, title=title)
+    return render(request, 'assets/search.html', context)
+
+def simple_search(request):
+    form = SimpleSearchForm(request.GET)
+    if form.has_changed() and form.is_valid():
+        return show_simple_search_results(request, form.cleaned_data['query'])
 
     title = _("Search for assets")
     context = dict(form=form, title=title)
