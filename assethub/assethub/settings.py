@@ -90,6 +90,8 @@ TEMPLATES = [
     },
 ]
 
+PAGEDOWN_WIDGET_CSS=("assets/pagedown.css", )
+
 WSGI_APPLICATION = 'assethub.wsgi.application'
 
 REST_FRAMEWORK = {

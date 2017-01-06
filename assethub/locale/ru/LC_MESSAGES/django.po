@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-06 15:10+0000\n"
+"POT-Creation-Date: 2017-01-06 16:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,7 +77,7 @@ msgstr "миниатюра"
 msgid "data file"
 msgstr "файл с данными"
 
-#: assets/models.py:58
+#: assets/models.py:58 assets/templates/assets/asset.html:28
 msgid "URL"
 msgstr "URL"
 
@@ -123,73 +123,77 @@ msgid ">= {0} and <= {1}"
 msgstr ">= {0} и <= {1}"
 
 #: assets/templates/assets/asset.html:18
+msgid "Uploaded by"
+msgstr "Загружен"
+
+#: assets/templates/assets/asset.html:21
 msgid "License"
 msgstr "Лицензия"
 
-#: assets/templates/assets/asset.html:21
+#: assets/templates/assets/asset.html:24
 msgid "Edit"
 msgstr "Редактировать"
 
-#: assets/templates/assets/asset.html:26 assets/templates/assets/tags.html:3
+#: assets/templates/assets/asset.html:32 assets/templates/assets/tags.html:3
 msgid "Tags"
 msgstr "Теги"
 
-#: assets/templates/assets/asset.html:32
+#: assets/templates/assets/asset.html:38
 msgid "No tags are assigned to this asset."
 msgstr "Для этого файла не было назначено тегов."
 
-#: assets/templates/assets/asset.html:35
+#: assets/templates/assets/asset.html:41
 #: assets/templates/assets/asset_common.html:13
 msgctxt "voting"
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: assets/templates/assets/asset.html:37
+#: assets/templates/assets/asset.html:43
 #: assets/templates/assets/asset_common.html:15
 msgctxt "voting"
 msgid "Up"
 msgstr "Увеличить"
 
-#: assets/templates/assets/asset.html:38
+#: assets/templates/assets/asset.html:44
 #: assets/templates/assets/asset_common.html:16
 msgctxt "voting"
 msgid "Down"
 msgstr "Уменьшить"
 
-#: assets/templates/assets/asset.html:42
+#: assets/templates/assets/asset.html:48
 msgid "Asset version"
 msgstr "Версия файла"
 
-#: assets/templates/assets/asset.html:44
+#: assets/templates/assets/asset.html:50
 msgid "Compatible application versions"
 msgstr "Совместимые версии приложения"
 
-#: assets/templates/assets/asset.html:45
+#: assets/templates/assets/asset.html:51
 msgid "Download asset"
 msgstr "Скачать файл"
 
-#: assets/templates/assets/asset.html:48
+#: assets/templates/assets/asset.html:54
 msgid "Installation instructions"
 msgstr "Инструкции по установке"
 
-#: assets/templates/assets/asset.html:54
+#: assets/templates/assets/asset.html:60
 #: assets/templates/assets/asset_common.html:18
 msgid "Comments"
 msgstr "Комментарии"
 
-#: assets/templates/assets/asset.html:59
+#: assets/templates/assets/asset.html:65
 msgid "No comments yet."
 msgstr "Комментариев ещё нет."
 
-#: assets/templates/assets/asset.html:72 assets/templates/assets/post.html:22
+#: assets/templates/assets/asset.html:78 assets/templates/assets/post.html:22
 msgid "Post"
 msgstr "Отправить"
 
-#: assets/templates/assets/asset.html:73
+#: assets/templates/assets/asset.html:79
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: assets/templates/assets/asset.html:78
+#: assets/templates/assets/asset.html:84
 msgid "Please <a href=\"{{login_url}}\">log in</a> to leave a comment."
 msgstr ""
 "Пожалуйста, <a href=\"{{login_url}}\">войдите</a>, чтобы оставить "

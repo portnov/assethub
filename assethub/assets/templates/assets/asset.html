@@ -14,6 +14,9 @@
       {% endif %}
       : {% asset_title asset False %}</p>
   </p>
+  {% if asset.original_author %}
+  <p>{% trans 'Uploaded by' %} {% user_link asset.author %}</p>
+  {% endif %}
   {% if asset.license %}
   <p>{% trans 'License' %}: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
   {% endif %}
@@ -21,6 +24,9 @@
     <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">{% trans 'Edit' %}</a></p>
   {% endif %}
   <p class="notes">{{asset.notes|markdown}}</p>
+  {% if asset.url %}
+    <p>{% trans 'URL' %}: <a href="{{asset.url}}">{{asset.url}}</a></p>
+  {% endif %}
   <p class="tags">
   {% if asset.tags.all %}
     {% trans 'Tags' %}:

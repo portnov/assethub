@@ -2,13 +2,15 @@
 body {
   font-family: "Ubuntu", Verdana, Arial, sans-serif;
   margin: 0;
+  color: #eee;
+  background-color: #333;
 }
 
 div#content {
   max-width: 100em;
   margin: 0 auto;
   padding: 1ex;
-  background: #f6f6f6;
+  background: #3b3b3b;
   overflow: hidden;
 }
 
@@ -17,7 +19,7 @@ div#navtree {
   padding-right: 1em;
   padding-left: 1em;
   margin-right: 1em;
-  border: #ccc thin solid;
+  border: #222 thin solid;
   float: left;
 }
 
@@ -26,7 +28,7 @@ div#tagscloud {
   padding-left: 1em;
   padding-right: 1em;
   margin-left: 1em;
-  border: #ccc thin solid;
+  border: #222 thin solid;
   float: right;
   clear: right;
 }
@@ -36,7 +38,7 @@ div#postlink {
   padding-left: 1em;
   padding-right: 1em;
   margin-left: 1em;
-  border: #ccc thin solid;
+  border: #222 thin solid;
   float: right;
 }
 
@@ -57,12 +59,14 @@ div.login p {
 div.gravatar-profile {
   float: right;
   padding: 1ex;
-  border: #ccc thin solid;
+  border: #222 thin solid;
 }
 
 h1 {
-  background: #de7008;
-  color: #f5e39e;
+  /*background: #de7008;*/
+  background: #222;
+  /*color: #f5e39e;*/
+  color: #9e5205;
   padding: 1em;
   margin: 0;
 }
@@ -81,7 +85,7 @@ h2, h3, h4 {
 }
 
 a:link, a:visited {
-  color: #777;
+  color: #888;
 }
 
 a:hover {
@@ -89,13 +93,14 @@ a:hover {
 }
 
 div.asset {
-  background: #ddd;
+  background: #3f3f3f;
   width: 30em;
   min-height: 10ex;
   float: left;
   padding: 2ex;
   margin: 1ex;
   text-align: left;
+  border-radius: 6px;
 }
 
 div.asset img.thumbnail {
@@ -109,13 +114,15 @@ div.asset div.thumbnail-description {
 }
 
 a.tag {
-  background-color: #ddeefe;
+  /*background-color: #ddeefe;*/
+  background-color: #f4f4f4;
   border: 1px solid #acc3ec;
   border-top-color: #c0d9e9;
   padding: 2px 7px 2px 10px;
   border-radius: 12px;
   box-shadow: 0 1px 1px #e4edf2;
   color: #2b3840;
+  text-shadow: 0 1px 1px white;
   text-decoration: none;
 }
 
