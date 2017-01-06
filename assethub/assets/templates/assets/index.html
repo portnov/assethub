@@ -1,16 +1,17 @@
 {% extends 'assets/default.html' %}
+{% load i18n %}
 {% load markdown_deux_tags %}
 {% load navigation %}
 
 {% block content %}
 {% if application %}
-<h2>Application: <a href="{{application.url}}">{{application}}</a></h2>
+<h2>{% trans 'Application' %}: <a href="{{application.url}}">{{application}}</a></h2>
 <div class="application-notes">
 {{application.notes|markdown}}
 </div>
 {% endif %}
 {% if component %}
-<h2>Component: <a href="{% url 'by_component' application.slug component.slug %}">{{component.title}}</a></h2>
+<h2>{% trans 'Component' %}: <a href="{% url 'by_component' application.slug component.slug %}">{{component.title}}</a></h2>
 <div class="component-notes">
   {{component.notes|markdown}}
 </div>
@@ -28,6 +29,6 @@
 {% pagination assets %}
 
 {%else%}
-  <p>No assets available.</p>
+  <p>{% trans 'No assets available.' %}</p>
 {%endif%}
 {% endblock %}

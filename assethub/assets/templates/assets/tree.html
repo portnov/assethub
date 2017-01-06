@@ -1,6 +1,6 @@
-
+{% load i18n %}
 <div id="navtree">
-  <h3>Navigation</h3>
+  <h3>{% trans 'Navigation' %}</h3>
   <ul>
     {% for app in applications %}
     <li><a href="{% url 'by_application' app.slug %}">{{app.title}}</a>
@@ -15,5 +15,5 @@
     {% endfor %}
   </ul>
   
-  <p><a href="{% url 'users_list' %}">All users</a></p>
+  <p><a href="{% url 'users_list' %}">{% trans 'All users' %}</a></p>
 </div>

@@ -1,4 +1,5 @@
 {% extends 'assets/default.html' %}
+{% load i18n %}
 {% load gravatar %}
 
 {% block content %}
@@ -7,26 +8,28 @@
   <div class="gravatar-profile">
     {% gravatar buddy.email 64 %}
   </div>
-<p>Login: {{buddy.username}}</p>
-<p>Name: {{buddy.get_full_name}}</p>
-<p>Rating: {{buddy.profile.get_rating}}</p>
+  <p>{% trans 'Login' %}: {{buddy.username}}</p>
+  <p>{% trans 'Name' %}: {{buddy.get_full_name}}</p>
+  <p>{% trans 'Rating' %}: {{buddy.profile.get_rating}}</p>
 
 {% if user != buddy %}
 {% if followed %}
 <p class="followtext">
-You are following this user.
-<a href="#" onclick="unfollow('{{buddy.username}}')">Do not follow this user</a></p>
+{% trans 'You are following this user.' %}
+<a href="#" onclick="unfollow('{{buddy.username}}')">{% trans 'Do not follow this user' %}</a></p>
 {% else %}
-<p class="followtext"><a href="#" onclick="follow('{{buddy.username}}')">Follow this user</a></p>
+<p class="followtext"><a href="#" onclick="follow('{{buddy.username}}')">{% trans 'Follow this user' %}</a></p>
 {% endif %}
 {% else %}
-<p>This is you.</p>
-<p><a href="{% url 'edit_profile' %}">Edit your profile details</a></p>
+<p>{% trans 'This is you.' %}</p>
+<p><a href="{% url 'edit_profile' %}">{% trans 'Edit your profile details' %}</a></p>
 {% endif %}
-<p><a href="{% url 'user_feed' buddy.username %}">Go to {{buddy.get_full_name}}'s feed</a></p>
+<p><a href="{% url 'user_feed' buddy.username %}">
+  {% blocktrans with name=buddy.get_full_name %}Go to {{name}}'s feed{% endblocktrans %}
+</a></p>
 
 {% if most_rated_assets %}
-<h2>Most rated assets</h2>
+<h2>{% trans 'Most rated assets' %}</h2>
 <div class="assets">
     {% for asset in most_rated_assets %}
     <div class="asset">
@@ -36,7 +39,7 @@ You are following this user.
     {% endfor %}
 </div>
 {%else%}
-  <p>This buddy did not post any assets yet.</p>
+  <p>{% trans 'This buddy did not post any assets yet.' %}</p>
 {%endif%}
 </div>
 

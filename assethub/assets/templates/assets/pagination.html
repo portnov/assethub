@@ -1,15 +1,16 @@
+{% load i18n %}
 <div class="pagination">
     <span class="step-links">
         {% if objects.has_previous %}
-            <a href="?page={{ objects.previous_page_number }}">previous</a>
+          <a href="?page={{ objects.previous_page_number }}">{% trans 'previous' %}</a>
         {% endif %}
 
         <span class="current">
-            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
+          {% blocktrans with current=objects.number total=objects.paginator.num_pages %}Page {{current}} of {{total}}.{% endblocktrans %}
         </span>
 
         {% if objects.has_next %}
-            <a href="?page={{ objects.next_page_number }}">next</a>
+          <a href="?page={{ objects.next_page_number }}">{% trans 'next' %}</a>
         {% endif %}
     </span>
 </div>

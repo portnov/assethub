@@ -1,15 +1,16 @@
 {% extends 'assets/default.html' %}
+{% load i18n %}
 {% load markdown_deux_tags %}
 
 {% block content %}
 <div class="license">
   <div class="license-short">
-    <h2>Brief introduction</h2>
+    <h2>{% trans 'Brief introduction' context "license" %}</h2>
     {{license.notes|markdown}}
   </div>
 
   <div class="license-text">
-    <h2>Legal text</h2>
+    <h2>{% trans 'Legal text' context "license" %}</h2>
     {{license.text|markdown}}
   </div>
 </div>

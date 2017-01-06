@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-05 19:32+0000\n"
+"POT-Creation-Date: 2017-01-06 07:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,8 @@ msgstr ""
 #: assets/forms.py:29
 #, python-brace-format
 msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
-msgstr "Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
+msgstr ""
+"Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
 
 #: assets/models.py:34
 #, python-brace-format
@@ -100,6 +101,184 @@ msgstr "Максимальная совместимая версия прило�
 msgid "tags"
 msgstr "теги"
 
+#: assets/templates/assets/asset.html:15
+msgid "by"
+msgstr "от"
+
+#: assets/templates/assets/asset.html:23
+msgid "License"
+msgstr "Лицензия"
+
+#: assets/templates/assets/asset.html:31 assets/templates/assets/tags.html:3
+msgid "Tags"
+msgstr "Теги"
+
+#: assets/templates/assets/asset.html:37
+msgid "No tags are assigned to this asset."
+msgstr "Для этого файла не было назначено тегов."
+
+#: assets/templates/assets/asset.html:40
+msgctxt "voting"
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: assets/templates/assets/asset.html:42
+msgctxt "voting"
+msgid "Up"
+msgstr "Увеличить"
+
+#: assets/templates/assets/asset.html:43
+msgctxt "voting"
+msgid "Down"
+msgstr "Уменьшить"
+
+#: assets/templates/assets/asset.html:47
+msgid "Asset version"
+msgstr "версия файла"
+
+#: assets/templates/assets/asset.html:49
+msgid "Compatible application versions"
+msgstr "Минимальная совместимая версия приложения"
+
+#: assets/templates/assets/asset.html:50
+msgid "Download asset"
+msgstr "Скачать файл"
+
+#: assets/templates/assets/asset.html:53
+msgid "Installation instructions"
+msgstr "Инструкции по установке"
+
+#: assets/templates/assets/asset.html:71 assets/templates/assets/post.html:22
+msgid "Post"
+msgstr "Отправить"
+
+#: assets/templates/assets/asset.html:72
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: assets/templates/assets/asset.html:77
+msgid "Please <a href=\"{{login_url}}\">log in</a> to leave a comment."
+msgstr ""
+"Пожалуйста, <a href=\"{{login_url}}\">войдите</a>, чтобы оставить "
+"комментарий."
+
+#: assets/templates/assets/default.html:99
+msgctxt "site_greeting"
+msgid "Hello,"
+msgstr "Приветствуем,"
+
+#: assets/templates/assets/default.html:101
+msgid "Administration"
+msgstr "Администрирование"
+
+#: assets/templates/assets/default.html:103
+msgid "Log out"
+msgstr "Выйти"
+
+#: assets/templates/assets/default.html:105
+msgid "Log in"
+msgstr "Войти"
+
+#: assets/templates/assets/default.html:121 assets/views/asset.py:155
+msgid "Post an asset"
+msgstr "Поместить файл"
+
+#: assets/templates/assets/edit_profile.html:9
+msgid "Save"
+msgstr "Сохранить"
+
+#: assets/templates/assets/index.html:8 assets/templates/assets/post.html:7
+msgid "Application"
+msgstr "Приложение"
+
+#: assets/templates/assets/index.html:14 assets/templates/assets/post.html:10
+msgid "Component"
+msgstr "Компонент"
+
+#: assets/templates/assets/index.html:32
+msgid "No assets available."
+msgstr "Нет доступных файлов."
+
+#: assets/templates/assets/license.html:8
+msgctxt "license"
+msgid "Brief introduction"
+msgstr "Краткое описание"
+
+#: assets/templates/assets/license.html:13
+msgctxt "license"
+msgid "Legal text"
+msgstr "Юридический текст"
+
+#: assets/templates/assets/pagination.html:5
+msgid "previous"
+msgstr "предыдущая"
+
+#: assets/templates/assets/pagination.html:9
+#, python-format
+msgid "Page %(current)s of %(total)s."
+msgstr "Страница %(current)s из %(total)s."
+
+#: assets/templates/assets/pagination.html:13
+msgid "next"
+msgstr "следующая"
+
+#: assets/templates/assets/post.html:14
+msgid "Upload instructions"
+msgstr "Инструкции по загрузке"
+
+#: assets/templates/assets/profile.html:11
+msgid "Login"
+msgstr "Логин"
+
+#: assets/templates/assets/profile.html:12
+msgid "Name"
+msgstr "Имя"
+
+#: assets/templates/assets/profile.html:13
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: assets/templates/assets/profile.html:18
+msgid "You are following this user."
+msgstr "Вы отслеживаете этого пользователя."
+
+#: assets/templates/assets/profile.html:19
+msgid "Do not follow this user"
+msgstr "Не отслеживать этого пользователя"
+
+#: assets/templates/assets/profile.html:21
+msgid "Follow this user"
+msgstr "Отслеживать этого пользователя"
+
+#: assets/templates/assets/profile.html:24
+msgid "This is you."
+msgstr "Это вы."
+
+#: assets/templates/assets/profile.html:25
+msgid "Edit your profile details"
+msgstr "Редактировать ваш профиль"
+
+#: assets/templates/assets/profile.html:28
+#, python-format
+msgid "Go to %(name)s's feed"
+msgstr "Перейти к ленте %(name)s"
+
+#: assets/templates/assets/profile.html:32
+msgid "Most rated assets"
+msgstr "Наиболее высоко оцененные файлы"
+
+#: assets/templates/assets/profile.html:42
+msgid "This buddy did not post any assets yet."
+msgstr "Этот пользователь ещё не поместил никаких файлов."
+
+#: assets/templates/assets/tree.html:3
+msgid "Navigation"
+msgstr "Навигация"
+
+#: assets/templates/assets/tree.html:18
+msgid "All users"
+msgstr "Все пользователи"
+
 #: assets/views/asset.py:38
 #, python-brace-format
 msgid "Feed for user {0}"
@@ -137,10 +316,19 @@ msgstr "Файлы для приложения {0}, совместимые с в
 msgid "{0} assets compatible with version {1}"
 msgstr "Файлы {0}, совместимые с версией {1}"
 
-#: assets/views/asset.py:155
-msgid "Post an asset"
-msgstr "Поместить файл"
-
 #: assets/views/asset.py:174
 msgid "Edit an asset"
 msgstr "Редактировать файл"
+
+#: assets/views/users.py:46
+#, python-brace-format
+msgid "{0}'s profile"
+msgstr "Профиль {0}"
+
+#: assets/views/users.py:58
+msgid "List of users"
+msgstr "Список пользователей"
+
+#: assets/views/users.py:73
+msgid "Edit profile"
+msgstr "Редактирование профиля"

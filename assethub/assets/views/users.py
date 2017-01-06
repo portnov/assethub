@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from taggit.models import Tag
@@ -42,7 +43,7 @@ def user_profile(request, username):
     return get_user_profile(request, user)
 
 def get_user_profile(request, user):
-    title = "{0}'s profile".format(user.username)
+    title = _("{0}'s profile").format(user.username)
     most_rated_assets = user.asset_set.order_by('-num_votes')[:5]
     try:
         followed = request.user.profile.does_follow(user)
@@ -54,7 +55,7 @@ def get_user_profile(request, user):
 def get_users_list(request):
     users_list = User.objects.order_by('username')
     users = get_page(request, users_list)
-    context = dict(users=users, title = "List of users")
+    context = dict(users=users, title = _("List of users"))
     return render(request, "assets/users.html", context)
 
 @login_required
@@ -69,7 +70,7 @@ def edit_profile(request):
     else:
         form = ProfileForm(instance=user)
 
-    title = "Edit profile"
+    title = _("Edit profile")
     context = dict(form=form, title=title, form_action=reverse('edit_profile'))
     return render(request, 'assets/edit_profile.html', context)
 

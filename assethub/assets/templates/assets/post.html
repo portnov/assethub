@@ -1,16 +1,17 @@
 {% extends 'assets/default.html' %}
+{% load i18n %}
 {% load markdown_deux_tags %}
 
 {% block content %}
 {% if application %}
-<p>Application: <a href="{% url 'by_application' application.slug %}">{{application.title}}</a></p>
+<p>{% trans 'Application' %}: <a href="{% url 'by_application' application.slug %}">{{application.title}}</a></p>
 {% endif %}
 {% if component %}
-<p>Component: <a href="{% url 'by_component' application.slug component.slug %}">{{component.title}}</a></p>
+<p>{% trans 'Component' %}: <a href="{% url 'by_component' application.slug component.slug %}">{{component.title}}</a></p>
 {% endif %}
 {% if component.upload_instructions %}
 <div class="upload-instructions">
-  <h3>Upload instructions</h3>
+  <h3>{% trans 'Upload instructions' %}</h3>
   {{component.upload_instructions|markdown}}
 </div>
 {% endif %}
@@ -18,7 +19,7 @@
 <table>
   {% csrf_token %}
   {{ post_form.as_table }}
-  <tr><td><input type="submit" value="Post"/></td></tr>
+  <tr><td><input type="submit" value="{% trans 'Post' %}"/></td></tr>
 </table>
 </form>
 {% endblock %}

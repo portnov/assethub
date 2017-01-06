@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load staticfiles %}
 {% load navigation %}
 {% load social_auth %}
@@ -95,13 +96,13 @@ function unfollow(username) {
 
 <div class="login">
 {% if user.is_authenticated %}
-<p>Hello, {% user_link user %}!</p>
+<p>{% trans 'Hello,' context "site_greeting" %} {% user_link user %}!</p>
 {% if user.is_staff %}
-<p><a href="/admin/">Administration</a></p>
+<p><a href="/admin/">{% trans 'Administration' %}</a></p>
 {% endif %}
-<p><a href="{% url 'logout' %}">Log out</a></p>
+<p><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></p>
 {% else %}
-<p><a href="{% url 'login' %}">Log in</a></p>
+<p><a href="{% url 'login' %}">{% trans 'Log in' %}</a></p>
 {% endif %}
 </div>
 
@@ -117,7 +118,7 @@ function unfollow(username) {
 {% if application %}
   {% if component %}
   <div id="postlink">
-    <p><a href="{% url 'post_asset' application.slug component.slug %}">Post an asset</a></p>
+    <p><a href="{% url 'post_asset' application.slug component.slug %}">{% trans 'Post an asset' %}</a></p>
   </div>
   {% endif %}
 {% endif %}
