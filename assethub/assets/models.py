@@ -67,12 +67,12 @@ class Asset(models.Model):
 
     def get_app_versions(self):
         if not self.app_version_min and not self.app_version_max:
-            return "any"
+            return pgettext_lazy("application version", "any")
         if self.app_version_min and not self.app_version_max:
-            return ">= {}".format(self.app_version_min)
+            return pgettext_lazy("application version", ">= {}").format(self.app_version_min)
         if not self.app_version_min and self.app_version_max:
-            return "<= {}".format(self.app_version_max)
-        return ">= {0} and <= {1}".format(self.app_version_min, self.app_version_max)
+            return pgettext_lazy("application version", "<= {}").format(self.app_version_max)
+        return pgettext_lazy("application version", ">= {0} and <= {1}").format(self.app_version_min, self.app_version_max)
 
     def __str__(self):
         result = ""

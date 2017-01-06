@@ -23,7 +23,7 @@
   <p>{% trans 'License' %}: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
   {% endif %}
   {% if user == asset.author %}
-    <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">Edit</a></p>
+    <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">{% trans 'Edit' %}</a></p>
   {% endif %}
   <p class="notes">{{asset.notes|markdown}}</p>
   <p class="tags">

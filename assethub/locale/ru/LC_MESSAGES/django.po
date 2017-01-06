@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-06 13:07+0000\n"
+"POT-Creation-Date: 2017-01-06 13:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,6 +101,27 @@ msgstr "Максимальная совместимая версия прило�
 msgid "tags"
 msgstr "теги"
 
+#: assets/models.py:70
+msgctxt "application version"
+msgid "any"
+msgstr "любые"
+
+#: assets/models.py:72
+msgctxt "application version"
+msgid ">= {}"
+msgstr ">= {}"
+
+#: assets/models.py:74
+msgctxt "application version"
+msgid "<= {}"
+msgstr "<= {}"
+
+#: assets/models.py:75
+#, python-brace-format
+msgctxt "application version"
+msgid ">= {0} and <= {1}"
+msgstr ">= {0} и <= {1}"
+
 #: assets/templates/assets/asset.html:15
 msgid "by"
 msgstr "от"
@@ -108,6 +129,10 @@ msgstr "от"
 #: assets/templates/assets/asset.html:23
 msgid "License"
 msgstr "Лицензия"
+
+#: assets/templates/assets/asset.html:26
+msgid "Edit"
+msgstr "Редактировать"
 
 #: assets/templates/assets/asset.html:31 assets/templates/assets/tags.html:3
 msgid "Tags"
@@ -134,11 +159,11 @@ msgstr "Уменьшить"
 
 #: assets/templates/assets/asset.html:47
 msgid "Asset version"
-msgstr "версия файла"
+msgstr "Версия файла"
 
 #: assets/templates/assets/asset.html:49
 msgid "Compatible application versions"
-msgstr "Минимальная совместимая версия приложения"
+msgstr "Совместимые версии приложения"
 
 #: assets/templates/assets/asset.html:50
 msgid "Download asset"
