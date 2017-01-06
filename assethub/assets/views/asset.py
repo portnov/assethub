@@ -16,6 +16,52 @@ from assets.models import Asset, Component, Application, License
 from assets.forms import AssetForm
 from assets.views.common import get_page
 
+def show_assets_list(request, assets_list, **kwargs):
+    assets = get_page(request, assets_list)
+    context=dict(assets=assets, **kwargs)
+    return render(request, 'assets/index.html', context)
+
+def show_assets_list_by(request, appslug=None, cslug=None, tslug=None, follower=None, verstring=None, order_by='-pub_date', **kwargs):
+    qry = Q()
+    app = None
+    component = None
+    auto_title = []
+    if appslug is not None:
+        app = get_object_or_404(Application, slug=appslug)
+        auto_title.append(_("application {}").format(app.title))
+        qry = qry & Q(application=app)
+    if cslug is not None and app is not None:
+        component = get_object_or_404(Component, application=app, slug=cslug)
+        auto_title.append(_("component {}").format(component.title))
+        qry = qry & Q(component=component)
+    if tslug is not None:
+        tag = get_object_or_404(Tag, slug=slug)
+        auto_title.append(_("tag {}").format(tag.name))
+        qry = qry & Q(tags=tag)
+    if follower is not None:
+        qry = qry & Q(author__follower=follower.profile)
+        auto_title.append(_("from users followed by {}").format(follower.get_full_name))
+    if verstring is not None and app is not None:
+        try:
+            version = convert_version_string_to_int(verstring, [8,8,8,8])
+        except (ValueError, NotImplementedError):
+            raise Http404
+        auto_title.append(_("compatible with application version {}").format(verstring))
+        qry = qry & (Q(application=app) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
+
+    asset_list = Asset.objects.filter(qry).order_by(order_by)
+
+    title = kwargs.get('title', None)
+    if title is None:
+        title = _("Assets by criteria") + ": " + ", ".join(auto_title)
+        kwargs['title'] = title
+    if app is not None:
+        kwargs['application'] = app
+        kwargs['logo'] = app.logo
+    if component is not None:
+        kwargs['component'] = component
+    return show_assets_list(request, asset_list, **kwargs)
+
 def index(request):
     if request.user.is_authenticated:
         return user_feed(request, request.user)
@@ -23,91 +69,36 @@ def index(request):
         return full_feed(request)
 
 def full_feed(request):
-    asset_list = Asset.objects.order_by('-pub_date')
-    assets = get_page(request, asset_list)
-    context=dict(assets=assets, title='Last uploads')
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, title=_('Last uploads'))
 
 def get_user_feed(request, username):
     user = get_object_or_404(User, username=username)
     return user_feed(request, user)
 
 def user_feed(request, user):
-    asset_list = Asset.objects.filter(author__follower=user.profile).order_by('-pub_date')
-    assets = get_page(request, asset_list)
     title = _("Feed for user {0}").format(user.get_full_name())
-    context=dict(assets=assets, title=title)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, follower=user, title=title)
 
 def by_tag(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
-    assets = Asset.objects.filter(tags=tag).order_by('-pub_date')
-    title = _("Assets with tag {}").format(tag.name)
-    context = dict(assets = assets, tag=tag.name, title=title)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, tslug=slug)
 
 def by_application(request, appslug):
-    app = get_object_or_404(Application, slug=appslug)
-    asset_list = Asset.objects.filter(application=app).order_by('-pub_date')
-    assets = get_page(request, asset_list)
-    title = _("Assets for application {}").format(app.title)
-    context = dict(assets = assets, application=app, title=title, logo=app.logo)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, appslug=appslug)
 
 def by_component(request, appslug, cslug):
-    app = get_object_or_404(Application, slug=appslug)
-    component = get_object_or_404(Component, application=app, slug=cslug)
-    title = _("{} assets").format(component)
-    asset_list = Asset.objects.filter(application=app, component=component).order_by('-pub_date')
-    assets = get_page(request, asset_list)
-    context = dict(assets = assets, application=app, component=component, title=title, logo=app.logo)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, appslug=appslug, cslug=cslug)
 
 def by_app_tag(request, appslug, tslug):
-    app = get_object_or_404(Application, slug=appslug)
-    tag = get_object_or_404(Tag, slug=tslug)
-    asset_list = Asset.objects.filter(application=app, tags=tag).order_by('-pub_date')
-    assets = get_page(request, asset_list)
-    title = _("Assets for application {0} with tag {1}").format(app.title, tag.name)
-    context = dict(assets = assets, title=title, logo=app.logo)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, appslug=appslug, tslug=tslug)
 
 def by_component_tag(request, appslug, cslug, tslug):
-    app = get_object_or_404(Application, slug=appslug)
-    component = get_object_or_404(Component, application=app, slug=cslug)
-    tag = get_object_or_404(Tag, slug=tslug)
-    asset_list = Asset.objects.filter(application=app, component=component, tags=tag).order_by('-pub_date')
-    assets = get_page(request, asset_list)
-    title = _("{0} assets with tag {1}").format(component, tag.name)
-    context = dict(assets = assets, title=title, logo=app.logo)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, appslug=appslug, tslug=tslug)
 
 def by_version(request, appslug, verstring):
-    try:
-        version = convert_version_string_to_int(verstring, [8,8,8,8])
-    except (ValueError, NotImplementedError):
-        raise Http404
-
-    app = get_object_or_404(Application, slug=appslug)
-    asset_list = Asset.objects.filter(Q(application=app) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
-    assets = get_page(request, asset_list)
-    title = _("Assets for application {0} compatible with version {1}").format(app, verstring)
-    context = dict(assets = assets, title=title, logo=app.logo)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, appslug=appslug, verstring=verstring)
 
 def by_component_version(request, appslug, cslug, verstring):
-    try:
-        version = convert_version_string_to_int(verstring, [8,8,8,8])
-    except (ValueError, NotImplementedError):
-        raise Http404
-
-    app = get_object_or_404(Application, slug=appslug)
-    component = get_object_or_404(Component, slug=cslug)
-    asset_list = Asset.objects.filter(Q(application=app) & Q(component=component) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
-    assets = get_page(request, asset_list)
-    title = _("{0} assets compatible with version {1}").format(component, verstring)
-    context = dict(assets = assets, title=title, logo=app.logo)
-    return render(request, 'assets/index.html', context)
+    return show_assets_list_by(request, appslug=appslug, cslug=cslug, verstring=verstring)
 
 def asset_details(request, pk):
     asset = get_object_or_404(Asset, pk=pk)

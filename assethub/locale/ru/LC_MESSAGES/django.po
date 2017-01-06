@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-06 07:11+0000\n"
+"POT-Creation-Date: 2017-01-06 13:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgstr "Выйти"
 msgid "Log in"
 msgstr "Войти"
 
-#: assets/templates/assets/default.html:121 assets/views/asset.py:155
+#: assets/templates/assets/default.html:121 assets/views/asset.py:146
 msgid "Post an asset"
 msgstr "Поместить файл"
 
@@ -279,44 +279,40 @@ msgstr "Навигация"
 msgid "All users"
 msgstr "Все пользователи"
 
-#: assets/views/asset.py:38
+#: assets/views/asset.py:31
+msgid "application {}"
+msgstr "приложение {}"
+
+#: assets/views/asset.py:35
+msgid "component {}"
+msgstr "компонент {}"
+
+#: assets/views/asset.py:39
+msgid "tag {}"
+msgstr "тег {}"
+
+#: assets/views/asset.py:43
+msgid "from users followed by {}"
+msgstr "от пользователей, отслеживаемых {}"
+
+#: assets/views/asset.py:49
+msgid "compatible with application version {}"
+msgstr "совместимые с версией приложения {}"
+
+#: assets/views/asset.py:56
+msgid "Assets by criteria"
+msgstr "Файлы по критериям"
+
+#: assets/views/asset.py:72
+msgid "Last uploads"
+msgstr "Последние загрузки"
+
+#: assets/views/asset.py:79
 #, python-brace-format
 msgid "Feed for user {0}"
 msgstr "Лента пользователя {0}"
 
-#: assets/views/asset.py:45
-msgid "Assets with tag {}"
-msgstr "Файлы с тегом {}"
-
-#: assets/views/asset.py:53
-msgid "Assets for application {}"
-msgstr "Файлы для приложения {}"
-
-#: assets/views/asset.py:60
-msgid "{} assets"
-msgstr "Файлы {}"
-
-#: assets/views/asset.py:71
-#, python-brace-format
-msgid "Assets for application {0} with tag {1}"
-msgstr "Файлы для приложения {0} с тегом {1}"
-
-#: assets/views/asset.py:81
-#, python-brace-format
-msgid "{0} assets with tag {1}"
-msgstr "Файлы {0} с тегом {1}"
-
-#: assets/views/asset.py:94
-#, python-brace-format
-msgid "Assets for application {0} compatible with version {1}"
-msgstr "Файлы для приложения {0}, совместимые с версией {1}"
-
-#: assets/views/asset.py:108
-#, python-brace-format
-msgid "{0} assets compatible with version {1}"
-msgstr "Файлы {0}, совместимые с версией {1}"
-
-#: assets/views/asset.py:174
+#: assets/views/asset.py:165
 msgid "Edit an asset"
 msgstr "Редактировать файл"
 
@@ -332,3 +328,24 @@ msgstr "Список пользователей"
 #: assets/views/users.py:73
 msgid "Edit profile"
 msgstr "Редактирование профиля"
+
+#~ msgid "Assets with tag {}"
+#~ msgstr "Файлы с тегом {}"
+
+#~ msgid "Assets for application {}"
+#~ msgstr "Файлы для приложения {}"
+
+#~ msgid "{} assets"
+#~ msgstr "Файлы {}"
+
+#~ msgid "Assets for application {0} with tag {1}"
+#~ msgstr "Файлы для приложения {0} с тегом {1}"
+
+#~ msgid "{0} assets with tag {1}"
+#~ msgstr "Файлы {0} с тегом {1}"
+
+#~ msgid "Assets for application {0} compatible with version {1}"
+#~ msgstr "Файлы для приложения {0}, совместимые с версией {1}"
+
+#~ msgid "{0} assets compatible with version {1}"
+#~ msgstr "Файлы {0}, совместимые с версией {1}"
