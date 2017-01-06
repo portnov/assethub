@@ -35,7 +35,7 @@ def show_assets_list_by(request, appslug=None, cslug=None, tslug=None, follower=
         auto_title.append(_("component {}").format(component.title))
         qry = qry & Q(component=component)
     if tslug is not None:
-        tag = get_object_or_404(Tag, slug=slug)
+        tag = get_object_or_404(Tag, slug=tslug)
         auto_title.append(_("tag {}").format(tag.name))
         qry = qry & Q(tags=tag)
     if follower is not None:

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load markdown_deux_tags %}
 {% load navigation %}
+{% load common %}
 
 {% block content %}
 {% if application %}
@@ -19,9 +20,12 @@
 {% if assets %}
 <div class="assets">
     {% for asset in assets %}
-    <div class="asset">
-      <a href="{% url 'asset' asset.pk %}"><img src='{{asset.image.url}}' alt="{{asset.title}}"/></a>
-      <p class="title"><a href="{% url 'asset' asset.pk %}">{{asset.title}}</a></p>
+    <div class="asset" id="asset_{{asset.pk}}">
+      <a href="{% url 'asset' asset.pk %}"><img class="thumbnail" src='{{asset.image.url}}' alt="{{asset.title}}"/></a>
+      <div class="thumbnail-description">
+        <p class="title">{% asset_title asset True %}</p>
+        {% asset_common asset False %}
+      </div>
     </div>
     {% endfor %}
 </div>

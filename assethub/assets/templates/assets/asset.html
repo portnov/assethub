@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load markdown_deux_tags %}
 {% load comments %}
-{% load social_auth %}
+{% load common %}
 
 {% block content %}
 <div id="asset_{{asset.pk}}">
@@ -12,12 +12,7 @@
       {% if asset.component %}
       <a href="{% url 'by_component' asset.application.slug asset.component.slug %}">{{asset.component.title}}</a>
       {% endif %}
-      : {{asset.title}} {% trans 'by' %}
-    {% if asset.original_author %}
-      {{asset.original_author}}
-    {% else %}
-      {% user_link asset.author %}
-    {% endif %}
+      : {% asset_title asset False %}</p>
   </p>
   {% if asset.license %}
   <p>{% trans 'License' %}: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
@@ -30,7 +25,7 @@
   {% if asset.tags.all %}
     {% trans 'Tags' %}:
     {% for tag in asset.tags.all %}
-      <a href="{% url 'by_tag' tag.slug %}">{{tag.name}}</a>
+      <a class="tag" href="{% url 'by_tag' tag.slug %}">{{tag.name}}</a>
       {% if not forloop.last %}, {% endif %}
     {% endfor %}
   {% else %}
@@ -56,7 +51,13 @@
   {% endif %}
 </div>
 
+<h3>{% trans 'Comments' %}</h3>
+{% get_comment_list for asset as comments %}
+{% if comments %}
 {% render_comment_list for asset %}
+{% else %}
+<p>{% trans 'No comments yet.' %}</p>
+{% endif %}
 
 {% if user.is_authenticated %}
 {% get_comment_form for asset as form %}

@@ -6,6 +6,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
+from django_comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 
 from taggit_autosuggest.managers import TaggableManager
@@ -73,6 +75,10 @@ class Asset(models.Model):
         if not self.app_version_min and self.app_version_max:
             return pgettext_lazy("application version", "<= {}").format(self.app_version_max)
         return pgettext_lazy("application version", ">= {0} and <= {1}").format(self.app_version_min, self.app_version_max)
+
+    def get_comments_count(self):
+        ct = ContentType.objects.get_for_model(Asset)
+        return Comment.objects.filter(content_type=ct, object_pk=self.pk).count()
 
     def __str__(self):
         result = ""

@@ -1,20 +1,10 @@
 
 from django import template
 from django.conf import settings
-from django.urls import reverse
-from django.utils.html import format_html
-
-from django_gravatar.helpers import get_gravatar_url
 
 register = template.Library()
 
 @register.simple_tag
 def google_plus_client_id():
     return settings.SOCIAL_AUTH_GOOGLE_PLUS_KEY
-
-@register.simple_tag
-def user_link(user):
-    gravatar_url = get_gravatar_url(user.email, size=16)
-    profile_url = reverse('user_profile', args=[user.username])
-    return format_html("""<a href="{0}"><img class="gravatar-small" src="{1}"/>{2}</a>""", profile_url, gravatar_url, user.get_full_name())
 

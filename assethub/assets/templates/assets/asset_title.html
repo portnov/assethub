@@ -1,0 +1,15 @@
+{% load i18n %}
+{% load common %}
+
+{% if as_link %}
+  <a href="{% url 'asset' asset.pk %}">{{asset.title}}</a>
+{% else %}
+  {{asset.title}}
+{% endif %}
+{% trans 'by' %}
+{% if asset.original_author %}
+  {{asset.original_author}}
+{% else %}
+  {% user_link asset.author %}
+{% endif %}
+
