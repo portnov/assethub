@@ -232,7 +232,7 @@ def show_simple_search_results(request, query):
         qry = qry | Q(tags=tag)
     
     asset_list = Asset.objects.filter(qry).order_by('-pub_date')
-    title = _("Search results")
+    title = _("Search results: {}").format(query)
     return show_assets_list(request, asset_list, title=title)
 
 def advanced_search(request):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-06 17:50+0000\n"
+"POT-Creation-Date: 2017-01-06 20:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,41 +19,11 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: assets/forms.py:30
+#: assets/forms.py:32
 #, python-brace-format
 msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
 msgstr ""
 "Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
-
-#: assets/forms.py:34 assets/models.py:49
-msgid "application"
-msgstr "приложение"
-
-#: assets/forms.py:35 assets/models.py:50
-msgid "component"
-msgstr "компонент"
-
-#: assets/forms.py:36 assets/models.py:51
-msgid "license"
-msgstr "лицензия"
-
-#: assets/forms.py:37 assets/models.py:52
-msgid "original author"
-msgstr "автор оригинала"
-
-#: assets/forms.py:38 assets/models.py:54
-msgid "title"
-msgstr "название"
-
-#: assets/forms.py:39 assets/models.py:60
-msgid "asset version"
-msgstr "версия файла"
-
-#: assets/forms.py:40
-#, fuzzy
-#| msgid "Compatible application versions"
-msgid "application version"
-msgstr "Совместимые версии приложения"
 
 #: assets/models.py:36
 #, python-brace-format
@@ -71,9 +41,29 @@ msgstr "{0}: {1}"
 msgid "author"
 msgstr "автор"
 
+#: assets/models.py:49
+msgid "application"
+msgstr "приложение"
+
+#: assets/models.py:50
+msgid "component"
+msgstr "компонент"
+
+#: assets/models.py:51
+msgid "license"
+msgstr "лицензия"
+
+#: assets/models.py:52
+msgid "original author"
+msgstr "автор оригинала"
+
 #: assets/models.py:53
 msgid "Originally created"
 msgstr "изначально создан"
+
+#: assets/models.py:54
+msgid "title"
+msgstr "название"
 
 #: assets/models.py:55
 msgid "description"
@@ -94,6 +84,10 @@ msgstr "URL"
 #: assets/models.py:59
 msgid "date published"
 msgstr "дата публикации"
+
+#: assets/models.py:60
+msgid "asset version"
+msgstr "версия файла"
 
 #: assets/models.py:61
 msgid "Minimum compatible application version"
@@ -226,9 +220,13 @@ msgstr "Выйти"
 msgid "Log in"
 msgstr "Войти"
 
-#: assets/templates/assets/default.html:122 assets/views/asset.py:148
+#: assets/templates/assets/default.html:122 assets/views/asset.py:181
 msgid "Post an asset"
 msgstr "Поместить файл"
+
+#: assets/templates/assets/default.html:130
+msgid "search"
+msgstr "поиск"
 
 #: assets/templates/assets/edit_profile.html:9
 msgid "Save"
@@ -318,7 +316,7 @@ msgstr "Наиболее высоко оцененные файлы"
 msgid "This buddy did not post any assets yet."
 msgstr "Этот пользователь ещё не поместил никаких файлов."
 
-#: assets/templates/assets/search.html:9
+#: assets/templates/assets/search.html:8
 msgid "Search"
 msgstr "Поиск"
 
@@ -330,44 +328,73 @@ msgstr "Навигация"
 msgid "All users"
 msgstr "Все пользователи"
 
-#: assets/views/asset.py:32
+#: assets/views/asset.py:43
 msgid "application {}"
 msgstr "приложение {}"
 
-#: assets/views/asset.py:37
+#: assets/views/asset.py:48
 msgid "component {}"
 msgstr "компонент {}"
 
-#: assets/views/asset.py:41
+#: assets/views/asset.py:52
 msgid "tag {}"
 msgstr "тег {}"
 
-#: assets/views/asset.py:45
+#: assets/views/asset.py:56
+#| msgid "tags"
+msgid "tags {}"
+msgstr "теги {}"
+
+#: assets/views/asset.py:59
+msgid "title contains `{}'"
+msgstr "название содержит `{}'"
+
+#: assets/views/asset.py:62
+msgid "author is {}"
+msgstr "автор {}"
+
+#: assets/views/asset.py:65
+msgid "original author {}"
+msgstr "автор оригинала {}"
+
+#: assets/views/asset.py:68
+msgid "license {}"
+msgstr "лицензия {}"
+
+#: assets/views/asset.py:72
 msgid "from users followed by {}"
 msgstr "от пользователей, отслеживаемых {}"
 
-#: assets/views/asset.py:51
+#: assets/views/asset.py:81
 msgid "compatible with application version {}"
 msgstr "совместимые с версией приложения {}"
 
-#: assets/views/asset.py:58
+#: assets/views/asset.py:84
+msgid "version is {}"
+msgstr "версия {}"
+
+#: assets/views/asset.py:91
 msgid "Assets by criteria"
 msgstr "Файлы по критериям"
 
-#: assets/views/asset.py:74
+#: assets/views/asset.py:107
 msgid "Last uploads"
 msgstr "Последние загрузки"
 
-#: assets/views/asset.py:81
+#: assets/views/asset.py:114
 #, python-brace-format
 msgid "Feed for user {0}"
 msgstr "Лента пользователя {0}"
 
-#: assets/views/asset.py:167
+#: assets/views/asset.py:200
 msgid "Edit an asset"
 msgstr "Редактировать файл"
 
-#: assets/views/asset.py:187
+#: assets/views/asset.py:235
+msgid "Search results: {}"
+msgstr "Результаты поиска: {}"
+
+#: assets/views/asset.py:243 assets/views/asset.py:252
 msgid "Search for assets"
 msgstr "Поиск файлов"
 
@@ -383,6 +410,11 @@ msgstr "Список пользователей"
 #: assets/views/users.py:73
 msgid "Edit profile"
 msgstr "Редактирование профиля"
+
+#, fuzzy
+#~| msgid "Compatible application versions"
+#~ msgid "application version"
+#~ msgstr "Совместимые версии приложения"
 
 #~ msgid "Assets with tag {}"
 #~ msgstr "Файлы с тегом {}"
