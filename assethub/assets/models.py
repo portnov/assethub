@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from os.path import basename
+from os.path import basename, join, splitext
+from hashlib import sha1
 from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
@@ -10,16 +11,25 @@ from django.contrib.auth.models import User
 from django_comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
+from django.utils import timezone
 
 from taggit_autosuggest.managers import TaggableManager
 from vote.managers import VotableManager
 from versionfield import VersionField
 
+def get_upload_path(prefix):
+    def get_path(instance, filename):
+        name,ext = splitext(filename)
+        hash = sha1(str(timezone.now())).hexdigest()[:6]
+        filename = '{}_{}{}'.format(name, hash, ext)
+        return join(prefix, filename)
+    return get_path
+
 class Application(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
-    logo = models.ImageField(upload_to='logos/', null=True, blank=True)
+    logo = models.ImageField(upload_to=get_upload_path('logos/'), null=True, blank=True)
     url = models.URLField(null=True, blank=True)
 
     def __str__(self):
@@ -54,8 +64,8 @@ class Asset(models.Model):
     creation_date = models.DateTimeField(null=True, blank=True, verbose_name=_("Originally created"))
     title = models.CharField(max_length=255, verbose_name=_("title"))
     notes = models.TextField(null=True, verbose_name=_("description"))
-    image = models.ImageField(upload_to='thumbnails/', verbose_name=_("thumbnail"))
-    data = models.FileField(upload_to='data/', verbose_name=_("data file"))
+    image = models.ImageField(upload_to=get_upload_path('thumbnails/'), verbose_name=_("thumbnail"))
+    data = models.FileField(upload_to=get_upload_path('data/'), verbose_name=_("data file"))
     url = models.URLField(null=True, blank=True, verbose_name=_("URL"))
     pub_date = models.DateTimeField(verbose_name=_("date published"))
     version = VersionField(null=True, blank=True, number_bits=[8,8,8,8], verbose_name=_("asset version"))
