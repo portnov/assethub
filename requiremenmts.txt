@@ -8,6 +8,7 @@ django-taggit-autosuggest
 django-contrib-comments
 django-vote
 social-auth-app-django
+markdown2==2.3.1
 django-markdown-deux
 django-pagedown
 djangorestframework
