@@ -72,21 +72,21 @@ Features, or what is implemented currently
 ------------------------------------------
 
 * Simple structure to store assets:
-** The site contains several Applications (for example, Krita, Blender, MyPaint);
-** Each Application has several Components (for example Krita can have Brushes and Gradients);
-** Components contain assets.
-** Supported set of applications and components is configured by site administrator.
+ * The site contains several Applications (for example, Krita, Blender, MyPaint);
+ * Each Application has several Components (for example Krita can have Brushes and Gradients);
+ * Components contain assets.
+ * Supported set of applications and components is configured by site administrator.
 * Each asset has the following set of attributes:
-** Author, meaning the user who uploaded it to site;
-** Original author, for case if user uploads asset which was created by another man;
-** License; supported set of licenses is configured by site administrator.
-** Title and notes; Markdown is supported for notes.
-** Thumbnail image and data file.
-** URL for author's site or something like that.
-** Asset version (for example, brush pack version).
-** Range of Application versions, with which the asset is compatible.
-** Set of tags.
-** Rating aka score aka votes number. Each user can vote for one asset not more than one time.
+ * Author, meaning the user who uploaded it to site;
+ * Original author, for case if user uploads asset which was created by another man;
+ * License; supported set of licenses is configured by site administrator.
+ * Title and notes; Markdown is supported for notes.
+ * Thumbnail image and data file.
+ * URL for author's site or something like that.
+ * Asset version (for example, brush pack version).
+ * Range of Application versions, with which the asset is compatible.
+ * Set of tags.
+ * Rating aka score aka votes number. Each user can vote for one asset not more than one time.
 * Comments are supported for assets. Markdown is supported for comments.
 * The user can `follow' other users and have a feed of assets uploaded by them.
 * Authentication with G+ account (other social networks to be supported) and
