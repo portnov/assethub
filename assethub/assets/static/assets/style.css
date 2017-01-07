@@ -130,7 +130,15 @@ div.asset {
   border-radius: 6px;
 }
 
-div.asset img.thumbnail {
+div.asset-details {
+  background: #3f3f3f;
+  padding: 2ex;
+  margin: 1ex;
+  text-align: left;
+  border-radius: 6px;
+}
+
+img.thumbnail {
   float: left;
   margin: 1ex;
 }

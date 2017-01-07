@@ -5,8 +5,8 @@
 {% load common %}
 
 {% block content %}
-<div id="asset_{{asset.pk}}">
-  <img src="{{asset.image.url}}" alt="{{asset.title}}"/>
+<div class="asset-details" id="asset_{{asset.pk}}">
+  <img class="thumbnail" src="{{asset.image.url}}" alt="{{asset.title}}"/>
   <p class="title">
     <a href="{% url 'by_application' asset.application.slug %}">{{asset.application.title}}</a>
       {% if asset.component %}
