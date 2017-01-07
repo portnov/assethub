@@ -35,6 +35,9 @@ class Application(models.Model):
     def __str__(self):
         return self.title.encode('utf-8')
 
+    def __unicode__(self):
+        return self.title
+
 class Component(models.Model):
     application = models.ForeignKey('Application', on_delete=models.CASCADE)
     slug = models.SlugField(max_length=32, primary_key=True)
@@ -46,6 +49,10 @@ class Component(models.Model):
     def __str__(self):
         return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title).encode('utf-8')
 
+    def __unicode__(self):
+        return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title)
+
+
 class License(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
     title = models.CharField(max_length=255)
@@ -53,7 +60,11 @@ class License(models.Model):
     text = models.TextField(null=True, blank=True)
 
     def __str__(self):
+        return pgettext_lazy("license title", "{0}: {1}").format(self.slug, self.title).encode('utf-8')
+
+    def __str__(self):
         return pgettext_lazy("license title", "{0}: {1}").format(self.slug, self.title)
+
 
 class Asset(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("author"))
@@ -102,6 +113,16 @@ class Asset(models.Model):
             result += self.component.title + " "
         result += self.title
         return result.encode('utf-8')
+
+    def __unicode__(self):
+        result = ""
+        if self.application:
+            result += str(self.application) + " "
+        if self.component:
+            result += self.component.title + " "
+        result += self.title
+        return result
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
