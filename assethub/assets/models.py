@@ -101,7 +101,7 @@ class Asset(models.Model):
         if self.component:
             result += self.component.title + " "
         result += self.title
-        return result
+        return result.encode('utf-8')
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
