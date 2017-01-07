@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-06 20:11+0000\n"
+"POT-Creation-Date: 2017-01-07 07:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,6 +78,7 @@ msgid "data file"
 msgstr "файл с данными"
 
 #: assets/models.py:58 assets/templates/assets/asset.html:28
+#: flatmenu/models.py:14
 msgid "URL"
 msgstr "URL"
 
@@ -181,19 +182,28 @@ msgstr "Инструкции по установке"
 msgid "Comments"
 msgstr "Комментарии"
 
-#: assets/templates/assets/asset.html:65
+#: assets/templates/assets/asset.html:68
+msgctxt "comment post date"
+msgid "at"
+msgstr " "
+
+#: assets/templates/assets/asset.html:78
 msgid "No comments yet."
 msgstr "Комментариев ещё нет."
 
-#: assets/templates/assets/asset.html:78 assets/templates/assets/post.html:22
+#: assets/templates/assets/asset.html:82
+msgid "Leave a comment:"
+msgstr "Оставить комментарий:"
+
+#: assets/templates/assets/asset.html:93 assets/templates/assets/post.html:22
 msgid "Post"
 msgstr "Отправить"
 
-#: assets/templates/assets/asset.html:79
+#: assets/templates/assets/asset.html:94
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: assets/templates/assets/asset.html:84
+#: assets/templates/assets/asset.html:100
 msgid "Please <a href=\"{{login_url}}\">log in</a> to leave a comment."
 msgstr ""
 "Пожалуйста, <a href=\"{{login_url}}\">войдите</a>, чтобы оставить "
@@ -220,11 +230,11 @@ msgstr "Выйти"
 msgid "Log in"
 msgstr "Войти"
 
-#: assets/templates/assets/default.html:122 assets/views/asset.py:181
+#: assets/templates/assets/default.html:134 assets/views/asset.py:181
 msgid "Post an asset"
 msgstr "Поместить файл"
 
-#: assets/templates/assets/default.html:130
+#: assets/templates/assets/default.html:142
 msgid "search"
 msgstr "поиск"
 
@@ -232,15 +242,15 @@ msgstr "поиск"
 msgid "Save"
 msgstr "Сохранить"
 
-#: assets/templates/assets/index.html:9 assets/templates/assets/post.html:7
+#: assets/templates/assets/index.html:12 assets/templates/assets/post.html:7
 msgid "Application"
 msgstr "Приложение"
 
-#: assets/templates/assets/index.html:15 assets/templates/assets/post.html:10
+#: assets/templates/assets/index.html:18 assets/templates/assets/post.html:10
 msgid "Component"
 msgstr "Компонент"
 
-#: assets/templates/assets/index.html:36
+#: assets/templates/assets/index.html:39
 msgid "No assets available."
 msgstr "Нет доступных файлов."
 
@@ -341,7 +351,6 @@ msgid "tag {}"
 msgstr "тег {}"
 
 #: assets/views/asset.py:56
-#| msgid "tags"
 msgid "tags {}"
 msgstr "теги {}"
 
@@ -410,6 +419,26 @@ msgstr "Список пользователей"
 #: assets/views/users.py:73
 msgid "Edit profile"
 msgstr "Редактирование профиля"
+
+#: flatmenu/models.py:10
+msgid "Title"
+msgstr "Название"
+
+#: flatmenu/models.py:12
+msgid "Order"
+msgstr "Порядок"
+
+#: flatmenu/models.py:13
+msgid "Page"
+msgstr "Страница"
+
+#: flatmenu/models.py:19
+msgid "Page and URL can not be specified simultaneously"
+msgstr "Страница и URL не могут быть указаны одновременно"
+
+#: flatmenu/models.py:21
+msgid "You should specify either page or URL"
+msgstr "Необходимо указать страницу или URL"
 
 #, fuzzy
 #~| msgid "Compatible application versions"
