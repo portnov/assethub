@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from os.path import basename
 from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
@@ -75,6 +76,9 @@ class Asset(models.Model):
         if not self.app_version_min and self.app_version_max:
             return pgettext_lazy("application version", "<= {}").format(self.app_version_max)
         return pgettext_lazy("application version", ">= {0} and <= {1}").format(self.app_version_min, self.app_version_max)
+
+    def get_filename(self):
+        return basename(self.data.name)
 
     def get_comments_count(self):
         ct = ContentType.objects.get_for_model(Asset)

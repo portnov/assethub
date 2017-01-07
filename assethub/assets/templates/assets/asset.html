@@ -48,7 +48,11 @@
   <p>{% trans 'Asset version' %}: {{asset.version}}</p>
   {% endif %}
   <p>{% trans 'Compatible application versions' %}: {{asset.get_app_versions}}</p>
-  <p class="download"><a href="{{asset.data.url}}">{% trans 'Download asset' %}</a></p>
+  <p class="download"><a href="{{asset.data.url}}">
+    {% blocktrans with size=asset.data.size|filesizeformat name=asset.get_filename %}
+    Download the asset ({{name}}, {{size}})
+    {% endblocktrans %}
+  </a></p>
   {% if asset.component.install_instructions %}
   <div class="install-instructions">
     <h3>{% trans 'Installation instructions' %}</h3>
