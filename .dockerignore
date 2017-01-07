@@ -1,0 +1,9 @@
+*.pyc
+*.swp
+*.sqlite3
+*.mo
+assethub/data/
+assethub/thumbnails/
+assethub/assethub/secret_settings.py
+assethub/assethub/email_settings.py
+assethub/s3-credentials.txt

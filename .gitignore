@@ -6,3 +6,4 @@ data/
 thumbnails/
 secret_settings.py
 email_settings.py
+s3-credentials.txt

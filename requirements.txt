@@ -2,6 +2,7 @@ pytz
 Pillow
 markdown
 boto
+psycopg2
 Django
 django-registration
 django-taggit
