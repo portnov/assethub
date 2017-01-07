@@ -1,0 +1,18 @@
+{% extends 'assets/default.html' %}
+{% load markdown_deux_tags %}
+
+{% block pagetitle %}
+<title>{{flatpage.title}}</title>
+{% endblock %}
+
+{% block h1 %}
+<h1>
+  <a href="/">/</a>
+  {{flatpage.title}}
+</h1>
+{% endblock %}
+
+{% block content %}
+{{flatpage.content|markdown}}
+{% endblock %}
+

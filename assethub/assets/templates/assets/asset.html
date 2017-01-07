@@ -60,12 +60,26 @@
 <h3>{% trans 'Comments' %}</h3>
 {% get_comment_list for asset as comments %}
 {% if comments %}
-{% render_comment_list for asset %}
+  <div class="comments">
+  {% for comment in comments %}
+    <div class="comment" id="c{{comment.pk}}">
+      <p class="comment-title">
+        {% user_link comment.user %}
+        {% trans 'at' context "comment post date" %}
+        {{comment.submit_date}}
+      </p>
+      <div class="comment-text">
+        {{comment.comment|markdown}}
+      </div>
+    </div>
+  {% endfor %}
+  </div>
 {% else %}
 <p>{% trans 'No comments yet.' %}</p>
 {% endif %}
 
 {% if user.is_authenticated %}
+<p>{% trans 'Leave a comment:' %}</p>
 {% get_comment_form for asset as form %}
     <form action="{% comment_form_target %}" method="post">
     {% csrf_token %}
@@ -75,8 +89,10 @@
     {{ form.object_pk }}
     {{ form.timestamp }}
     {{ form.security_hash }}
-    <input type="submit" name="submit" value="{% trans 'Post' %}">
-    <input type="submit" name="preview" value="{% trans 'Preview' %}">
+    <p>
+      <input type="submit" name="submit" value="{% trans 'Post' %}">
+      <input type="submit" name="preview" value="{% trans 'Preview' %}">
+    </p>
     <input type="hidden" name="next" value="{% url 'asset' asset.pk %}" />
     </form>
 {% else %}

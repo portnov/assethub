@@ -6,6 +6,9 @@
 
 {% block content %}
 {% if application %}
+{% if logo %}
+<img class='logo' src='{{logo.url}}' height='48px'/>
+{% endif %}
 <h2>{% trans 'Application' %}: <a href="{{application.url}}">{{application}}</a></h2>
 <div class="application-notes">
 {{application.notes|markdown}}

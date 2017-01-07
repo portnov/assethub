@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.flatpages',
     'modeltranslation',
     'django_gravatar',
     'markdown_deux',
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     'taggit',
     'taggit_autosuggest',
     'vote',
-    'assets'
+    'assets',
+    'flatmenu'
 ]
 
 SITE_ID=1

@@ -3,6 +3,7 @@
 {% load navigation %}
 {% load social_auth %}
 {% load common %}
+{% load flatmenu_tags %}
 
 <!doctype html>
 <html>
@@ -10,9 +11,11 @@
 <head>
   <meta name="google-signin-client_id" content="{% google_plus_client_id %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'assets/style.css' %}" />
+{% block pagetitle %}
 {% if title %}
 <title>{{title}}</title>
 {% endif %}
+{% endblock %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
 function getCookie(name) {
@@ -91,9 +94,6 @@ function unfollow(username) {
 
 <body>
 
-{% if logo %}
-<img class='logo' src='{{logo.url}}' height='80px'/>
-{% endif %}
 
 <div class="login">
 {% if user.is_authenticated %}
@@ -107,15 +107,27 @@ function unfollow(username) {
 {% endif %}
 </div>
 
+{% get_menu_items as menu %}
+<div class="topmenu">
+<ul class="topmenu">
+  {% for item in menu %}
+    <li class="menuitem"><a href="{{item.get_url}}">{{item.title}}</a></li>
+  {% endfor %}
+</ul>
+</div>
+
+{% block h1 %}
 {% if title %}
 <h1>
   <a href="/">/</a>
 {{title}}
 </h1>
 {% endif %}
+{% endblock %}
 
 {% tree %}
 
+<div id="rightpane">
 {% if application %}
   {% if component %}
   <div id="postlink">
@@ -132,6 +144,7 @@ function unfollow(username) {
 </div>
 
 {% tags %}
+</div>
 
 <div id="content">
 

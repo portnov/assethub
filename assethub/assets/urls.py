@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^accounts/profile/$', views.users.current_user_profile, name='current_user_profile'),
     url(r'^accounts/$', views.users.get_users_list, name='users_list'),
     url(r'^post/(?P<appslug>[-\w]+)/(?P<cslug>[-\w]+)/$', views.asset.post_asset, name='post_asset'),
+    url(r'^pages/', include('django.contrib.flatpages.urls')),
     url(r'^(?P<appslug>[-\w]+)/$', views.asset.by_application, name='by_application'),
     url(r'^(?P<appslug>[-\w]+)/version/(?P<verstring>[0-9.]+)/$', views.asset.by_version, name='by_version'),
     url(r'^(?P<appslug>[-\w]+)/(?P<cslug>[-\w]+)/version/(?P<verstring>[0-9.]+)/$', views.asset.by_component_version, name='by_component_version'),
