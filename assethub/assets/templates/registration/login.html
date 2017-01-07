@@ -1,4 +1,16 @@
 {% extends 'assets/default.html' %}
+{% load i18n %}
+
+{% block pagetitle %}
+<title>{% trans 'Log in' %}</title>
+{% endblock %}
+
+{% block h1 %}
+<h1>
+  <a href="/">/</a>
+  {% trans 'Log in' %}
+</h1>
+{% endblock %}
 
 {% block content %}
 
