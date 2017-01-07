@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'storages',
     'modeltranslation',
     'django_gravatar',
     'markdown_deux',
@@ -166,7 +167,9 @@ USE_TZ = True
 
 STATIC_ROOT='/static/'
 STATIC_URL = '/static/'
+#STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 #MEDIA_ROOT='/up/'
 MEDIA_URL='/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
