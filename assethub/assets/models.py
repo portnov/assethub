@@ -100,7 +100,7 @@ class Asset(models.Model):
     num_votes = models.PositiveIntegerField(default=0)
     votes = VotableManager(extra_field='num_votes')
 
-    def clean_image(self):
+    def clean(self):
         if self.component and self.component.thumbnail_mandatory:
             if not self.image and not (self.component and self.component.thumbnailer_name):
                 raise ValidationError(_("You should upload thumbnail file"))
