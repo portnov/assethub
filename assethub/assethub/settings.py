@@ -162,6 +162,9 @@ STATIC_URL = '/static/'
 MEDIA_URL='/media/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-THUMBNAILER_CLASSES = ["assets.thumbnailers.ImageThumbnailer"]
+THUMBNAILER_CLASSES = ["assets.thumbnailers.ImageThumbnailer",
+                       "assets.thumbnailers.KritaPresetThumbnailer",
+                       "assets.thumbnailers.KritaBundleThumbnailer"
+                      ]
 DEFAULT_THUMBNAILER = None
 

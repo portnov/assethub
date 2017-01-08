@@ -1,12 +1,17 @@
 {% extends 'assets/default.html' %}
 {% load i18n %}
+{% load staticfiles %}
 {% load markdown_deux_tags %}
 {% load comments %}
 {% load common %}
 
 {% block content %}
 <div class="asset-details" id="asset_{{asset.pk}}">
-  <img class="thumbnail" src="{{asset.image.url}}" alt="{{asset.title}}"/>
+  {% if asset.image %}
+    <img class="thumbnail" src="{{asset.image.url}}" alt="{{asset.title}}"/>
+  {% else %}
+    <img class="thumbnail" src="{% static 'assets/nopreview.png' %}" alt="{{asset.title}}"/>
+  {% endif %}
   <p class="title">
     <a href="{% url 'by_application' asset.application.slug %}">{{asset.application.title}}</a>
       {% if asset.component %}

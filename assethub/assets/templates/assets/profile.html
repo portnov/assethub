@@ -1,5 +1,6 @@
 {% extends 'assets/default.html' %}
 {% load i18n %}
+{% load staticfiles %}
 {% load gravatar %}
 {% load common %}
 
@@ -34,7 +35,13 @@
 <div class="assets">
     {% for asset in most_rated_assets %}
     <div class="asset" id="asset_{{asset.pk}}">
-      <a href="{% url 'asset' asset.pk %}"><img class="thumbnail" src='{{asset.image.url}}' alt="{{asset.title}}"/></a>
+      <a href="{% url 'asset' asset.pk %}">
+        {% if asset.image %}
+          <img class="thumbnail" src='{{asset.image.url}}' alt="{{asset.title}}"/>
+        {% else %}
+          <img class="thumbnail" src="{% static 'assets/nopreview.png' %}" alt="{{asset.title}}"/>
+        {% endif %}
+      </a>
       <div class="thumbnail-description">
         <p class="title">{% asset_title asset True %}</p>
         {% asset_common user asset False %}

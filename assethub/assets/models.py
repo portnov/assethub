@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django_comments.models import Comment
@@ -55,6 +56,7 @@ class Component(models.Model):
     upload_instructions = models.TextField(null=True, blank=True)
     install_instructions = models.TextField(null=True, blank=True)
     thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True)
+    thumbnail_mandatory = models.BooleanField(_("Thumbnail is mandatory"), default=False)
 
     def thumbnailer(self):
         return get_thumbnailer(self.thumbnailer_name)
@@ -98,13 +100,20 @@ class Asset(models.Model):
     num_votes = models.PositiveIntegerField(default=0)
     votes = VotableManager(extra_field='num_votes')
 
+    def clean_image(self):
+        if self.component and self.component.thumbnail_mandatory:
+            if not self.image and not (self.component and self.component.thumbnailer_name):
+                raise ValidationError(_("Thumbnail must be provided"))
+        super(Asset, self).clean()
+
     def save(self):
         if self.data and not self.image and self.component and self.component.thumbnailer_name:
             thumbnailer = self.component.thumbnailer()
             if thumbnailer:
                 thumbnail = thumbnailer.make_thumbnail(self.data)
-                # pass save=False because otherwise it would call save() recursively
-                self.image.save("auto_thumbnail.png", thumbnail, save=False)
+                if thumbnail:
+                    # pass save=False because otherwise it would call save() recursively
+                    self.image.save("auto_thumbnail.png", thumbnail, save=False)
         super(Asset,self).save()
 
     def get_tags(self):
