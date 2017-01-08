@@ -14,16 +14,18 @@
   <p>{% trans 'Rating' %}: {{buddy.profile.get_rating}}</p>
 
 {% if user != buddy %}
-{% if followed %}
-<p class="followtext">
-{% trans 'You are following this user.' %}
-<a href="#" onclick="unfollow('{{buddy.username}}')">{% trans 'Do not follow this user' %}</a></p>
+  {% if used.is_authenticated %}
+    {% if followed %}
+      <p class="followtext">
+      {% trans 'You are following this user.' %}
+      <a href="#" onclick="unfollow('{{buddy.username}}')">{% trans 'Do not follow this user' %}</a></p>
+    {% else %}
+      <p class="followtext"><a href="#" onclick="follow('{{buddy.username}}')">{% trans 'Follow this user' %}</a></p>
+    {% endif %}
+  {% endif %}
 {% else %}
-<p class="followtext"><a href="#" onclick="follow('{{buddy.username}}')">{% trans 'Follow this user' %}</a></p>
-{% endif %}
-{% else %}
-<p>{% trans 'This is you.' %}</p>
-<p><a href="{% url 'edit_profile' %}">{% trans 'Edit your profile details' %}</a></p>
+  <p>{% trans 'This is you.' %}</p>
+  <p><a href="{% url 'edit_profile' %}">{% trans 'Edit your profile details' %}</a></p>
 {% endif %}
 <p><a href="{% url 'user_feed' buddy.username %}">
   {% blocktrans with name=buddy.get_full_name %}Go to {{name}}'s feed{% endblocktrans %}
