@@ -38,11 +38,15 @@ def get_logo_path(instance, filename):
     return get_path('logos/', instance, filename)
 
 class Application(models.Model):
+    class Meta:
+        verbose_name = _("application")
+        verbose_name_plural = _("applications")
+
     slug = models.SlugField(max_length=32, primary_key=True)
-    title = models.CharField(max_length=255)
-    notes = models.TextField(null=True, blank=True)
-    logo = models.ImageField(upload_to=get_logo_path, null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name=_("title"))
+    notes = models.TextField(null=True, blank=True, verbose_name=_("notes"))
+    logo = models.ImageField(upload_to=get_logo_path, null=True, blank=True, verbose_name=_("application logo"))
+    url = models.URLField(null=True, blank=True, verbose_name=_("URL"))
 
     def __str__(self):
         return self.title.encode('utf-8')
@@ -51,15 +55,19 @@ class Application(models.Model):
         return self.title
 
 class Component(models.Model):
-    application = models.ForeignKey('Application', on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = _("component")
+        verbose_name_plural = _("components")
+        
+    application = models.ForeignKey('Application', on_delete=models.CASCADE, verbose_name=_("application"))
     slug = models.SlugField(max_length=32, primary_key=True)
-    title = models.CharField(max_length=255)
-    notes = models.TextField(null=True, blank=True)
-    upload_instructions = models.TextField(null=True, blank=True)
-    install_instructions = models.TextField(null=True, blank=True)
-    thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name=_("title"))
+    notes = models.TextField(null=True, blank=True, verbose_name=_("notes"))
+    upload_instructions = models.TextField(null=True, blank=True, verbose_name=_("Upload instructions"))
+    install_instructions = models.TextField(null=True, blank=True, verbose_name=_("Installation instructions"))
+    thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True, verbose_name=_("automatic thumbnail creation"))
     thumbnail_mandatory = models.BooleanField(pgettext_lazy("component field label", "Thumbnail is mandatory"), default=False)
-    file_masks = models.CharField(_("Allowed file masks"), max_length=64, default="*")
+    file_masks = models.CharField(_("Allowed file masks"), help_text=_("space-separated list of file masks, e.g. *.jpg"), max_length=64, default="*")
 
     def thumbnailer(self):
         return get_thumbnailer(self.thumbnailer_name)
@@ -81,10 +89,14 @@ class Component(models.Model):
         return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title)
 
 class License(models.Model):
+    class Meta:
+        verbose_name = _("license")
+        verbose_name_plural = _("licenses")
+        
     slug = models.SlugField(max_length=32, primary_key=True)
-    title = models.CharField(max_length=255)
-    notes = models.TextField(null=True, blank=True)
-    text = models.TextField(null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name=_("Title"))
+    notes = models.TextField(null=True, blank=True, verbose_name=_("Notes"))
+    text = models.TextField(null=True, blank=True, verbose_name=_("Legal text"))
 
     def __str__(self):
         return pgettext_lazy("license title", "{0}: {1}").format(self.slug, self.title).encode('utf-8')
@@ -94,6 +106,10 @@ class License(models.Model):
 
 
 class Asset(models.Model):
+    class Meta:
+        verbose_name = _("asset")
+        verbose_name_plural = _("assets")
+
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("author"))
     application = models.ForeignKey('Application', on_delete=models.CASCADE, verbose_name=_("application"))
     component = models.ForeignKey('Component', on_delete=models.CASCADE, null=True, verbose_name=_("component"))
