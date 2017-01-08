@@ -56,7 +56,7 @@ class Component(models.Model):
     upload_instructions = models.TextField(null=True, blank=True)
     install_instructions = models.TextField(null=True, blank=True)
     thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True)
-    thumbnail_mandatory = models.BooleanField(_("Thumbnail is mandatory"), default=False)
+    thumbnail_mandatory = models.BooleanField(pgettext_lazy("component field label", "Thumbnail is mandatory"), default=False)
 
     def thumbnailer(self):
         return get_thumbnailer(self.thumbnailer_name)
@@ -103,7 +103,7 @@ class Asset(models.Model):
     def clean_image(self):
         if self.component and self.component.thumbnail_mandatory:
             if not self.image and not (self.component and self.component.thumbnailer_name):
-                raise ValidationError(_("Thumbnail must be provided"))
+                raise ValidationError(_("You should upload thumbnail file"))
         super(Asset, self).clean()
 
     def save(self):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-07 08:54+0000\n"
+"POT-Creation-Date: 2017-01-08 10:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,99 +25,108 @@ msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
 msgstr ""
 "Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
 
-#: assets/models.py:37
+#: assets/models.py:59
+msgctxt "component field label"
+msgid "Thumbnail is mandatory"
+msgstr "Предпросмотр обязателен"
+
+#: assets/models.py:65 assets/models.py:68
 #, python-brace-format
 msgctxt "component title"
 msgid "{0} {1}"
 msgstr "{1} {0}"
 
-#: assets/models.py:46
+#: assets/models.py:77 assets/models.py:80
 #, python-brace-format
 msgctxt "license title"
 msgid "{0}: {1}"
 msgstr "{0}: {1}"
 
-#: assets/models.py:49
+#: assets/models.py:84
 msgid "author"
 msgstr "автор"
 
-#: assets/models.py:50
+#: assets/models.py:85
 msgid "application"
 msgstr "приложение"
 
-#: assets/models.py:51
+#: assets/models.py:86
 msgid "component"
 msgstr "компонент"
 
-#: assets/models.py:52
+#: assets/models.py:87
 msgid "license"
 msgstr "лицензия"
 
-#: assets/models.py:53
+#: assets/models.py:88
 msgid "original author"
 msgstr "автор оригинала"
 
-#: assets/models.py:54
+#: assets/models.py:89
 msgid "Originally created"
 msgstr "изначально создан"
 
-#: assets/models.py:55
+#: assets/models.py:90
 msgid "title"
 msgstr "название"
 
-#: assets/models.py:56
+#: assets/models.py:91
 msgid "description"
 msgstr "описание"
 
-#: assets/models.py:57
+#: assets/models.py:92
 msgid "thumbnail"
 msgstr "миниатюра"
 
-#: assets/models.py:58
+#: assets/models.py:93
 msgid "data file"
 msgstr "файл с данными"
 
-#: assets/models.py:59 assets/templates/assets/asset.html:28
+#: assets/models.py:94 assets/templates/assets/asset.html:28
 #: flatmenu/models.py:14
 msgid "URL"
 msgstr "URL"
 
-#: assets/models.py:60
+#: assets/models.py:95
 msgid "date published"
 msgstr "дата публикации"
 
-#: assets/models.py:61
+#: assets/models.py:96
 msgid "asset version"
 msgstr "версия файла"
 
-#: assets/models.py:62
+#: assets/models.py:97
 msgid "Minimum compatible application version"
 msgstr "минимальная совместимая версия приложения"
 
-#: assets/models.py:63
+#: assets/models.py:98
 msgid "Maximum compatible application version"
 msgstr "Максимальная совместимая версия приложения"
 
-#: assets/models.py:64
+#: assets/models.py:99
 msgid "tags"
 msgstr "теги"
 
-#: assets/models.py:73
+#: assets/models.py:106
+msgid "You should upload thumbnail file"
+msgstr "Необходимо загрузить файл предпросмотра"
+
+#: assets/models.py:124
 msgctxt "application version"
 msgid "any"
 msgstr "любые"
 
-#: assets/models.py:75
+#: assets/models.py:126
 msgctxt "application version"
 msgid ">= {}"
 msgstr ">= {}"
 
-#: assets/models.py:77
+#: assets/models.py:128
 msgctxt "application version"
 msgid "<= {}"
 msgstr "<= {}"
 
-#: assets/models.py:78
+#: assets/models.py:129
 #, python-brace-format
 msgctxt "application version"
 msgid ">= {0} and <= {1}"
@@ -210,6 +219,10 @@ msgstr ""
 "Пожалуйста, <a href=\"{{login_url}}\">войдите</a>, чтобы оставить "
 "комментарий."
 
+#: assets/templates/assets/asset_thumbnail.html:10
+msgid "No preview available"
+msgstr "Предпросмотр недоступен"
+
 #: assets/templates/assets/asset_title.html:9
 msgid "by"
 msgstr "от"
@@ -228,6 +241,8 @@ msgid "Log out"
 msgstr "Выйти"
 
 #: assets/templates/assets/default.html:106
+#: assets/templates/registration/login.html:5
+#: assets/templates/registration/login.html:11
 msgid "Log in"
 msgstr "Войти"
 
@@ -255,7 +270,7 @@ msgstr "Приложение"
 msgid "Component"
 msgstr "Компонент"
 
-#: assets/templates/assets/index.html:39
+#: assets/templates/assets/index.html:41
 msgid "No assets available."
 msgstr "Нет доступных файлов."
 
@@ -342,6 +357,11 @@ msgstr "Навигация"
 #: assets/templates/assets/tree.html:18
 msgid "All users"
 msgstr "Все пользователи"
+
+#: assets/templates/registration/registration_form.html:5
+#: assets/templates/registration/registration_form.html:11
+msgid "Registration"
+msgstr "Регистрация"
 
 #: assets/views/asset.py:43
 msgid "application {}"
@@ -448,7 +468,6 @@ msgstr "Необходимо указать страницу или URL"
 #~ msgid "Download asset"
 #~ msgstr "Скачать файл"
 
-#, fuzzy
 #~| msgid "Compatible application versions"
 #~ msgid "application version"
 #~ msgstr "Совместимые версии приложения"
