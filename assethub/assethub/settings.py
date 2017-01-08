@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import re
 
 from secret_settings import *
 from email_settings import *
@@ -167,4 +168,19 @@ THUMBNAILER_CLASSES = ["assets.thumbnailers.ImageThumbnailer",
                        "assets.thumbnailers.KritaBundleThumbnailer"
                       ]
 DEFAULT_THUMBNAILER = None
+
+MARKDOWN_DEUX_STYLES = {
+    "default": {
+            "link_patterns": [
+                (re.compile(r'#(\d+)\b'), r"/asset/\1/"),
+                (re.compile(r'#(\w+)\b'), r"/tag/\1/"),
+            ],
+            "extras": {
+                "code-friendly": None,
+                "demote-headers": 1,
+                "link-patterns": None,
+            },
+        "safe_mode": "escape",
+    }
+}
 
