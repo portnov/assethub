@@ -25,7 +25,7 @@ class AssetForm(ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get("image")
         if not image:
-            raise forms.ValidationError("No thumbnail provided")
+            pass
         else:
            w, h = get_image_dimensions(image)
            if w > MAX_IMAGE_SIZE or h > MAX_IMAGE_SIZE:

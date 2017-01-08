@@ -17,19 +17,28 @@ from taggit_autosuggest.managers import TaggableManager
 from vote.managers import VotableManager
 from versionfield import VersionField
 
-def get_upload_path(prefix):
-    def get_path(instance, filename):
-        name,ext = splitext(filename)
-        hash = sha1(str(timezone.now())).hexdigest()[:6]
-        filename = '{}_{}{}'.format(name, hash, ext)
-        return join(prefix, filename)
-    return get_path
+from assets.thumbnailers import get_thumbnailer_classes, get_default_thumbnailer, get_thumbnailer
+
+def get_path(prefix, instance, filename):
+    name,ext = splitext(filename)
+    hash = sha1(str(timezone.now())).hexdigest()[:6]
+    filename = '{}_{}{}'.format(name, hash, ext)
+    return join(prefix, filename)
+
+def get_thumbnail_path(instance, filename):
+    return get_path('thumbnails/', instance, filename)
+
+def get_data_path(instance, filename):
+    return get_path('data/', instance, filename)
+
+def get_logo_path(instance, filename):
+    return get_path('logos/', instance, filename)
 
 class Application(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
     title = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
-    logo = models.ImageField(upload_to=get_upload_path('logos/'), null=True, blank=True)
+    logo = models.ImageField(upload_to=get_logo_path, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
 
     def __str__(self):
@@ -45,13 +54,16 @@ class Component(models.Model):
     notes = models.TextField(null=True, blank=True)
     upload_instructions = models.TextField(null=True, blank=True)
     install_instructions = models.TextField(null=True, blank=True)
+    thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True)
+
+    def thumbnailer(self):
+        return get_thumbnailer(self.thumbnailer_name)
 
     def __str__(self):
         return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title).encode('utf-8')
 
     def __unicode__(self):
         return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title)
-
 
 class License(models.Model):
     slug = models.SlugField(max_length=32, primary_key=True)
@@ -75,8 +87,8 @@ class Asset(models.Model):
     creation_date = models.DateTimeField(null=True, blank=True, verbose_name=_("Originally created"))
     title = models.CharField(max_length=255, verbose_name=_("title"))
     notes = models.TextField(null=True, verbose_name=_("description"))
-    image = models.ImageField(upload_to=get_upload_path('thumbnails/'), verbose_name=_("thumbnail"))
-    data = models.FileField(upload_to=get_upload_path('data/'), verbose_name=_("data file"))
+    image = models.ImageField(upload_to=get_thumbnail_path, verbose_name=_("thumbnail"), null=True, blank=True)
+    data = models.FileField(upload_to=get_data_path, verbose_name=_("data file"))
     url = models.URLField(null=True, blank=True, verbose_name=_("URL"))
     pub_date = models.DateTimeField(verbose_name=_("date published"))
     version = VersionField(null=True, blank=True, number_bits=[8,8,8,8], verbose_name=_("asset version"))
@@ -85,6 +97,15 @@ class Asset(models.Model):
     tags = TaggableManager(blank=True, verbose_name=_("tags"))
     num_votes = models.PositiveIntegerField(default=0)
     votes = VotableManager(extra_field='num_votes')
+
+    def save(self):
+        if self.data and not self.image and self.component and self.component.thumbnailer_name:
+            thumbnailer = self.component.thumbnailer()
+            if thumbnailer:
+                thumbnail = thumbnailer.make_thumbnail(self.data)
+                # pass save=False because otherwise it would call save() recursively
+                self.image.save("auto_thumbnail.png", thumbnail, save=False)
+        super(Asset,self).save()
 
     def get_tags(self):
         return ", ".join([tag.name for tag in self.tags.all()])
