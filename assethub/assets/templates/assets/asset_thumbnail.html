@@ -1,0 +1,15 @@
+{% load staticfiles %}
+{% load i18n %}
+
+{% if as_link %}
+<a href="{% url 'asset' asset.pk %}">
+{% endif %}
+{% if asset.image %}
+  <img class="thumbnail" src="{{asset.image.url}}" alt="{{asset.title}}"/>
+{% else %}
+  <img alt="{% trans 'No preview available' %}" class="thumbnail" src="{% static 'assets/nopreview.png' %}" alt="{{asset.title}}"/>
+{% endif %}
+{% if as_link %}
+</a>
+{% endif %}
+
