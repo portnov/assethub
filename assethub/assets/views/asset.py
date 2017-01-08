@@ -19,6 +19,7 @@ from assets.forms import AssetForm, AdvancedSearchForm, SimpleSearchForm
 from assets.views.common import get_page
 
 def show_assets_list(request, assets_list, **kwargs):
+    """Display list of assets with paging"""
     assets = get_page(request, assets_list)
     context=dict(assets=assets, **kwargs)
     return render(request, 'assets/index.html', context)
@@ -35,6 +36,9 @@ def search_assets_by(request,
             author=None,
             original_author=None,
             order_by='-pub_date', **kwargs):
+
+    """Search assets by criteria specified in arguments."""
+
     qry = Q()
     auto_title = []
     if appslug is not None:
@@ -98,15 +102,19 @@ def search_assets_by(request,
     return show_assets_list(request, asset_list, **kwargs)
 
 def index(request):
+    """Index page view"""
+
     if request.user.is_authenticated:
         return user_feed(request, request.user)
     else:
         return full_feed(request)
 
 def full_feed(request):
+    """Feed with all assets"""
     return search_assets_by(request, title=_('Last uploads'))
 
 def get_user_feed(request, username):
+    """Feed for specific user"""
     user = get_object_or_404(User, username=username)
     return user_feed(request, user)
 
@@ -141,6 +149,8 @@ def asset_details(request, pk):
     return render(request, 'assets/asset.html', context)
 
 def vote(request, asset_id, direction):
+    """POST handler for vote AJAX links"""
+
     if request.method != 'POST':
         return HttpResponseBadRequest()
     if direction not in ["up", "down"]:
@@ -202,6 +212,8 @@ def edit_asset(request, pk):
     return render(request, 'assets/post.html', context)
 
 def license(request, slug):
+    """Display license details"""
+
     license = get_object_or_404(License, slug=slug)
     context = dict(license=license, title=str(license))
     return render(request, 'assets/license.html', context)

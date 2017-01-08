@@ -16,6 +16,8 @@ from assets.views.common import get_page
 
 @login_required
 def follow(request, username):
+    """POST handler for 'follow' AJAX link"""
+
     if request.method != 'POST':
         return HttpResponseBadRequest()
     buddy = get_object_or_404(User, username=username)
@@ -25,6 +27,8 @@ def follow(request, username):
 
 @login_required
 def unfollow(request, username):
+    """POST handler for 'unfollow' AJAX link"""
+
     if request.method != 'POST':
         return HttpResponseBadRequest()
     buddy = get_object_or_404(User, username=username)

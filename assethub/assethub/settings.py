@@ -40,18 +40,29 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    # To use S3 storage
     'storages',
+    # To enable translations of Application and Component descriptions
     'modeltranslation',
     'django_gravatar',
+    # Markdown
     'markdown_deux',
+    # Markdown editor
     'pagedown',
+    # REST API
     'rest_framework',
+    # Social networks authentication
     'social_django',
     'django_comments',
+    # Tags for assets
     'taggit',
+    # Autocomplete for tags
     'taggit_autosuggest',
+    # Voting / rating / liking
     'vote',
+    # Main application
     'assets',
+    # Configurable top menu
     'flatmenu'
 ]
 
@@ -95,10 +106,12 @@ TEMPLATES = [
     },
 ]
 
+# CSS for markdown editor widget
 PAGEDOWN_WIDGET_CSS=("assets/pagedown.css", )
 
 WSGI_APPLICATION = 'assethub.wsgi.application'
 
+# Configuration for REST API framework
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -125,7 +138,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# How long account activation links will be active
 ACCOUNT_ACTIVATION_DAYS=3
+# Redirect user to / after log out
 LOGOUT_REDIRECT_URL="/"
 
 # Internationalization
@@ -161,23 +176,31 @@ STATIC_URL = '/static/'
 
 #MEDIA_ROOT='/up/'
 MEDIA_URL='/media/'
+
+# Use S3 to store media files uploaded by users
+# Comment this out to use default filesystem storage
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+# List of automatic thumbnailer classes
 THUMBNAILER_CLASSES = ["assets.thumbnailers.ImageThumbnailer",
                        "assets.thumbnailers.KritaPresetThumbnailer",
                        "assets.thumbnailers.KritaBundleThumbnailer"
                       ]
 DEFAULT_THUMBNAILER = None
 
+# Settings for markdown
 MARKDOWN_DEUX_STYLES = {
     "default": {
             "link_patterns": [
+                # convert #123 to link to /asset/123/
                 (re.compile(r'#(\d+)\b'), r"/asset/\1/"),
+                # convert #hashtag to link to /tag/hashtag/
                 (re.compile(r'#(\w+)\b'), r"/tag/\1/"),
             ],
             "extras": {
                 "code-friendly": None,
                 "demote-headers": 1,
+                # its odd but for some reason we have to specify both "link-patterns" and "link_patterns"
                 "link-patterns": None,
             },
         "safe_mode": "escape",

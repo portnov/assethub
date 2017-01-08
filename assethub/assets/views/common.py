@@ -12,6 +12,7 @@ from taggit.models import Tag
 from assets.models import Asset, Component, Application
 from assets.forms import AssetForm
 
+# TODO; this should be configurable
 PER_PAGE=30
 
 def get_page(request, list):

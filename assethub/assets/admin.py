@@ -11,6 +11,12 @@ from modeltranslation.admin import TranslationAdmin
 from models import Application, Component, Asset, Profile, License
 import assets.translation
 
+class ComponentInline(admin.StackedInline):
+    model = Component
+
+class ComponentAdmin(TranslationAdmin):
+    pass
+
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
@@ -26,9 +32,7 @@ class ApplicationForm(ModelForm):
 
 class ApplicationAdmin(TranslationAdmin):
     form = ApplicationForm
-
-class ComponentAdmin(TranslationAdmin):
-    pass
+    #inlines = [ComponentInline]
 
 class LicenseForm(ModelForm):
     class Meta:
