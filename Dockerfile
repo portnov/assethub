@@ -9,6 +9,7 @@ WORKDIR /assethub/
 ADD requirements.txt .
 
 RUN pip install -U -r /assethub/requirements.txt
+RUN apt-get update -y && apt-get install -y gettext
 
 ADD assethub/ .
 add install-database.sh /
