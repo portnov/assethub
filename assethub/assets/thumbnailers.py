@@ -102,7 +102,7 @@ def get_default_thumbnailer():
 
 def get_thumbnailer(name):
     if not name:
-        return None
+        name = get_default_thumbnailer()
     cls = import_string(name)
     thumbnailer = cls()
     if not isinstance(thumbnailer, Thumbnailer):
