@@ -184,9 +184,7 @@ def post_asset(request, appslug, cslug):
             form.save_m2m()
             return HttpResponseRedirect(reverse('asset', args=[new_asset.pk]))
     else:
-        form = AssetForm()
-        form.application = application
-        form.component = component
+        form = AssetForm(initial={'application': application, 'component': component})
 
     title = _("Post an asset")
     context = dict(post_form=form, title=title, application=application, component=component, form_action=reverse('post_asset', args=[appslug, cslug]))

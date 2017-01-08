@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 
 from os.path import basename, join, splitext
+from glob import fnmatch
 from hashlib import sha1
+
 from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
@@ -57,9 +59,20 @@ class Component(models.Model):
     install_instructions = models.TextField(null=True, blank=True)
     thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True)
     thumbnail_mandatory = models.BooleanField(pgettext_lazy("component field label", "Thumbnail is mandatory"), default=False)
+    file_masks = models.CharField(_("Allowed file masks"), max_length=64, default="*")
 
     def thumbnailer(self):
         return get_thumbnailer(self.thumbnailer_name)
+
+    def is_filename_allowed(self, name):
+        if not self.file_masks:
+            #print "masks not specified for component"
+            return True
+        for mask in self.file_masks.split():
+            if fnmatch.fnmatch(name, mask):
+                #print "{} matches to {}".format(name, mask)
+                return True
+        return False
 
     def __str__(self):
         return pgettext_lazy("component title", "{0} {1}").format(self.application.title, self.title).encode('utf-8')
@@ -101,9 +114,13 @@ class Asset(models.Model):
     votes = VotableManager(extra_field='num_votes')
 
     def clean(self):
+        if self.component and self.data and not self.component.is_filename_allowed(self.data.name):
+            raise ValidationError(_("It is not allowed to upload files of this type for this component"))
+
         if self.component and self.component.thumbnail_mandatory:
             if not self.image and not (self.component and self.component.thumbnailer_name):
                 raise ValidationError(_("You should upload thumbnail file"))
+
         super(Asset, self).clean()
 
     def save(self):

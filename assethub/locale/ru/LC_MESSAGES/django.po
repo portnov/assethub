@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-08 10:36+0000\n"
+"POT-Creation-Date: 2017-01-08 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,108 +25,112 @@ msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
 msgstr ""
 "Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
 
-#: assets/models.py:59
+#: assets/models.py:61
 msgctxt "component field label"
 msgid "Thumbnail is mandatory"
 msgstr "Предпросмотр обязателен"
 
-#: assets/models.py:65 assets/models.py:68
+#: assets/models.py:62
+msgid "Allowed file masks"
+msgstr ""
+
+#: assets/models.py:76 assets/models.py:79
 #, python-brace-format
 msgctxt "component title"
 msgid "{0} {1}"
 msgstr "{1} {0}"
 
-#: assets/models.py:77 assets/models.py:80
+#: assets/models.py:88 assets/models.py:91
 #, python-brace-format
 msgctxt "license title"
 msgid "{0}: {1}"
 msgstr "{0}: {1}"
 
-#: assets/models.py:84
+#: assets/models.py:95
 msgid "author"
 msgstr "автор"
 
-#: assets/models.py:85
+#: assets/models.py:96
 msgid "application"
 msgstr "приложение"
 
-#: assets/models.py:86
+#: assets/models.py:97
 msgid "component"
 msgstr "компонент"
 
-#: assets/models.py:87
+#: assets/models.py:98
 msgid "license"
 msgstr "лицензия"
 
-#: assets/models.py:88
+#: assets/models.py:99
 msgid "original author"
 msgstr "автор оригинала"
 
-#: assets/models.py:89
+#: assets/models.py:100
 msgid "Originally created"
 msgstr "изначально создан"
 
-#: assets/models.py:90
+#: assets/models.py:101
 msgid "title"
 msgstr "название"
 
-#: assets/models.py:91
+#: assets/models.py:102
 msgid "description"
 msgstr "описание"
 
-#: assets/models.py:92
+#: assets/models.py:103
 msgid "thumbnail"
 msgstr "миниатюра"
 
-#: assets/models.py:93
+#: assets/models.py:104
 msgid "data file"
 msgstr "файл с данными"
 
-#: assets/models.py:94 assets/templates/assets/asset.html:28
+#: assets/models.py:105 assets/templates/assets/asset.html:28
 #: flatmenu/models.py:14
 msgid "URL"
 msgstr "URL"
 
-#: assets/models.py:95
+#: assets/models.py:106
 msgid "date published"
 msgstr "дата публикации"
 
-#: assets/models.py:96
+#: assets/models.py:107
 msgid "asset version"
 msgstr "версия файла"
 
-#: assets/models.py:97
+#: assets/models.py:108
 msgid "Minimum compatible application version"
 msgstr "минимальная совместимая версия приложения"
 
-#: assets/models.py:98
+#: assets/models.py:109
 msgid "Maximum compatible application version"
 msgstr "Максимальная совместимая версия приложения"
 
-#: assets/models.py:99
+#: assets/models.py:110
 msgid "tags"
 msgstr "теги"
 
-#: assets/models.py:106
+#: assets/models.py:117
 msgid "You should upload thumbnail file"
 msgstr "Необходимо загрузить файл предпросмотра"
 
-#: assets/models.py:124
+#: assets/models.py:139
 msgctxt "application version"
 msgid "any"
 msgstr "любые"
 
-#: assets/models.py:126
+#: assets/models.py:141
 msgctxt "application version"
 msgid ">= {}"
 msgstr ">= {}"
 
-#: assets/models.py:128
+#: assets/models.py:143
 msgctxt "application version"
 msgid "<= {}"
 msgstr "<= {}"
 
-#: assets/models.py:129
+#: assets/models.py:144
 #, python-brace-format
 msgctxt "application version"
 msgid ">= {0} and <= {1}"
@@ -246,7 +250,7 @@ msgstr "Выйти"
 msgid "Log in"
 msgstr "Войти"
 
-#: assets/templates/assets/default.html:134 assets/views/asset.py:181
+#: assets/templates/assets/default.html:134 assets/views/asset.py:191
 msgid "Post an asset"
 msgstr "Поместить файл"
 
@@ -313,36 +317,36 @@ msgstr "Имя"
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: assets/templates/assets/profile.html:19
+#: assets/templates/assets/profile.html:20
 msgid "You are following this user."
 msgstr "Вы отслеживаете этого пользователя."
 
-#: assets/templates/assets/profile.html:20
+#: assets/templates/assets/profile.html:21
 msgid "Do not follow this user"
 msgstr "Не отслеживать этого пользователя"
 
-#: assets/templates/assets/profile.html:22
+#: assets/templates/assets/profile.html:23
 msgid "Follow this user"
 msgstr "Отслеживать этого пользователя"
 
-#: assets/templates/assets/profile.html:25
+#: assets/templates/assets/profile.html:27
 msgid "This is you."
 msgstr "Это вы."
 
-#: assets/templates/assets/profile.html:26
+#: assets/templates/assets/profile.html:28
 msgid "Edit your profile details"
 msgstr "Редактировать ваш профиль"
 
-#: assets/templates/assets/profile.html:29
+#: assets/templates/assets/profile.html:31
 #, python-format
 msgid "Go to %(name)s's feed"
 msgstr "Перейти к ленте %(name)s"
 
-#: assets/templates/assets/profile.html:33
+#: assets/templates/assets/profile.html:35
 msgid "Most rated assets"
 msgstr "Наиболее высоко оцененные файлы"
 
-#: assets/templates/assets/profile.html:46
+#: assets/templates/assets/profile.html:48
 msgid "This buddy did not post any assets yet."
 msgstr "Этот пользователь ещё не поместил никаких файлов."
 
@@ -363,85 +367,85 @@ msgstr "Все пользователи"
 msgid "Registration"
 msgstr "Регистрация"
 
-#: assets/views/asset.py:43
+#: assets/views/asset.py:47
 msgid "application {}"
 msgstr "приложение {}"
 
-#: assets/views/asset.py:48
+#: assets/views/asset.py:52
 msgid "component {}"
 msgstr "компонент {}"
 
-#: assets/views/asset.py:52
+#: assets/views/asset.py:56
 msgid "tag {}"
 msgstr "тег {}"
 
-#: assets/views/asset.py:56
+#: assets/views/asset.py:60
 msgid "tags {}"
 msgstr "теги {}"
 
-#: assets/views/asset.py:59
+#: assets/views/asset.py:63
 msgid "title contains `{}'"
 msgstr "название содержит `{}'"
 
-#: assets/views/asset.py:62
+#: assets/views/asset.py:66
 msgid "author is {}"
 msgstr "автор {}"
 
-#: assets/views/asset.py:65
+#: assets/views/asset.py:69
 msgid "original author {}"
 msgstr "автор оригинала {}"
 
-#: assets/views/asset.py:68
+#: assets/views/asset.py:72
 msgid "license {}"
 msgstr "лицензия {}"
 
-#: assets/views/asset.py:72
+#: assets/views/asset.py:76
 msgid "from users followed by {}"
 msgstr "от пользователей, отслеживаемых {}"
 
-#: assets/views/asset.py:81
+#: assets/views/asset.py:85
 msgid "compatible with application version {}"
 msgstr "совместимые с версией приложения {}"
 
-#: assets/views/asset.py:84
+#: assets/views/asset.py:88
 msgid "version is {}"
 msgstr "версия {}"
 
-#: assets/views/asset.py:91
+#: assets/views/asset.py:95
 msgid "Assets by criteria"
 msgstr "Файлы по критериям"
 
-#: assets/views/asset.py:107
+#: assets/views/asset.py:114
 msgid "Last uploads"
 msgstr "Последние загрузки"
 
-#: assets/views/asset.py:114
+#: assets/views/asset.py:122
 #, python-brace-format
 msgid "Feed for user {0}"
 msgstr "Лента пользователя {0}"
 
-#: assets/views/asset.py:200
+#: assets/views/asset.py:210
 msgid "Edit an asset"
 msgstr "Редактировать файл"
 
-#: assets/views/asset.py:235
+#: assets/views/asset.py:247
 msgid "Search results: {}"
 msgstr "Результаты поиска: {}"
 
-#: assets/views/asset.py:243 assets/views/asset.py:252
+#: assets/views/asset.py:255 assets/views/asset.py:264
 msgid "Search for assets"
 msgstr "Поиск файлов"
 
-#: assets/views/users.py:46
+#: assets/views/users.py:50
 #, python-brace-format
 msgid "{0}'s profile"
 msgstr "Профиль {0}"
 
-#: assets/views/users.py:58
+#: assets/views/users.py:62
 msgid "List of users"
 msgstr "Список пользователей"
 
-#: assets/views/users.py:73
+#: assets/views/users.py:77
 msgid "Edit profile"
 msgstr "Редактирование профиля"
 

@@ -19,8 +19,11 @@ class AssetForm(ModelForm):
 
     class Meta:
         model = Asset
-        fields = ['license', 'original_author', 'creation_date', 'title', 'notes', 'image', 'data', 'url', 'version', 'app_version_min', 'app_version_max', 'tags']
-        widgets = {'notes': PagedownWidget()}
+        fields = ['application', 'component', 'license', 'original_author', 'creation_date', 'title', 'notes', 'image', 'data', 'url', 'version', 'app_version_min', 'app_version_max', 'tags']
+        widgets = {'notes': PagedownWidget(), 
+                   'application': forms.HiddenInput(),
+                   'component': forms.HiddenInput()
+                  }
 
     def clean_image(self):
         image = self.cleaned_data.get("image")
