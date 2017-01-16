@@ -16,7 +16,7 @@ from versionfield.utils import convert_version_string_to_int
 
 from assets.models import Asset, Component, Application, License
 from assets.forms import AssetForm, AdvancedSearchForm, SimpleSearchForm
-from assets.views.common import get_page
+from assets.views.common import get_page, get_assets_query, get_simple_search_qry
 
 def show_assets_list(request, assets_list, **kwargs):
     """Display list of assets with paging"""
@@ -39,55 +39,12 @@ def search_assets_by(request,
 
     """Search assets by criteria specified in arguments."""
 
-    qry = Q()
-    auto_title = []
-    if appslug is not None:
-        app = get_object_or_404(Application, slug=appslug)
-    if app is not None:
-        auto_title.append(_("application {}").format(app.title))
-        qry = qry & Q(application=app)
-    if cslug is not None and app is not None:
-        component = get_object_or_404(Component, application=app, slug=cslug)
-    if component is not None:
-        auto_title.append(_("component {}").format(component.title))
-        qry = qry & Q(component=component)
-    if tslug is not None:
-        tag = get_object_or_404(Tag, slug=tslug)
-        auto_title.append(_("tag {}").format(tag.name))
-        qry = qry & Q(tags=tag)
-    if tags is not None:
-        tags_title = ", ".join([tag.name for tag in tags])
-        auto_title.append(_("tags {}").format(tags_title))
-        qry = qry & Q(tags__in=tags)
-    if asset_title:
-        auto_title.append(_("title contains `{}'").format(asset_title))
-        qry = qry & Q(title__contains=asset_title)
-    if author is not None:
-        auto_title.append(_("author is {}").format(author.get_full_name()))
-        qry = qry & Q(author=author)
-    if original_author:
-        auto_title.append(_("original author {}").format(original_author))
-        qry = qry & Q(original_author__contains=original_author)
-    if license is not None:
-        auto_title.append(_("license {}").format(license))
-        qry = qry & Q(license=license)
-    if follower is not None:
-        qry = qry & Q(author__follower=follower.profile)
-        auto_title.append(_("from users followed by {}").format(follower.get_full_name()))
-    if verstring is not None and app is not None:
-        try:
-            version = convert_version_string_to_int(verstring, [8,8,8,8])
-        except (ValueError, NotImplementedError):
-            raise Http404
-    if version is not None and app is not None:
-        if not verstring:
-            verstring = str(version)
-        auto_title.append(_("compatible with application version {}").format(version))
-        qry = qry & (Q(application=app) & (Q(app_version_min__lte=verstring) | Q(app_version_min=None)) & (Q(app_version_max__gte=verstring) | Q(app_version_max=None)))
-    if asset_version is not None:
-        auto_title.append(_("version is {}").format(asset_version))
-        qry = qry & Q(version=asset_version)
-
+    qry, auto_title = get_assets_query(appslug=appslug, app=app, cslug=cslug, component=component,
+                                          tslug=tslug, tags=tags, follower=follower,
+                                          verstring=verstring, version=version,
+                                          asset_version=asset_version, license=license,
+                                          asset_title=asset_title,
+                                          author=author, original_author=original_author)
     asset_list = Asset.objects.filter(qry).order_by(order_by)
 
     title = kwargs.get('title', None)
@@ -229,18 +186,7 @@ def show_advanced_search_results(request, query):
                 )
 
 def show_simple_search_results(request, query):
-    qry = Q(title__contains=query)
-    qry = qry | Q(application__slug=query)
-    qry = qry | Q(component__slug=query)
-    qry = qry | Q(author__username__contains=query)
-    qry = qry | Q(original_author__contains=query)
-    try:
-        tag = Tag.objects.get(slug=query)
-    except Tag.DoesNotExist:
-        tag = None
-    else:
-        qry = qry | Q(tags=tag)
-    
+    qry = get_simple_search_qry(query)
     asset_list = Asset.objects.filter(qry).order_by('-pub_date')
     title = _("Search results: {}").format(query)
     return show_assets_list(request, asset_list, title=title)
