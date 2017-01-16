@@ -64,7 +64,11 @@ class AssetHubClient(object):
     def list(self):
         r = requests.get(self._get_url(), params=self._get_params())
         r.raise_for_status()
-        return [Asset(a) for a in r.json()]
+        json = r.json()
+        if isinstance(json, list):
+            return [Asset(a) for a in r.json()]
+        else:
+            return [Asset(json)]
 
 if __name__ == "__main__":
 
