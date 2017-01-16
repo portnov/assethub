@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
