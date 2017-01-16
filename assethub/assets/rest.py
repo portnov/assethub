@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
@@ -19,7 +20,13 @@ class AssetList(APIView):
         appslug = self.kwargs.get('appslug', None)
         cslug = self.kwargs.get('cslug', None)
         tagslug = self.request.query_params.get('tag', None)
-        qry, _t = get_assets_query(appslug=appslug, cslug=cslug, tslug=tagslug)
+        author_name = self.request.query_params.get('author', None)
+        version = self.request.query_params.get('appversion', None)
+
+        qry, _t = get_assets_query(appslug=appslug, cslug=cslug, tslug=tagslug, verstring=version)
+        if author_name is not None:
+            author = get_object_or_404(User, username=author_name)
+            qry = qry & Q(author=author)
         query = self.request.query_params.get('query', None)
         if query is not None:
             search = get_simple_search_qry(query)

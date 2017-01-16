@@ -12,7 +12,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
 from taggit.models import Tag
-from versionfield.utils import convert_version_string_to_int
 
 from assets.models import Asset, Component, Application, License
 from assets.forms import AssetForm, AdvancedSearchForm, SimpleSearchForm
