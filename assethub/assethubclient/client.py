@@ -40,9 +40,13 @@ class AssetHubClient(object):
         self.application = application
         self.component = component
         self.tag = None
+        self.author = None
+        self.id = None
 
     def _get_url(self):
-        if self.application is not None and self.component is not None:
+        if self.id is not None:
+            return join(self._base_url, self.id)
+        elif self.application is not None and self.component is not None:
             return join(self._base_url, self.application, self.component)
         elif self.application is not None:
             return join(self._base_url, self.application)
@@ -69,6 +73,7 @@ if __name__ == "__main__":
     parser.add_argument('-a', '--application', metavar='APP', help='Application')
     parser.add_argument('-c', '--component', metavar='COMPONENT', help='Component')
     parser.add_argument('--author', metavar='USER', help='Asset author')
+    parser.add_argument('--id', metavar='ID', help='Asset ID')
     parser.add_argument('-t', '--tag', metavar='TAG', help='Asset tag')
     parser.add_argument('-J', '--json', action='store_true', help='Output data as JSON')
     parser.add_argument('-D', '--download', action='store_true', help='Download asset data')
@@ -82,6 +87,7 @@ if __name__ == "__main__":
     client = AssetHubClient(url, args.application, args.component)
     client.tag = args.tag
     client.author = args.author
+    client.id = args.id
     for asset in client.list():
         if args.download:
             asset.download_data(asset.get_filename())
@@ -89,5 +95,5 @@ if __name__ == "__main__":
         elif args.json:
             print(asset)
         else:
-            print(asset.title)
+            print("{}\t{}".format(asset.id, asset.title))
 
