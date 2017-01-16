@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from os.path import join, basename
+from io import BytesIO
 import requests
 import argparse
 
@@ -23,12 +24,30 @@ class Asset(object):
     def __repr__(self):
         return repr(self.dict)
 
+    def get_data_content_type(self):
+        r = requests.head(self.data)
+        r.raise_for_status()
+        return r.headers.get('content-type', None)
+
     def download_data(self, outpath):
         r = requests.get(self.data)
         r.raise_for_status()
         with open(outpath, 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 f.write(chunk)
+
+    def get_data(self, content_type=None):
+        r = requests.get(self.data)
+        r.raise_for_status()
+        if content_type is not None:
+            if r.headers.get('content-type', None) != content_type:
+                raise TypeError("Asset data is not of type " + content_type)
+        f = BytesIO()
+        for chunk in r.iter_content(chunk_size=1024):
+            f.write(chunk)
+        result = f.getvalue()
+        f.close()
+        return result
 
     def get_filename(self):
         return basename(self.data)
@@ -42,6 +61,7 @@ class AssetHubClient(object):
         self.tag = None
         self.author = None
         self.id = None
+        self.asset_constructor = Asset
 
     def _get_url(self):
         if self.id is not None:
@@ -66,9 +86,16 @@ class AssetHubClient(object):
         r.raise_for_status()
         json = r.json()
         if isinstance(json, list):
-            return [Asset(a) for a in r.json()]
+            return [self.asset_constructor(a) for a in r.json()]
         else:
-            return [Asset(json)]
+            return [self.asset_constructor(json)]
+
+    def get(self, id):
+        url = join(self._base_url, str(id))
+        r = requests.get(url)
+        r.raise_for_status()
+        return self.asset_constructor(r.json())
+
 
 if __name__ == "__main__":
 
@@ -81,6 +108,7 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--tag', metavar='TAG', help='Asset tag')
     parser.add_argument('-J', '--json', action='store_true', help='Output data as JSON')
     parser.add_argument('-D', '--download', action='store_true', help='Download asset data')
+    parser.add_argument('--content-type', action='store_true', help='Print data content type')
     args = parser.parse_args()
 
     if args.url:
@@ -98,6 +126,8 @@ if __name__ == "__main__":
             print("Downloaded " + asset.get_filename())
         elif args.json:
             print(asset)
+        elif args.content_type:
+            print("{}\t{}\t{}".format(asset.id, asset.title, asset.get_data_content_type()))
         else:
             print("{}\t{}".format(asset.id, asset.title))
 
