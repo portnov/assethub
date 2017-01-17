@@ -139,7 +139,7 @@ class Asset(models.Model):
 
         super(Asset, self).clean()
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.data and not self.image and self.component and self.component.thumbnailer_name:
             thumbnailer = self.component.thumbnailer()
             if thumbnailer:
@@ -147,7 +147,7 @@ class Asset(models.Model):
                 if thumbnail:
                     # pass save=False because otherwise it would call save() recursively
                     self.image.save("auto_thumbnail.png", thumbnail, save=False)
-        super(Asset,self).save()
+        super(Asset,self).save(*args, **kwargs)
 
     def get_tags(self):
         return ", ".join([tag.name for tag in self.tags.all()])
