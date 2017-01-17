@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 from os.path import join, basename
+import sys
 from io import BytesIO
 import requests
+from requests.auth import HTTPBasicAuth
 import argparse
+import getpass
 
 class Asset(object):
     def __init__(self, json):
@@ -11,6 +14,9 @@ class Asset(object):
 
     def __getattr__(self, attr):
         return self.dict[attr]
+
+#     def __setattr__(self, attr, val):
+#         self.dict[attr] = val
 
     def json(self):
         return self.dict
@@ -53,11 +59,15 @@ class Asset(object):
         return basename(self.data)
 
 class AssetHubClient(object):
-    def __init__(self, url, application=None, component=None):
+    def __init__(self, url, application=None, component=None, username=None, password=None):
         self.url = url
         self._base_url = join(self.url, 'api', 'assets')
+        if not self._base_url.endswith('/'):
+            self._base_url = self._base_url + '/'
         self.application = application
         self.component = component
+        self.username = username
+        self.password = password
         self.tag = None
         self.author = None
         self.id = None
@@ -96,6 +106,17 @@ class AssetHubClient(object):
         r.raise_for_status()
         return self.asset_constructor(r.json())
 
+    def post(self, asset, data_path, image_path=None):
+        auth = HTTPBasicAuth(self.username, self.password)
+        data = asset.json()
+        files = dict(data=open(data_path, 'rb'))
+        if image_path is not None:
+            files['image'] = open(image_path, 'rb')
+        r = requests.post(self._base_url, data=data, files=files, auth=auth)
+        print r.content
+        r.raise_for_status()
+        return r.json()
+
 
 if __name__ == "__main__":
 
@@ -106,9 +127,15 @@ if __name__ == "__main__":
     parser.add_argument('--author', metavar='USER', help='Asset author')
     parser.add_argument('--id', metavar='ID', help='Asset ID')
     parser.add_argument('-t', '--tag', metavar='TAG', help='Asset tag')
+    parser.add_argument('-L', '--license', metavar='LICENSE', help='Asset license')
+    parser.add_argument('--title', metavar='TITLE', help='Asset title')
     parser.add_argument('-J', '--json', action='store_true', help='Output data as JSON')
     parser.add_argument('-D', '--download', action='store_true', help='Download asset data')
+    parser.add_argument('-P', '--post', metavar='FILENAME.dat', help='Post new asset')
+    parser.add_argument('-T', '--thumb', metavar='FILENAME.png', help='Thumbnail for new asset')
     parser.add_argument('--content-type', action='store_true', help='Print data content type')
+    parser.add_argument('-U', '--user', metavar='USER', help='User name')
+    parser.add_argument('-W', '--password', metavar='PASSWORD', help='Password')
     args = parser.parse_args()
 
     if args.url:
@@ -120,14 +147,42 @@ if __name__ == "__main__":
     client.tag = args.tag
     client.author = args.author
     client.id = args.id
-    for asset in client.list():
-        if args.download:
-            asset.download_data(asset.get_filename())
-            print("Downloaded " + asset.get_filename())
-        elif args.json:
-            print(asset)
-        elif args.content_type:
-            print("{}\t{}\t{}".format(asset.id, asset.title, asset.get_data_content_type()))
+
+    if args.post:
+        if not args.title:
+            print("Title is mandatory when posting an asset")
+            sys.exit(1)
+        if not args.application:
+            print("Application is mandatory when posting an asset")
+            sys.exit(1)
+        if not args.component:
+            print("Component is mandatory when posting an asset")
+            sys.exit(1)
+        if not args.license:
+            print("License is not specified, defaulting to CC0")
+            args.license = "CC0"
+        asset = Asset(dict(title=args.title, application=args.application, component=args.component, license=args.license))
+        if not args.user:
+            print("User name is mandatory to post an asset")
+            sys.exit(1)
+        client.username = args.user
+        if not args.password:
+            client.password = getpass.getpass()
         else:
-            print("{}\t{}".format(asset.id, asset.title))
+            client.password = args.password
+
+        client.post(asset, args.post, args.thumb)
+
+    else:
+
+        for asset in client.list():
+            if args.download:
+                asset.download_data(asset.get_filename())
+                print("Downloaded " + asset.get_filename())
+            elif args.json:
+                print(asset)
+            elif args.content_type:
+                print("{}\t{}\t{}".format(asset.id, asset.title, asset.get_data_content_type()))
+            else:
+                print("{}\t{}".format(asset.id, asset.title))
 
