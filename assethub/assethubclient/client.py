@@ -71,6 +71,7 @@ class AssetHubClient(object):
         self.tag = None
         self.author = None
         self.id = None
+        self.license = None
         self.asset_constructor = Asset
 
     def _get_url(self):
@@ -106,14 +107,13 @@ class AssetHubClient(object):
         r.raise_for_status()
         return self.asset_constructor(r.json())
 
-    def post(self, asset, data_path, image_path=None):
+    def post(self, asset, data_file, image_file=None):
         auth = HTTPBasicAuth(self.username, self.password)
         data = asset.json()
-        files = dict(data=open(data_path, 'rb'))
-        if image_path is not None:
-            files['image'] = open(image_path, 'rb')
+        files = dict(data=data_file)
+        if image_file is not None:
+            files['image'] = image_file
         r = requests.post(self._base_url, data=data, files=files, auth=auth)
-        print r.content
         r.raise_for_status()
         return r.json()
 
@@ -171,7 +171,12 @@ if __name__ == "__main__":
         else:
             client.password = args.password
 
-        client.post(asset, args.post, args.thumb)
+        data_file = open(args.post, 'rb')
+        if args.thumb:
+            image_file = open(args.thumb, 'rb')
+        else:
+            image_file = None
+        client.post(asset, data_file, image_file)
 
     else:
 

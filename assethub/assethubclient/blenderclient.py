@@ -58,4 +58,15 @@ class AssetHubClient(client.AssetHubClient):
     def __init__(self, *args, **kwargs):
         super(AssetHubClient, self).__init__(*args, **kwargs)
         self.asset_constructor = Asset
+        if not self.application:
+            self.application = 'blender'
+
+    def post_text_block(self, name, license=None):
+        if license is None:
+            license = self.license
+        if license is None:
+            license = "CC0"
+        content = bpy.data.texts[name].as_string()
+        asset = Asset(dict(title=name, application=self.application, component=self.component, license=license))
+        return self.post(asset, content)
 
