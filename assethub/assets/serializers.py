@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers, viewsets
 
-from assets.models import Asset
+from assets.models import Asset, Application, Component, License
 
 class TagsField(serializers.Field):
     def to_representation(self, obj):
@@ -25,4 +25,19 @@ class AssetSerializer(serializers.ModelSerializer):
 class AssetViewSet(viewsets.ModelViewSet):
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = '__all__'
+
+class ComponentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = '__all__'
+
+class LicenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = License
+        fields = '__all__'
 

@@ -9,8 +9,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from assets.models import Asset
-from assets.serializers import AssetSerializer
+from assets.models import Asset, Application, Component, License
+from assets.serializers import AssetSerializer, ApplicationSerializer, ComponentSerializer, LicenseSerializer
 from assets.views.common import get_assets_query, get_simple_search_qry
 
 class AssetList(APIView):
@@ -78,6 +78,19 @@ class AssetDetail(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ApplicationList(ListAPIView):
+    serializer_class = ApplicationSerializer
+    queryset = Application.objects.all()
 
+class ComponentList(ListAPIView):
+    serializer_class = ComponentSerializer
 
+    def get_queryset(self):
+        appslug = self.kwargs.get('appslug', None)
+        app = get_object_or_404(Application, slug=appslug)
+        return app.component_set.all()
+
+class LicenseList(ListAPIView):
+    serializer_class = LicenseSerializer
+    queryset = License.objects.all()
 
