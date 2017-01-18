@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django_comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
@@ -21,6 +21,10 @@ from vote.managers import VotableManager
 from versionfield import VersionField
 
 from assets.thumbnailers import get_thumbnailer_classes, get_default_thumbnailer, get_thumbnailer
+
+def get_api_group_name():
+    # TODO: this should be configurable
+    return "API Access"
 
 def get_path(prefix, instance, filename):
     name,ext = splitext(filename)
@@ -190,12 +194,26 @@ class Asset(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField(User, blank=True, related_name="follower")
+    enable_api = models.BooleanField(_("Enable API"), default=False)
 
     def get_rating(self):
         return Asset.objects.filter(author=self.user).aggregate(Sum('num_votes'))['num_votes__sum']
 
     def does_follow(self, name):
         return self.follows.filter(username=name).exists()
+
+    def enable_api_usage(self, rawpassword):
+        self.enable_api = True
+        self.save()
+        self.user.set_password(rawpassword)
+        api_group = Group.objects.get(name=get_api_group_name())
+        self.user.groups.add(api_group)
+        self.user.save()
+    
+    def is_api_enabled(self):
+        return self.user.has_usable_password() and \
+                self.enable_api == True and \
+                self.user.groups.filter(name=get_api_group_name()).exists()
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

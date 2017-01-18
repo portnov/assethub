@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 
 #from rest_framework import routers
 
+import views.common
 import views.asset
 import views.users
 import rest
@@ -29,6 +30,7 @@ urlpatterns = [
     url(r'^asset/(?P<pk>[0-9]+)/edit/$', views.asset.edit_asset, name='edit_asset'),
     url(r'^vote/(?P<asset_id>[0-9]+)/(?P<direction>up|down)/$', views.asset.vote, name='vote'),
     url(r'^license/(?P<slug>[-\w]+)/$', views.asset.license, name='license'),
+    url(r'^accounts/api/', views.common.enable_api, name='enable_api'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/follow/$', views.users.follow, name='follow_user'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/unfollow/$', views.users.unfollow, name='unfollow_user'),
     url(r'^accounts/profile/(?P<username>[-\w]+)/feed/$', views.asset.get_user_feed, name='user_feed'),

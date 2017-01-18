@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
+from django.template import loader
 from django.http import HttpResponse, Http404, HttpResponseForbidden, HttpResponseBadRequest, JsonResponse, HttpResponseRedirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -103,4 +105,15 @@ def get_simple_search_qry(query):
     else:
         qry = qry | Q(tags=tag)
     return qry
+
+@login_required
+def enable_api(request):
+    if request.user.profile.is_api_enabled():
+        context = dict(use_current_password=True)
+        return render(request, 'assets/enable_api.html', context)
+    else:
+        new_password = User.objects.make_random_password(length=18)
+        request.user.profile.enable_api_usage(new_password)
+        context = dict(new_password=new_password, use_current_password=False)
+        return render(request, 'assets/enable_api.html', context)
 

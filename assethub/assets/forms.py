@@ -4,6 +4,7 @@ from django.forms import ModelForm
 from django.db import models
 from django.core.files.images import get_image_dimensions
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordResetForm
 from django.utils.translation import ugettext as _, ugettext_lazy as _l
 
 from pagedown.widgets import PagedownWidget

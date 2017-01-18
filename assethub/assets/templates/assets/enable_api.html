@@ -1,0 +1,24 @@
+{% extends 'assets/default.html' %}
+{% load i18n %}
+
+{% block content %}
+<p>{% trans 'API usage is now enabled.' %}</p>
+{% if use_current_password %}
+<p>
+{% blocktrans %}You can use your current password to access API.{% endblocktrans %}
+</p>
+{% else %}
+<p>
+{% trans 'Please use the following password for API:' %}
+</p>
+<center>{{new_password}}</center>
+<p>
+{% trans 'Pleas save this password in safe place. This password will not be shown you again if you visit this page next time.' %}
+</p>
+{% endif %}
+{% url 'change_password' as change_password_url %}
+<p>
+{% blocktrans %}You may <a href="{{change_password_url}}">change your password</a> if you wish.{% endblocktrans %}
+</p>
+{% endblock %}
+
