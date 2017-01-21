@@ -1,4 +1,6 @@
 import bpy
+from bpy.types import WindowManager
+from bpy.props import StringProperty, EnumProperty
 
 try:
     from sverchok.utils.sv_IO_panel_tools import import_tree
@@ -89,7 +91,7 @@ def previews_from_assethub(self, context):
         return enum_items
 
     wm = context.window_manager
-    component = wm.assethub_component
+    component = self.assethub_component
     if not component:
         return enum_items
 
@@ -143,47 +145,60 @@ def components_from_assethub(self, context):
     #print(assethub_components)
     return assethub_components
 
-class ImportPanel(bpy.types.Panel):
+class ImportOperator(bpy.types.Operator):
     bl_label = "Import from AssetHub"
-    bl_idname = "ASSETHUB_import"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "TOOLS"
+    bl_idname = "import.assethub"
+
+    assethub_component = EnumProperty(items = components_from_assethub)
+    asset = EnumProperty(items = previews_from_assethub)
 
     def draw(self, context):
         layout = self.layout
-        wm = context.window_manager
 
         row = layout.row()
-        row.prop(wm, "assethub_component")
+        row.prop(self, "assethub_component")
 
         row = layout.row()
-        row.template_icon_view(wm, "assethub_previews")
+        row.prop(self, "asset")
+        #row = layout.row()
+        #row.template_icon_view(self, "asset")
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def execute(self, context):
+        print("Params: comp={}, preview={}".format(self.assethub_component, self.asset))
+        c = get_assethub_client(context)
+        asset = c.get(self.asset)
+        if self.assethub_component == "sverchok-sn1":
+            asset.store_to_text_block()
+        elif self.assethub_component == "sverchok-layout":
+            asset.import_sverchok_tree()
+        return {'FINISHED'}
+
+def menu_func(self, context):
+    self.layout.operator("import.assethub", text="Import from AssetHub")
 
 def register():
-    from bpy.types import WindowManager
-    from bpy.props import StringProperty, EnumProperty
 
     WindowManager.assethub_url = StringProperty(
         name = "AssetHub URL",
         default = "http://assethub.iportnov.tech/")
 
-    WindowManager.assethub_component = EnumProperty(items = components_from_assethub)
-    WindowManager.assethub_previews = EnumProperty(items = previews_from_assethub)
-
-    bpy.utils.register_class(ImportPanel)
+    bpy.utils.register_class(ImportOperator)
+    bpy.types.INFO_MT_file_import.append(menu_func)
 
 def unregister():
     from bpy.types import WindowManager
 
     del WindowManager.assethub_url
-    del WindowManager.assethub_component
-    del WindowManager.assethub_previews
 
     for pcoll in preview_collections.values():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
 
-    bpy.utils.unregister_class(ImportPanel)
+    bpy.utils.unregister_class(ImportOperator)
+    bpy.types.INFO_MT_file_import.remove(menu_func)
 
 if __name__ == "__main__":
     register()
