@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^api/assets/(?P<pk>\d+)/$', rest.AssetDetail.as_view()),
     url(r'^api/assets/(?P<appslug>[-\w]+)/$', rest.AssetList.as_view()),
     url(r'^api/assets/(?P<appslug>[-\w]+)/(?P<cslug>[-\w]+)/$', rest.AssetList.as_view()),
+    url(r'^api/tags/$', rest.TagList.as_view()),
     url(r'^search/$', views.asset.simple_search, name='simple_search'),
     url(r'^search/advanced/$', views.asset.advanced_search, name='advanced_search'),
     url(r'^tag/(?P<slug>[-\w]+)/$', views.asset.by_tag, name='by_tag'),

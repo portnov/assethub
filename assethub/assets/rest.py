@@ -4,18 +4,19 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+from taggit.models import Tag
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from assets.models import Asset, Application, Component, License
-from assets.serializers import AssetSerializer, ApplicationSerializer, ComponentSerializer, LicenseSerializer
+from assets import serializers
 from assets.views.common import get_assets_query, get_simple_search_qry
 
 class AssetList(APIView):
     #queryset = Asset.objects.all()
-    #serializer_class = AssetSerializer
+    #serializer_class = serializers.AssetSerializer
 
     def get_queryset(self):
         appslug = self.kwargs.get('appslug', None)
@@ -37,19 +38,19 @@ class AssetList(APIView):
     # Retrieve a list of assets
     def get(self, request, appslug=None, cslug=None, format=None):
         assets = self.get_queryset()
-        serializer = AssetSerializer(assets, many=True)
+        serializer = serializers.AssetSerializer(assets, many=True)
         return Response(serializer.data)
 
     # Create new asset
     def post(self, request, format=None):
-        serializer = AssetSerializer(data=request.data)
+        serializer = serializers.AssetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(author = self.request.user, pub_date=timezone.now())
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SearchList(ListAPIView):
-    serializer_class = AssetSerializer
+    serializer_class = serializers.AssetSerializer
 
     def get_queryset(self):
         query = self.request.query_params['query']
@@ -66,24 +67,24 @@ class AssetDetail(APIView):
     # Get details for one asset
     def get(self, request, pk, format=None):
         asset = self.get_object(pk)
-        serializer = AssetSerializer(asset)
+        serializer = serializers.AssetSerializer(asset)
         return Response(serializer.data)
 
     # Update one asset
     def put(self, request, pk, format=None):
         asset = self.get_object(pk)
-        serializer = AssetSerializer(asset, data=request.data)
+        serializer = serializers.AssetSerializer(asset, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ApplicationList(ListAPIView):
-    serializer_class = ApplicationSerializer
+    serializer_class = serializers.ApplicationSerializer
     queryset = Application.objects.all()
 
 class ComponentList(ListAPIView):
-    serializer_class = ComponentSerializer
+    serializer_class = serializers.ComponentSerializer
 
     def get_queryset(self):
         appslug = self.kwargs.get('appslug', None)
@@ -91,6 +92,10 @@ class ComponentList(ListAPIView):
         return app.component_set.all()
 
 class LicenseList(ListAPIView):
-    serializer_class = LicenseSerializer
+    serializer_class = serializers.LicenseSerializer
     queryset = License.objects.all()
+
+class TagList(ListAPIView):
+    serializer_class = serializers.TagSerializer
+    queryset = Tag.objects.all()
 

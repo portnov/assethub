@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 
+from taggit.models import Tag
 from rest_framework import serializers, viewsets
 
 from assets.models import Asset, Application, Component, License
@@ -39,5 +40,10 @@ class ComponentSerializer(serializers.ModelSerializer):
 class LicenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = License
+        fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
         fields = '__all__'
 
