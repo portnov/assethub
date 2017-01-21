@@ -189,11 +189,12 @@ class ImportOperator(bpy.types.Operator):
         print("Params: comp={}, preview={}".format(wm.assethub_component, wm.assethub_asset))
         c = get_assethub_client(context)
         asset = c.get(wm.assethub_asset)
-        component = wm.assethub_component
-        if component == "sverchok-sn1":
-            asset.store_to_text_block()
-        elif component == "sverchok-layout":
-            asset.import_sverchok_tree()
+        component = client.Component.get("blender", wm.assethub_component)
+        if component is None:
+            print("Dont know how to import objects for component " + wm.assethub_component)
+        else:
+            print(component)
+            component.import_asset(asset)
         return {'FINISHED'}
 
 class SettingsPanel(bpy.types.AddonPreferences):
@@ -210,6 +211,14 @@ class SettingsPanel(bpy.types.AddonPreferences):
         row = layout.row()
         row.prop(self, "assethub_url")
 
+class SverchokSn1(client.Component):
+    def import_asset(self, asset):
+        asset.store_to_text_block()
+
+class SverchokLayout(client.Component):
+    def import_asset(self, asset):
+        asset.import_sverchok_tree()
+
 def menu_func(self, context):
     self.layout.operator("import.assethub", text="Import from AssetHub")
 
@@ -218,6 +227,9 @@ def register():
     WindowManager.assethub_component = EnumProperty(name="Component", items = components_from_assethub)
     WindowManager.assethub_tag = EnumProperty(name="Tag", default=None, items = tags_from_assethub)
     WindowManager.assethub_asset = EnumProperty(name="Asset", items = previews_from_assethub)
+
+    client.Component.register("blender", "sverchok-sn1", SverchokSn1)
+    client.Component.register("blender", "sverchok-layout", SverchokLayout)
 
     bpy.utils.register_class(ImportOperator)
     bpy.utils.register_class(SettingsPanel)

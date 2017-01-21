@@ -3,6 +3,7 @@
 from os.path import join, basename
 import sys
 from io import BytesIO
+from collections import defaultdict
 import requests
 from requests.auth import HTTPBasicAuth
 import argparse
@@ -67,8 +68,34 @@ class Asset(JsonObject):
     def get_filename(self):
         return basename(self.data)
 
+components_registry = {}
+
 class Component(JsonObject):
-    pass
+
+    @classmethod
+    def get(cls, appslug, cslug):
+        global components_registry
+        app = components_registry.get(appslug, None)
+        if app is None:
+            return None
+        component_class = app.get(cslug, None)
+        if component_class is None:
+            return None
+        return component_class(dict())
+
+    @classmethod
+    def register(cls, appslug, cslug, component_class):
+        if appslug is None:
+            raise ValueError("Application cannot be None")
+        if appslug not in components_registry:
+            components_registry[appslug] = defaultdict()
+        if cslug is None:
+            components_registry[appslug].default_factory = component_class
+        else:
+            components_registry[appslug][cslug] = component_class
+
+    def import_asset(self, asset):
+        raise NotImplementedError
 
 class Tag(JsonObject):
     pass
