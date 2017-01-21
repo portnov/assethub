@@ -42,6 +42,16 @@ class Asset(object):
             for chunk in r.iter_content(chunk_size=1024):
                 f.write(chunk)
 
+    def download_thumbnail(self, outpath):
+        r = requests.get(self.image)
+        r.raise_for_status()
+        with open(outpath, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                f.write(chunk)
+
+    def get_thumbnail_name(self):
+        return basename(self.image)
+
     def get_data(self, content_type=None):
         r = requests.get(self.data)
         r.raise_for_status()
@@ -57,6 +67,25 @@ class Asset(object):
 
     def get_filename(self):
         return basename(self.data)
+
+class Component(object):
+    def __init__(self, json):
+        self.dict = json
+
+    def __getattr__(self, attr):
+        return self.dict[attr]
+
+    def json(self):
+        return self.dict
+    
+    def __unicode__(self):
+        return unicode(self.dict)
+
+    def __str__(self):
+        return str(self.dict)
+
+    def __repr__(self):
+        return repr(self.dict)
 
 class AssetHubClient(object):
     def __init__(self, url, application=None, component=None, username=None, password=None):
@@ -91,6 +120,17 @@ class AssetHubClient(object):
         if self.author is not None:
             params['author'] = author
         return params
+
+    def get_components(self, application=None):
+        if application is None:
+            application = self.application
+        if application is None:
+            raise TypeError("Application is not defined")
+        
+        url = join(self.url, 'api', 'applications', application)
+        r = requests.get(url)
+        r.raise_for_status()
+        return [Component(c) for c in r.json()]
 
     def list(self):
         r = requests.get(self._get_url(), params=self._get_params())
