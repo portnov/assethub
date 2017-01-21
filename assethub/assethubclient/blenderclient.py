@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import WindowManager
+from bpy.types import WindowManager, AddonPreferences
 from bpy.props import StringProperty, EnumProperty
 
 try:
@@ -81,7 +81,8 @@ def get_assethub_client(context):
 
     if assethub_client is not None:
         return assethub_client
-    assethub_client = AssetHubClient(context.window_manager.assethub_url, application="blender")
+    addon = bpy.context.user_preferences.addons.get("assethubclient").preferences
+    assethub_client = AssetHubClient(addon.assethub_url, application="blender")
     return assethub_client
 
 def previews_from_assethub(self, context):
@@ -176,28 +177,40 @@ class ImportOperator(bpy.types.Operator):
             asset.import_sverchok_tree()
         return {'FINISHED'}
 
+class SettingsPanel(bpy.types.AddonPreferences):
+    bl_label = "AssetHub settings"
+    bl_idname = __package__
+
+    assethub_url = StringProperty(
+        name = "AssetHub URL",
+        default = "http://assethub.iportnov.tech/")
+
+    def draw(self, context):
+        layout = self.layout
+        #wm = context.window_manager
+
+        row = layout.row()
+        row.prop(self, "assethub_url")
+
 def menu_func(self, context):
     self.layout.operator("import.assethub", text="Import from AssetHub")
 
 def register():
 
-    WindowManager.assethub_url = StringProperty(
-        name = "AssetHub URL",
-        default = "http://assethub.iportnov.tech/")
 
     bpy.utils.register_class(ImportOperator)
+    bpy.utils.register_class(SettingsPanel)
     bpy.types.INFO_MT_file_import.append(menu_func)
 
 def unregister():
     from bpy.types import WindowManager
-
-    del WindowManager.assethub_url
 
     for pcoll in preview_collections.values():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
 
     bpy.utils.unregister_class(ImportOperator)
+    bpy.utils.unregister_class(SettingsPanel)
     bpy.types.INFO_MT_file_import.remove(menu_func)
 
 if __name__ == "__main__":
