@@ -74,6 +74,7 @@ class AssetHubClient(client.AssetHubClient):
 
 assethub_client = None
 assethub_components = []
+assethub_tags = []
 preview_collections = {}
 
 def get_assethub_client(context):
@@ -92,7 +93,8 @@ def previews_from_assethub(self, context):
         return enum_items
 
     wm = context.window_manager
-    component = self.assethub_component
+    component = wm.assethub_component
+    tag = wm.assethub_tag
     if not component:
         return enum_items
 
@@ -100,13 +102,15 @@ def previews_from_assethub(self, context):
     pcoll = preview_collections.get(component, None)
     if pcoll is None:
         pcoll = bpy.utils.previews.new()
-        pcoll.previews = []
+        pcoll.previews = {}
         preview_collections[component] = pcoll
-    if pcoll.previews:
-        return pcoll.previews
+    if tag in pcoll.previews:
+       return pcoll.previews[tag]
 
     c = get_assethub_client(context)
     c.component = component
+    if tag != "__all__":
+        c.tag = tag
     for idx, asset in enumerate(c.list()):
         id = str(asset.id)
         if not asset.image:
@@ -126,12 +130,11 @@ def previews_from_assethub(self, context):
             notes = asset.title
         enum_items.append((id, asset.title, notes, icon, idx))
     
-    pcoll.previews = enum_items
+    pcoll.previews[tag] = enum_items
     return enum_items
 
 def components_from_assethub(self, context):
     global assethub_components
-    #assethub_components = []
 
     if len(assethub_components) > 0 or context is None:
         return assethub_components
@@ -143,37 +146,53 @@ def components_from_assethub(self, context):
             notes = comp.title_en
         assethub_components.append((comp.slug, comp.title_en, notes))
 
-    #print(assethub_components)
     return assethub_components
+
+def tags_from_assethub(self, context):
+    global assethub_tags
+
+    if len(assethub_tags) > 0 or context is None:
+        return assethub_tags
+
+    assethub_tags.append(("__all__", "Any", "Any tag"))
+
+    c = get_assethub_client(context)
+    for idx, tag in enumerate(c.get_tags()):
+        name = tag.name
+        if not name:
+            name = tag.slug
+        assethub_tags.append((tag.slug, name, name))
+
+    return assethub_tags
+
+class ImportPanel(bpy.types.Panel):
+    bl_label = "Import from AssetHub"
+    bl_idname = "import.assethub.panel"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "TOOLS"
+
+    def draw(self, context):
+        layout = self.layout
+        wm = context.window_manager
+
+        layout.prop(wm, "assethub_component")
+        layout.prop(wm, "assethub_tag")
+        layout.template_icon_view(wm, "assethub_asset")
+        layout.operator("import.assethub")
 
 class ImportOperator(bpy.types.Operator):
     bl_label = "Import from AssetHub"
     bl_idname = "import.assethub"
 
-    assethub_component = EnumProperty(items = components_from_assethub)
-    asset = EnumProperty(items = previews_from_assethub)
-
-    def draw(self, context):
-        layout = self.layout
-
-        row = layout.row()
-        row.prop(self, "assethub_component")
-
-        row = layout.row()
-        row.prop(self, "asset")
-        #row = layout.row()
-        #row.template_icon_view(self, "asset")
-
-    def invoke(self, context, event):
-        return context.window_manager.invoke_props_dialog(self)
-
     def execute(self, context):
-        print("Params: comp={}, preview={}".format(self.assethub_component, self.asset))
+        wm = context.window_manager
+        print("Params: comp={}, preview={}".format(wm.assethub_component, wm.assethub_asset))
         c = get_assethub_client(context)
-        asset = c.get(self.asset)
-        if self.assethub_component == "sverchok-sn1":
+        asset = c.get(wm.assethub_asset)
+        component = wm.assethub_component
+        if component == "sverchok-sn1":
             asset.store_to_text_block()
-        elif self.assethub_component == "sverchok-layout":
+        elif component == "sverchok-layout":
             asset.import_sverchok_tree()
         return {'FINISHED'}
 
@@ -187,7 +206,6 @@ class SettingsPanel(bpy.types.AddonPreferences):
 
     def draw(self, context):
         layout = self.layout
-        #wm = context.window_manager
 
         row = layout.row()
         row.prop(self, "assethub_url")
@@ -196,10 +214,14 @@ def menu_func(self, context):
     self.layout.operator("import.assethub", text="Import from AssetHub")
 
 def register():
-
+    
+    WindowManager.assethub_component = EnumProperty(name="Component", items = components_from_assethub)
+    WindowManager.assethub_tag = EnumProperty(name="Tag", default=None, items = tags_from_assethub)
+    WindowManager.assethub_asset = EnumProperty(name="Asset", items = previews_from_assethub)
 
     bpy.utils.register_class(ImportOperator)
     bpy.utils.register_class(SettingsPanel)
+    bpy.utils.register_class(ImportPanel)
     bpy.types.INFO_MT_file_import.append(menu_func)
 
 def unregister():
@@ -209,8 +231,13 @@ def unregister():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
 
+    del WindowManager.assethub_asset
+    del WindowManager.assethub_component
+    del WindowManager.assethub_tag
+
     bpy.utils.unregister_class(ImportOperator)
     bpy.utils.unregister_class(SettingsPanel)
+    bpy.utils.unregister_class(ImportPanel)
     bpy.types.INFO_MT_file_import.remove(menu_func)
 
 if __name__ == "__main__":

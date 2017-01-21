@@ -8,15 +8,12 @@ from requests.auth import HTTPBasicAuth
 import argparse
 import getpass
 
-class Asset(object):
+class JsonObject(object):
     def __init__(self, json):
         self.dict = json
 
     def __getattr__(self, attr):
         return self.dict[attr]
-
-#     def __setattr__(self, attr, val):
-#         self.dict[attr] = val
 
     def json(self):
         return self.dict
@@ -29,6 +26,8 @@ class Asset(object):
 
     def __repr__(self):
         return repr(self.dict)
+
+class Asset(JsonObject):
 
     def get_data_content_type(self):
         r = requests.head(self.data)
@@ -68,24 +67,11 @@ class Asset(object):
     def get_filename(self):
         return basename(self.data)
 
-class Component(object):
-    def __init__(self, json):
-        self.dict = json
+class Component(JsonObject):
+    pass
 
-    def __getattr__(self, attr):
-        return self.dict[attr]
-
-    def json(self):
-        return self.dict
-    
-    def __unicode__(self):
-        return unicode(self.dict)
-
-    def __str__(self):
-        return str(self.dict)
-
-    def __repr__(self):
-        return repr(self.dict)
+class Tag(JsonObject):
+    pass
 
 class AssetHubClient(object):
     def __init__(self, url, application=None, component=None, username=None, password=None):
@@ -131,6 +117,12 @@ class AssetHubClient(object):
         r = requests.get(url)
         r.raise_for_status()
         return [Component(c) for c in r.json()]
+    
+    def get_tags(self):
+        url = join(self.url, 'api', 'tags')
+        r = requests.get(url)
+        r.raise_for_status()
+        return [Tag(t) for t in r.json()]
 
     def list(self):
         r = requests.get(self._get_url(), params=self._get_params())
