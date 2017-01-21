@@ -63,26 +63,32 @@ class AssetHubClient(client.AssetHubClient):
         if not self.application:
             self.application = 'blender'
 
-    def post_text_block(self, name, license=None):
+    def post_text_block(self, name, title=None, license=None, content_type="text/plain"):
         if license is None:
             license = self.license
         if license is None:
             license = "CC0"
+        if title is None:
+            title = name
         content = bpy.data.texts[name].as_string()
-        asset = Asset(dict(title=name, application=self.application, component=self.component, license=license))
-        return self.post(asset, content)
+        asset = Asset(dict(title=title, application=self.application, component=self.component, license=license))
+        return self.post(asset, content, file_name=name, content_type=content_type)
 
 assethub_client = None
 assethub_components = []
+assethub_licenses = []
 assethub_tags = []
 preview_collections = {}
+
+def get_preferences():
+    return bpy.context.user_preferences.addons.get("assethubclient").preferences
 
 def get_assethub_client(context):
     global assethub_client
 
     if assethub_client is not None:
         return assethub_client
-    addon = bpy.context.user_preferences.addons.get("assethubclient").preferences
+    addon = get_preferences()
     assethub_client = AssetHubClient(addon.assethub_url, application="blender")
     return assethub_client
 
@@ -165,6 +171,18 @@ def tags_from_assethub(self, context):
 
     return assethub_tags
 
+def licenses_from_assethub(self, context):
+    global assethub_licenses
+
+    if len(assethub_licenses) > 0 or context is None:
+        return assethub_licenses
+
+    c = get_assethub_client(context)
+    for idx, license in enumerate(c.get_licenses()):
+        assethub_licenses.append((license.slug, license.title, license.title))
+
+    return assethub_licenses
+
 class ImportPanel(bpy.types.Panel):
     bl_label = "Import from AssetHub"
     bl_idname = "import.assethub.panel"
@@ -197,6 +215,51 @@ class ImportOperator(bpy.types.Operator):
             component.import_asset(asset)
         return {'FINISHED'}
 
+class PostScriptPanel(bpy.types.Panel):
+    bl_label = "Post to AssetHub"
+    bl_idname = "export.assethub.sverchok-sn1.panel"
+    bl_space_type = "TEXT_EDITOR"
+    bl_region_type = "UI"
+
+    def draw(self, context):
+        layout = self.layout
+        wm = context.window_manager
+
+        op = layout.operator("export.assethub_sverchok_sn1")
+        space = bpy.context.space_data
+        if op and isinstance(space, bpy.types.SpaceTextEditor) and space.text:
+            op.name = space.text.name
+
+class PostScriptOperator(bpy.types.Operator):
+    bl_label = "Post to AssetHub"
+    bl_idname = "export.assethub_sverchok_sn1"
+
+    name = StringProperty(name="Text block name")
+    title = StringProperty(name="Title")
+    license = EnumProperty(name="License", items = licenses_from_assethub)
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name")
+        layout.prop(self, "title")
+        layout.prop(self, "license")
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def execute(self, context):
+        #space = bpy.context.space_data
+        #if not isinstance(space, bpy.types.SpaceTextEditor):
+        c = get_assethub_client(context)
+        addon = get_preferences()
+        c.component = "sverchok-sn1"
+        c.username = addon.username
+        c.password = addon.password
+        #print(c.username, c.password)
+        #print(self.license)
+        c.post_text_block(self.name, title=self.title, license=self.license, content_type="text/x-python")
+        return {'FINISHED'}
+
 class SettingsPanel(bpy.types.AddonPreferences):
     bl_label = "AssetHub settings"
     bl_idname = __package__
@@ -205,11 +268,15 @@ class SettingsPanel(bpy.types.AddonPreferences):
         name = "AssetHub URL",
         default = "http://assethub.iportnov.tech/")
 
+    username = StringProperty(name="AssetHub user name")
+    password = StringProperty(name="AssetHub password", subtype="PASSWORD")
+
     def draw(self, context):
         layout = self.layout
 
-        row = layout.row()
-        row.prop(self, "assethub_url")
+        layout.prop(self, "assethub_url")
+        layout.prop(self, "username")
+        layout.prop(self, "password")
 
 class SverchokSn1(client.Component):
     def import_asset(self, asset):
@@ -234,6 +301,8 @@ def register():
     bpy.utils.register_class(ImportOperator)
     bpy.utils.register_class(SettingsPanel)
     bpy.utils.register_class(ImportPanel)
+    bpy.utils.register_class(PostScriptPanel)
+    bpy.utils.register_class(PostScriptOperator)
     bpy.types.INFO_MT_file_import.append(menu_func)
 
 def unregister():
@@ -250,6 +319,8 @@ def unregister():
     bpy.utils.unregister_class(ImportOperator)
     bpy.utils.unregister_class(SettingsPanel)
     bpy.utils.unregister_class(ImportPanel)
+    bpy.utils.unregister_class(PostScriptPanel)
+    bpy.utils.unregister_class(PostScriptOperator)
     bpy.types.INFO_MT_file_import.remove(menu_func)
 
 if __name__ == "__main__":

@@ -100,6 +100,9 @@ class Component(JsonObject):
 class Tag(JsonObject):
     pass
 
+class License(JsonObject):
+    pass
+
 class AssetHubClient(object):
     def __init__(self, url, application=None, component=None, username=None, password=None):
         self.url = url
@@ -151,6 +154,12 @@ class AssetHubClient(object):
         r.raise_for_status()
         return [Tag(t) for t in r.json()]
 
+    def get_licenses(self):
+        url = join(self.url, 'api', 'licenses')
+        r = requests.get(url)
+        r.raise_for_status()
+        return [License(l) for l in r.json()]
+
     def list(self):
         r = requests.get(self._get_url(), params=self._get_params())
         r.raise_for_status()
@@ -166,10 +175,17 @@ class AssetHubClient(object):
         r.raise_for_status()
         return self.asset_constructor(r.json())
 
-    def post(self, asset, data_file, image_file=None):
+    def post(self, asset, data_file, file_name=None, content_type=None, image_file=None):
         auth = HTTPBasicAuth(self.username, self.password)
         data = asset.json()
-        files = dict(data=data_file)
+        if file_name is None:
+            if hasattr(data_file, "name") and data_file.name is not None:
+                file_name = basename(data_file.name)
+            else:
+                file_name = "asset.dat"
+        if content_type is None:
+            content_type = "application/octet-stream"
+        files = dict(data=(file_name, data_file, content_type))
         if image_file is not None:
             files['image'] = image_file
         r = requests.post(self._base_url, data=data, files=files, auth=auth)
