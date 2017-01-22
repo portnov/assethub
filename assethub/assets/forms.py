@@ -14,27 +14,39 @@ from taggit.models import Tag
 
 from models import Asset, License, Application, Component
 
-MAX_IMAGE_SIZE=300
-
 class AssetForm(ModelForm):
 
     class Meta:
         model = Asset
-        fields = ['application', 'component', 'license', 'original_author', 'creation_date', 'title', 'notes', 'image', 'data', 'url', 'version', 'app_version_min', 'app_version_max', 'tags']
+        fields = ['application', 'component', 'license', 'original_author', 'creation_date', 'title', 'notes', 'image', 'big_image', 'data', 'url', 'version', 'app_version_min', 'app_version_max', 'tags']
         widgets = {'notes': PagedownWidget(), 
                    'application': forms.HiddenInput(),
                    'component': forms.HiddenInput()
                   }
 
-    def clean_image(self):
-        image = self.cleaned_data.get("image")
+    def __init__(self, component, *args, **kwargs):
+        super(AssetForm, self).__init__(*args, **kwargs)
+        if component and not component.big_image_allowed:
+            del self.fields['big_image']
+
+    def clean(self):
+        cleaned_data = super(AssetForm, self).clean()
+        component = cleaned_data.get("component")
+        image = cleaned_data.get("image")
         if not image:
             pass
         else:
            w, h = get_image_dimensions(image)
-           if w > MAX_IMAGE_SIZE or h > MAX_IMAGE_SIZE:
-               raise forms.ValidationError(_("The image is too large: {0}x{1}; maximum size allowed is {2}px").format(w,h,MAX_IMAGE_SIZE))
-        return image
+           if w > component.max_thumbnail_size or h > component.max_thumbnail_size:
+               raise forms.ValidationError(_("The thumbnail is too large: {0}x{1}; maximum size allowed is {2}px").format(w,h,component.max_thumbnail_size))
+        big_image = cleaned_data.get("big_image")
+        if not big_image:
+            pass
+        else:
+           w, h = get_image_dimensions(big_image)
+           if w > component.max_big_image_size or h > component.max_big_image_size:
+               raise forms.ValidationError(_("The image is too large: {0}x{1}; maximum size allowed is {2}px").format(w,h,component.max_big_image_size))
+        return cleaned_data
 
 class AdvancedSearchForm(forms.Form):
     application = forms.ModelChoiceField(queryset=Application.objects.all(), label=_l("Application"), required=False)

@@ -50,9 +50,13 @@ def search_assets_by(request,
     if title is None:
         title = _("Assets by criteria") + ": " + ", ".join(auto_title)
         kwargs['title'] = title
+    if appslug is not None:
+        app = get_object_or_404(Application, slug=appslug)
     if app is not None:
         kwargs['application'] = app
         kwargs['logo'] = app.logo
+    if cslug is not None:
+        component = get_object_or_404(Component, slug=cslug)
     if component is not None:
         kwargs['component'] = component
     return show_assets_list(request, asset_list, **kwargs)
@@ -129,7 +133,7 @@ def post_asset(request, appslug, cslug):
     application = get_object_or_404(Application, slug=appslug)
     component = get_object_or_404(Component, slug=cslug)
     if request.method == "POST":
-        form = AssetForm(request.POST, request.FILES)
+        form = AssetForm(component, request.POST, request.FILES)
         if form.is_valid():
             new_asset = form.save(commit=False)
             new_asset.author = request.user
@@ -140,7 +144,7 @@ def post_asset(request, appslug, cslug):
             form.save_m2m()
             return HttpResponseRedirect(reverse('asset', args=[new_asset.pk]))
     else:
-        form = AssetForm(initial={'application': application, 'component': component})
+        form = AssetForm(component, initial={'application': application, 'component': component})
 
     title = _("Post an asset")
     context = dict(post_form=form, title=title, application=application, component=component, form_action=reverse('post_asset', args=[appslug, cslug]))
@@ -152,14 +156,14 @@ def edit_asset(request, pk):
     if asset.author != request.user:
         return HttpResponseForbidden("You can edit only your own assets")
     if request.method == "POST":
-        form = AssetForm(request.POST, request.FILES, instance=asset)
+        form = AssetForm(asset.component, request.POST, request.FILES, instance=asset)
         if form.is_valid():
             new_asset = form.save(commit=False)
             new_asset.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse('asset', args=[new_asset.pk]))
     else:
-        form = AssetForm(instance=asset)
+        form = AssetForm(asset.component, instance=asset)
 
     title = _("Edit an asset")
     context = dict(post_form=form, title=title, form_action=reverse('edit_asset', args=[pk]))

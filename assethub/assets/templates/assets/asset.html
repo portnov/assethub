@@ -51,6 +51,9 @@
   <p class="download"><a href="{{asset.data.url}}">
     {% blocktrans with size=asset.data.size|filesizeformat name=asset.get_filename %}Download the asset ({{name}}, {{size}}){% endblocktrans %}
   </a></p>
+  {% if asset.big_image %}
+    <div class="bigimage"><img class="bigimage" alt="{{asset.title}}" src="{{asset.big_image.url}}"/></div>
+  {% endif %}
   {% if asset.component.install_instructions %}
   <div class="install-instructions">
     <h3>{% trans 'Installation instructions' %}</h3>

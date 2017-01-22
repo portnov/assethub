@@ -22,6 +22,9 @@ from versionfield import VersionField
 
 from assets.thumbnailers import get_thumbnailer_classes, get_default_thumbnailer, get_thumbnailer
 
+DEFAULT_MAX_THUMB_SIZE = 300
+DEFAULT_MAX_IMAGE_SIZE = 1024
+
 def get_api_group_name():
     # TODO: this should be configurable
     return "API Access"
@@ -34,6 +37,9 @@ def get_path(prefix, instance, filename):
 
 def get_thumbnail_path(instance, filename):
     return get_path('thumbnails/', instance, filename)
+
+def get_big_image_path(instance, filename):
+    return get_path('bigimages/', instance, filename)
 
 def get_data_path(instance, filename):
     return get_path('data/', instance, filename)
@@ -71,6 +77,9 @@ class Component(models.Model):
     install_instructions = models.TextField(null=True, blank=True, verbose_name=_("Installation instructions"))
     thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True, verbose_name=_("automatic thumbnail creation"))
     thumbnail_mandatory = models.BooleanField(pgettext_lazy("component field label", "Thumbnail is mandatory"), default=False)
+    max_thumbnail_size = models.IntegerField(verbose_name=_("Maximum thumbnail size"), default=DEFAULT_MAX_THUMB_SIZE)
+    big_image_allowed = models.BooleanField(pgettext_lazy("component field label", "Big images are allowed"), default=True)
+    max_big_image_size = models.IntegerField(verbose_name=_("Maximum larger image size"), default=DEFAULT_MAX_IMAGE_SIZE)
     file_masks = models.CharField(_("Allowed file masks"), help_text=_("space-separated list of file masks, e.g. *.jpg"), max_length=64, default="*")
 
     def thumbnailer(self):
@@ -123,6 +132,7 @@ class Asset(models.Model):
     title = models.CharField(max_length=255, verbose_name=_("title"))
     notes = models.TextField(null=True, verbose_name=_("description"))
     image = models.ImageField(upload_to=get_thumbnail_path, verbose_name=_("thumbnail"), null=True, blank=True)
+    big_image = models.ImageField(upload_to=get_big_image_path, verbose_name=_("larger image"), null=True, blank=True)
     data = models.FileField(upload_to=get_data_path, verbose_name=_("data file"))
     url = models.URLField(null=True, blank=True, verbose_name=_("URL"))
     pub_date = models.DateTimeField(verbose_name=_("date published"))

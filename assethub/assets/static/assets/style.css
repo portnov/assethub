@@ -143,6 +143,14 @@ img.thumbnail {
   margin: 1ex;
 }
 
+div.bigimage {
+  text-align: center;
+}
+
+img.bigimage {
+  margin: 1ex;
+}
+
 div.asset div.thumbnail-description {
   margin: 1ex;
   font-size: small;
