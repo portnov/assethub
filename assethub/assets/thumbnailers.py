@@ -49,7 +49,7 @@ def thumbnail_from_big_image(big_image, size=None):
             y = (th_h - size)/2.0
             if y < 0:
                 y = 0
-            img = img.crop((x,y, x, y))
+            img = img.crop((x,y, size+x, size+y))
         output = StringIO()
         img.save(output, format="PNG")
         contents = output.getvalue()

@@ -145,6 +145,7 @@ img.thumbnail {
 
 div.bigimage {
   text-align: center;
+  clear: both;
 }
 
 img.bigimage {
