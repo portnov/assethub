@@ -3,6 +3,7 @@ from bpy.types import WindowManager, AddonPreferences
 from bpy.props import StringProperty, EnumProperty
 
 try:
+    import sverchok
     from sverchok.utils.sv_IO_panel_tools import import_tree
     SVERCHOK_AVAILABLE=True
 except ImportError:
@@ -10,6 +11,7 @@ except ImportError:
 
 from os.path import join, basename, dirname, exists
 import json
+import webbrowser
 
 from assethubclient import client
 
@@ -79,7 +81,7 @@ assethub_components = []
 assethub_licenses = []
 assethub_tags = []
 preview_collections = {}
-asset_descriptions = {}
+known_assets = {}
 
 def get_preferences():
     return bpy.context.user_preferences.addons.get("assethubclient").preferences
@@ -120,6 +122,9 @@ def previews_from_assethub(self, context):
         c.tag = tag
     else:
         c.tag = None
+    component = client.Component.get("blender", wm.assethub_component)
+    if component:
+        c.appversion = component.get_current_version()
     for idx, asset in enumerate(c.list()):
         id = str(asset.id)
         if not asset.image:
@@ -134,16 +139,22 @@ def previews_from_assethub(self, context):
                 thumb = pcoll[id]
             icon = thumb.icon_id
         description = asset.description()
-        asset_descriptions[id] = description
+        known_assets[id] = asset
         enum_items.append((id, asset.title, description, icon, idx))
     
     pcoll.previews[tag] = enum_items
     return enum_items
 
-def get_asset_description(self, context, id):
-    if not asset_descriptions:
+def get_asset(self, context, id):
+    if not known_assets:
         previews_from_assethub(self, context)
-    return asset_descriptions.get(id, None)
+    return known_assets.get(id, None)
+
+def get_asset_description(self, context, id):
+    asset = get_asset(self, context, id)
+    if not asset:
+        return None
+    return asset.description()
 
 def components_from_assethub(self, context):
     global assethub_components
@@ -202,12 +213,27 @@ class ImportPanel(bpy.types.Panel):
         layout.prop(wm, "assethub_component")
         layout.prop(wm, "assethub_tag")
         layout.template_icon_view(wm, "assethub_asset")
-#         if wm.assethub_asset:
+        if wm.assethub_asset:
+            asset = get_asset(self, context, wm.assethub_asset)
+            layout.label(asset.title)
+            layout.label("License: {}".format(asset.license))
 #             description = get_asset_description(self, context, wm.assethub_asset)
 #             if description:
 #                 for line in description.split("\n"):
 #                     layout.label(line)
+            wm.assethub_asset_url = asset.url
+            layout.operator("browse.assethub_asset")
         layout.operator("import.assethub")
+
+class BrowseAssetOperator(bpy.types.Operator):
+    bl_label = "Open in browser"
+    bl_idname = "browse.assethub_asset"
+
+    def execute(self, context):
+        wm = context.window_manager
+        url = wm.assethub_asset_url
+        webbrowser.open(url)
+        return {'FINISHED'}
 
 class ImportOperator(bpy.types.Operator):
     bl_label = "Import from AssetHub"
@@ -215,14 +241,13 @@ class ImportOperator(bpy.types.Operator):
 
     def execute(self, context):
         wm = context.window_manager
-        print("Params: comp={}, preview={}".format(wm.assethub_component, wm.assethub_asset))
+        #print("Params: comp={}, preview={}".format(wm.assethub_component, wm.assethub_asset))
         c = get_assethub_client(context)
         asset = c.get(wm.assethub_asset)
         component = client.Component.get("blender", wm.assethub_component)
         if component is None:
             print("Dont know how to import objects for component " + wm.assethub_component)
         else:
-            print(component)
             component.import_asset(asset)
         return {'FINISHED'}
 
@@ -293,9 +318,25 @@ class SverchokSn1(client.Component):
     def import_asset(self, asset):
         asset.store_to_text_block()
 
+    def get_current_version(self):
+        if SVERCHOK_AVAILABLE:
+            vs = sverchok.bl_info['version']
+            return ".".join(str(v) for v in vs)
+
+    def get_min_compatible_version(self):
+        return "0.5.0.0"
+
 class SverchokLayout(client.Component):
     def import_asset(self, asset):
         asset.import_sverchok_tree()
+
+    def get_current_version(self):
+        if SVERCHOK_AVAILABLE:
+            vs = sverchok.bl_info['version']
+            return ".".join(str(v) for v in vs)
+
+    def get_min_compatible_version(self):
+        return "0.5.0.0"
 
 def menu_func(self, context):
     self.layout.operator("import.assethub", text="Import from AssetHub")
@@ -305,6 +346,7 @@ def register():
     WindowManager.assethub_component = EnumProperty(name="Component", items = components_from_assethub)
     WindowManager.assethub_tag = EnumProperty(name="Tag", default=None, items = tags_from_assethub)
     WindowManager.assethub_asset = EnumProperty(name="Asset", items = previews_from_assethub)
+    WindowManager.assethub_asset_url = StringProperty(name="Asset URL")
 
     client.Component.register("blender", "sverchok-sn1", SverchokSn1)
     client.Component.register("blender", "sverchok-layout", SverchokLayout)
@@ -314,6 +356,7 @@ def register():
     bpy.utils.register_class(ImportPanel)
     bpy.utils.register_class(PostScriptPanel)
     bpy.utils.register_class(PostScriptOperator)
+    bpy.utils.register_class(BrowseAssetOperator)
     bpy.types.INFO_MT_file_import.append(menu_func)
 
 def unregister():
@@ -324,6 +367,7 @@ def unregister():
     preview_collections.clear()
 
     del WindowManager.assethub_asset
+    del WindowManager.assethub_asset_url
     del WindowManager.assethub_component
     del WindowManager.assethub_tag
 
@@ -332,6 +376,7 @@ def unregister():
     bpy.utils.unregister_class(ImportPanel)
     bpy.utils.unregister_class(PostScriptPanel)
     bpy.utils.unregister_class(PostScriptOperator)
+    bpy.utils.unregister_class(BrowseAssetOperator)
     bpy.types.INFO_MT_file_import.remove(menu_func)
 
 if __name__ == "__main__":

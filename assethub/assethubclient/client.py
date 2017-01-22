@@ -11,10 +11,13 @@ import getpass
 
 class JsonObject(object):
     def __init__(self, json):
-        self.dict = json
+        super(JsonObject,self).__setattr__("dict", json)
 
     def __getattr__(self, attr):
-        return self.dict[attr]
+        return self.dict.get(attr, None)
+
+    def __setattr__(self, attr, value):
+        self.dict[attr] = value
 
     def json(self):
         return self.dict
@@ -104,6 +107,15 @@ class Component(JsonObject):
     def import_asset(self, asset):
         raise NotImplementedError
 
+    def get_current_version(self):
+        return None
+
+    def get_max_compatible_version(self):
+        return None
+
+    def get_min_compatible_version(self):
+        return None
+
 class Tag(JsonObject):
     pass
 
@@ -124,6 +136,7 @@ class AssetHubClient(object):
         self.author = None
         self.id = None
         self.license = None
+        self.appversion = None
         self.asset_constructor = Asset
 
     def _get_url(self):
@@ -142,6 +155,8 @@ class AssetHubClient(object):
             params['tag'] = self.tag
         if self.author is not None:
             params['author'] = author
+        if self.appversion is not None:
+            params['appversion'] = self.appversion
         return params
 
     def get_components(self, application=None):
@@ -167,23 +182,42 @@ class AssetHubClient(object):
         r.raise_for_status()
         return [License(l) for l in r.json()]
 
+    def format_asset_url(self, id):
+        return join(self.url, "asset", str(id))
+
     def list(self):
         r = requests.get(self._get_url(), params=self._get_params())
         r.raise_for_status()
         json = r.json()
+        result = []
         if isinstance(json, list):
-            return [self.asset_constructor(a) for a in r.json()]
+            for a in json:
+                asset = self.asset_constructor(a) 
+                asset.url = self.format_asset_url(asset.id)
+                result.append(asset)
         else:
-            return [self.asset_constructor(json)]
+            asset = self.asset_constructor(json)
+            asset.url = self.format_asset_url(asset.id)
+            result.append(asset)
+        return result
 
     def get(self, id):
         url = join(self._base_url, str(id))
         r = requests.get(url)
         r.raise_for_status()
-        return self.asset_constructor(r.json())
+        asset = self.asset_constructor(r.json())
+        asset.url = self.format_asset_url(asset.id)
+        return asset
 
     def post(self, asset, data_file, file_name=None, content_type=None, image_file=None):
         auth = HTTPBasicAuth(self.username, self.password)
+        component = Component.get(asset.application, asset.component)
+        if component and (not asset.app_version_min or not asset.app_version_max):
+            if not asset.app_version_min:
+                asset.app_version_min = component.get_min_compatible_version()
+            if not asset.app_version_max:
+                asset.app_version_max = component.get_max_compatible_version()
+
         data = asset.json()
         if file_name is None:
             if hasattr(data_file, "name") and data_file.name is not None:
