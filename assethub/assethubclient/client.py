@@ -30,6 +30,13 @@ class JsonObject(object):
 
 class Asset(JsonObject):
 
+    def description(self):
+        return """Title: {0}
+Notes: {1}
+License: {2}
+Tags: {3}
+""".format(self.title, self.notes, self.license, self.tags)
+
     def get_data_content_type(self):
         r = requests.head(self.data)
         r.raise_for_status()

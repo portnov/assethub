@@ -79,6 +79,7 @@ assethub_components = []
 assethub_licenses = []
 assethub_tags = []
 preview_collections = {}
+asset_descriptions = {}
 
 def get_preferences():
     return bpy.context.user_preferences.addons.get("assethubclient").preferences
@@ -117,6 +118,8 @@ def previews_from_assethub(self, context):
     c.component = component
     if tag != "__all__":
         c.tag = tag
+    else:
+        c.tag = None
     for idx, asset in enumerate(c.list()):
         id = str(asset.id)
         if not asset.image:
@@ -130,14 +133,17 @@ def previews_from_assethub(self, context):
             else:
                 thumb = pcoll[id]
             icon = thumb.icon_id
-        if asset.notes:
-            notes = asset.notes
-        else:
-            notes = asset.title
-        enum_items.append((id, asset.title, notes, icon, idx))
+        description = asset.description()
+        asset_descriptions[id] = description
+        enum_items.append((id, asset.title, description, icon, idx))
     
     pcoll.previews[tag] = enum_items
     return enum_items
+
+def get_asset_description(self, context, id):
+    if not asset_descriptions:
+        previews_from_assethub(self, context)
+    return asset_descriptions.get(id, None)
 
 def components_from_assethub(self, context):
     global assethub_components
@@ -196,6 +202,11 @@ class ImportPanel(bpy.types.Panel):
         layout.prop(wm, "assethub_component")
         layout.prop(wm, "assethub_tag")
         layout.template_icon_view(wm, "assethub_asset")
+#         if wm.assethub_asset:
+#             description = get_asset_description(self, context, wm.assethub_asset)
+#             if description:
+#                 for line in description.split("\n"):
+#                     layout.label(line)
         layout.operator("import.assethub")
 
 class ImportOperator(bpy.types.Operator):
