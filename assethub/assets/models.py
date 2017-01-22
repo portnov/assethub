@@ -4,6 +4,7 @@ from os.path import basename, join, splitext
 from glob import fnmatch
 from hashlib import sha1
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
@@ -20,10 +21,7 @@ from taggit_autosuggest.managers import TaggableManager
 from vote.managers import VotableManager
 from versionfield import VersionField
 
-from assets.thumbnailers import get_thumbnailer_classes, get_default_thumbnailer, get_thumbnailer
-
-DEFAULT_MAX_THUMB_SIZE = 300
-DEFAULT_MAX_IMAGE_SIZE = 1024
+from assets.thumbnailers import get_thumbnailer_classes, get_default_thumbnailer, get_thumbnailer, thumbnail_from_big_image
 
 def get_api_group_name():
     # TODO: this should be configurable
@@ -77,9 +75,9 @@ class Component(models.Model):
     install_instructions = models.TextField(null=True, blank=True, verbose_name=_("Installation instructions"))
     thumbnailer_name = models.CharField(max_length=64, choices=get_thumbnailer_classes(), default=get_default_thumbnailer(), null=True, blank=True, verbose_name=_("automatic thumbnail creation"))
     thumbnail_mandatory = models.BooleanField(pgettext_lazy("component field label", "Thumbnail is mandatory"), default=False)
-    max_thumbnail_size = models.IntegerField(verbose_name=_("Maximum thumbnail size"), default=DEFAULT_MAX_THUMB_SIZE)
+    max_thumbnail_size = models.IntegerField(verbose_name=_("Maximum thumbnail size"), default=settings.DEFAULT_MAX_THUMB_SIZE)
     big_image_allowed = models.BooleanField(pgettext_lazy("component field label", "Big images are allowed"), default=True)
-    max_big_image_size = models.IntegerField(verbose_name=_("Maximum larger image size"), default=DEFAULT_MAX_IMAGE_SIZE)
+    max_big_image_size = models.IntegerField(verbose_name=_("Maximum larger image size"), default=settings.DEFAULT_MAX_IMAGE_SIZE)
     file_masks = models.CharField(_("Allowed file masks"), help_text=_("space-separated list of file masks, e.g. *.jpg"), max_length=64, default="*")
 
     def thumbnailer(self):
@@ -147,6 +145,10 @@ class Asset(models.Model):
         if self.component and self.data and not self.component.is_filename_allowed(self.data.name):
             raise ValidationError(_("It is not allowed to upload files of this type for this component"))
 
+        if self.component and not self.component.big_image_allowed:
+            if self.big_image:
+                raise ValidationError(_("It is not allowed to upload big images for this component"))
+
         if self.component and self.component.thumbnail_mandatory:
             if not self.image and not (self.component and self.component.thumbnailer_name):
                 raise ValidationError(_("You should upload thumbnail file"))
@@ -154,13 +156,17 @@ class Asset(models.Model):
         super(Asset, self).clean()
 
     def save(self, *args, **kwargs):
-        if self.data and not self.image and self.component and self.component.thumbnailer_name:
+        if self.data and not self.image and self.component:
             thumbnailer = self.component.thumbnailer()
+            auto_thumbnail = None
             if thumbnailer:
-                thumbnail = thumbnailer.make_thumbnail(self.data)
-                if thumbnail:
-                    # pass save=False because otherwise it would call save() recursively
-                    self.image.save("auto_thumbnail.png", thumbnail, save=False)
+                auto_thumbnail = thumbnailer.make_thumbnail(self.data)
+            elif self.big_image:
+                auto_thumbnail = thumbnail_from_big_image(self.big_image, size=self.component.max_thumbnail_size)
+            if auto_thumbnail:
+                # pass save=False because otherwise it would call save() recursively
+                self.image.save("auto_thumbnail.png", auto_thumbnail, save=False)
+
         super(Asset,self).save(*args, **kwargs)
 
     def get_tags(self):

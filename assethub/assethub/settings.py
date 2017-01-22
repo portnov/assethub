@@ -188,6 +188,9 @@ THUMBNAILER_CLASSES = ["assets.thumbnailers.ImageThumbnailer",
                       ]
 DEFAULT_THUMBNAILER = None
 
+DEFAULT_MAX_THUMB_SIZE = 300
+DEFAULT_MAX_IMAGE_SIZE = 1024
+
 # Settings for markdown
 MARKDOWN_DEUX_STYLES = {
     "default": {

@@ -9,6 +9,7 @@ from importlib import import_module
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.module_loading import import_string
+from django.core.files.images import get_image_dimensions
 
 def import_by_path(path):
     """Import python module by path.
@@ -32,6 +33,30 @@ def import_by_path(path):
         path, ext = splitext(path)
     path = path.replace('/', '.')
     return import_module(path)
+
+def thumbnail_from_big_image(big_image, size=None):
+    try:
+        src_w, src_h = get_image_dimensions(big_image)
+        img = Image.open(big_image)
+        img.thumbnail((512,512))
+        th_w, th_h = img.size
+        if size is None:
+            size = settings.DEFAULT_MAX_THUMB_SIZE
+        if th_w > size or th_h > size:
+            x = (th_w - size)/2.0
+            if x < 0:
+                x = 0
+            y = (th_h - size)/2.0
+            if y < 0:
+                y = 0
+            img = img.crop((x,y, x, y))
+        output = StringIO()
+        img.save(output, format="PNG")
+        contents = output.getvalue()
+        output.close()
+        return ContentFile(contents)
+    except IOError:
+        return None
 
 class Thumbnailer(object):
     title = "Abstract thumbnailer"
@@ -103,6 +128,8 @@ def get_default_thumbnailer():
 def get_thumbnailer(name):
     if not name:
         name = get_default_thumbnailer()
+    if not name:
+        return None
     cls = import_string(name)
     thumbnailer = cls()
     if not isinstance(thumbnailer, Thumbnailer):
