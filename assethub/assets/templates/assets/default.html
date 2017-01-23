@@ -98,25 +98,28 @@ function unfollow(username) {
 <body>
 
 
-<div class="login">
-{% if user.is_authenticated %}
-<p>{% trans 'Hello,' context "site_greeting" %} {% user_link user %}!</p>
-{% if user.is_staff %}
-<p><a href="/admin/">{% trans 'Administration' %}</a></p>
-{% endif %}
-<p><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></p>
-{% else %}
-<p><a href="{% url 'login' %}">{% trans 'Log in' %}</a></p>
-{% endif %}
-</div>
-
 {% get_menu_items as menu %}
 <div class="topmenu">
 <ul class="topmenu">
   {% for item in menu %}
     <li class="menuitem"><a href="{{item.get_url}}">{{item.title}}</a></li>
   {% endfor %}
+  {% if user.is_staff %}
+    <li class="menuitem"><a href="/admin/">{% trans 'Administration' %}</a></li>
+  {% endif %}
+  {% if user.is_authenticated %}
+    <li class="menuitem"><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
+  {% else %}
+    <li class="menuitem"><a href="{% url 'login' %}">{% trans 'Log in' %}</a></li>
+    <li class="menuitem"><a href="/accounts/register/">{% trans 'Register' %}</a></li>
+  {% endif %}
 </ul>
+</div>
+
+<div class="login">
+{% if user.is_authenticated %}
+<p>{% trans 'Hello,' context "site_greeting" %} {% user_link user %}!</p>
+{% endif %}
 </div>
 
 {% block h1 %}

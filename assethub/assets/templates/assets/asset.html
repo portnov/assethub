@@ -3,7 +3,7 @@
 {% load markdown_deux_tags %}
 {% load comments %}
 {% load common %}
-
+{% load staticfiles %}
 
 {% block media %}
 {% get_comment_form for asset as commentsform %}
@@ -13,6 +13,9 @@
 {% block content %}
 <div class="asset-details" id="asset_{{asset.pk}}">
   {% asset_thumbnail asset False %}
+  {% if user == asset.author %}
+    <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">{% trans 'Edit' %}</a></p>
+  {% endif %}
   <p class="title">
     <a href="{% url 'by_application' asset.application.slug %}">{{asset.application.title}}</a>
       {% if asset.component %}
@@ -21,21 +24,27 @@
       : {% asset_title asset False %}</p>
   </p>
   {% if asset.original_author %}
-  <p>{% trans 'Uploaded by' %} {% user_link asset.author %}</p>
+  <p><strong>{% trans 'Uploaded by' %}<strong> {% user_link asset.author %}</p>
   {% endif %}
   {% if asset.license %}
-  <p>{% trans 'License' %}: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
+  <p><strong>{% trans 'License' %}</strong>: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
   {% endif %}
-  {% if user == asset.author %}
-    <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">{% trans 'Edit' %}</a></p>
-  {% endif %}
+  <div class="rating-container">
+    {% if user != asset.author %}
+      <p><a href="#" onclick="vote({{asset.pk}}, 'up')"><img src="{% static 'assets/vote-up.png' %}" title="{% trans 'Up' context "voting" %}"/></a></p>
+    {% endif %}
+    <p class="rating-value"><span class="num_votes">{{asset.num_votes}}</span></p>
+    {% if user != asset.author %}
+      <p><a href="#" onclick="vote({{asset.pk}}, 'down')"><img src="{% static 'assets/vote-down.png' %}" title="{% trans 'Down' context "voting" %}"/></a></p>
+    {% endif %}
+  </div>
   <p class="notes">{{asset.notes|markdown}}</p>
   {% if asset.url %}
     <p>{% trans 'URL' %}: <a href="{{asset.url}}">{{asset.url}}</a></p>
   {% endif %}
   <p class="tags">
   {% if asset.tags.all %}
-    {% trans 'Tags' %}:
+  <strong>{% trans 'Tags' %}</strong>:
     {% for tag in asset.tags.all %}
       <a class="tag" href="{% url 'by_tag' tag.slug %}">{{tag.name}}</a>
       {% if not forloop.last %}, {% endif %}
@@ -44,16 +53,10 @@
   {% trans 'No tags are assigned to this asset.' %}
   {% endif %}
   </p>
-  <p>{% trans 'Rating' context "voting" %}: <span class="num_votes">{{asset.num_votes}}</span>
-  {% if user != asset.author %}
-  <a href="#" onclick="vote({{asset.pk}}, 'up')">{% trans 'Up' context "voting" %}</a>
-  <a href="#" onclick="vote({{asset.pk}}, 'down')">{% trans 'Down' context "voting" %}</a>
-  {% endif %}
-  </p>
   {% if asset.version %}
-  <p>{% trans 'Asset version' %}: {{asset.version}}</p>
+  <p><strong>{% trans 'Asset version' %}</strong>: {{asset.version}}</p>
   {% endif %}
-  <p>{% trans 'Compatible application versions' %}: {{asset.get_app_versions}}</p>
+  <p><strong>{% trans 'Compatible application versions' %}</strong>: {{asset.get_app_versions}}</p>
   <p class="download"><a href="{{asset.data.url}}">
     {% blocktrans with size=asset.data.size|filesizeformat name=asset.get_filename %}Download the asset ({{name}}, {{size}}){% endblocktrans %}
   </a></p>

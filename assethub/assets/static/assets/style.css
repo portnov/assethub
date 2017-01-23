@@ -49,6 +49,7 @@ div#postlink, div#searchbox {
 
 div.login {
   float: right;
+  clear: right;
   padding-right: 1em;
   padding-top: 1.5ex;
   color: #f5e39e;
@@ -64,11 +65,13 @@ div.login p {
 }
 
 div.topmenu {
-  text-align: center;
+  text-align: right;
+  padding-left: 1ex;
+  padding-right: 1ex;
 }
 
 ul.topmenu {
-  text-align: center;
+  text-align: right;
   /*position: absolute;*/
   padding: 0.5ex;
   /*background: #3b3b3b;*/
@@ -138,6 +141,35 @@ div.asset-details {
   border-radius: 6px;
 }
 
+div.asset-details p.title, div.asset p.title {
+  font-weight: bold;
+  margin: 5px;
+}
+
+p.edit {
+  float: right;
+  clear: right;
+  /*font-weight: bold;*/
+  /*border: thin #191A1C solid;*/
+  /*padding: 1ex;*/
+}
+
+div.rating-container {
+  float: right;
+  clear: right;
+  text-align: center;
+  line-height: 0;
+  /*border: thin #222 solid;*/
+  background-color: #3B3B3B;
+  padding: 1ex;
+  min-width: 50px;
+}
+
+div.rating-container p.rating-value {
+  font-size: large;
+  font-weight: bold;
+}
+
 img.thumbnail {
   float: left;
   margin: 1ex;
@@ -178,10 +210,6 @@ ul.taglist {
 ul.taglist li {
   display: inline;
   line-height: 2;
-}
-
-p.title {
-  margin: 5px;
 }
 
 #id_honeypot {

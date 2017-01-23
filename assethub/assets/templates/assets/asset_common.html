@@ -1,7 +1,11 @@
 {% load i18n %}
 {% load markdown_deux_tags %}
 {% load common %}
+{% load staticfiles %}
 
+{% if user == asset.author %}
+  <p class="edit"><a href="{% url 'edit_asset' asset.pk %}">{% trans 'Edit' %}</a></p>
+{% endif %}
 {% if asset.tags.all %}
   <p class="tags">
   {% for tag in asset.tags.all %}
@@ -10,9 +14,13 @@
   {% endfor %}
   </p>
 {% endif %}
-<p>{% trans 'Rating' context "voting" %}: <span class="num_votes">{{asset.num_votes}}</span>
-{% if user != asset.author %}
-  <a href="#" onclick="vote({{asset.pk}}, 'up')">{% trans 'Up' context "voting" %}</a>
-  <a href="#" onclick="vote({{asset.pk}}, 'down')">{% trans 'Down' context "voting" %}</a>
-{% endif %}
+  <div class="rating-container">
+    {% if user != asset.author %}
+      <p><a href="#" onclick="vote({{asset.pk}}, 'up')"><img src="{% static 'assets/vote-up.png' %}" title="{% trans 'Up' context "voting" %}"/></a></p>
+    {% endif %}
+    <p class="rating-value"><span class="num_votes">{{asset.num_votes}}</span></p>
+    {% if user != asset.author %}
+      <p><a href="#" onclick="vote({{asset.pk}}, 'down')"><img src="{% static 'assets/vote-down.png' %}" title="{% trans 'Down' context "voting" %}"/></a></p>
+    {% endif %}
+  </div>
 <p>{% trans 'Comments' %}: {{asset.get_comments_count}}</p>
