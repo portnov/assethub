@@ -16,7 +16,7 @@
 <title>{{title}}</title>
 {% endif %}
 {% endblock %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
 <script>
 function getCookie(name) {
     var cookieValue = null;
@@ -90,6 +90,9 @@ function unfollow(username) {
 {{post_form.media}}
 {% endif %}
 
+{% block media %}
+{% endblock %}
+
 </head>
 
 <body>
@@ -156,6 +159,15 @@ function unfollow(username) {
 
 {% block endscripts %}
 {% endblock %}
+<script>
+$(document).ready(function() {
+  $('.wmd-preview').hide();
+});
+
+$('.wmd-preview-title').click(function() {
+  $('.wmd-preview').slideToggle('fast');
+});
+</script>
 
 </body>
 </html>

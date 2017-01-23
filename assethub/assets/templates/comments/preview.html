@@ -1,0 +1,49 @@
+{% extends 'assets/default.html' %}
+
+{% load i18n %}
+{% load markdown_deux_tags %}
+{% load comments %}
+
+{% block pagetitle %}
+<title>{% trans "Preview your comment" %}</title>
+{% endblock %}
+
+{% block h1 %}
+<h1>
+  <a href="/">/</a>
+  {% trans "Preview your comment" %}
+</h1>
+{% endblock %}
+
+{% block content %}
+  <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+    {% if next %}
+      <div><input type="hidden" name="next" value="{{ next }}"/></div>{% endif %}
+    {% if form.errors %}
+      <h1>{% blocktrans count counter=form.errors|length %}Please correct the error below{% plural %}Please correct the errors below{% endblocktrans %}</h1>
+    {% else %}
+      <blockquote>{{ comment|linebreaks }}</blockquote>
+      <p>
+        {% trans "and" %} <input id="submit" type="submit" name="submit" class="submit-post"
+                                 value="{% trans "Post your comment" %}"/>
+        {# Translators: This string follows the 'Post your comment' submit button. #}
+        {% trans "or make changes" %}:
+      </p>
+    {% endif %}
+    {% for field in form %}
+      {% if field.is_hidden %}
+        <div>{{ field }}</div>
+      {% else %}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+        <p
+                {% if field.errors %} class="error"{% endif %}
+                {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+          {{ field.label_tag }} {{ field }}
+        </p>
+      {% endif %}
+    {% endfor %}
+    <p class="submit">
+      <input type="submit" name="submit" class="submit-post" value="{% trans "Post" %}"/>
+    </p>
+</form>
+{% endblock %}

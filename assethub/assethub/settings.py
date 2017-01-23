@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Main application
+    'assets',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,8 +62,6 @@ INSTALLED_APPS = [
     'taggit_autosuggest',
     # Voting / rating / liking
     'vote',
-    # Main application
-    'assets',
     # Configurable top menu
     'flatmenu'
 ]
@@ -108,6 +108,8 @@ TEMPLATES = [
 
 # CSS for markdown editor widget
 PAGEDOWN_WIDGET_CSS=("assets/pagedown.css", )
+
+COMMENTS_APP = "assets"
 
 WSGI_APPLICATION = 'assethub.wsgi.application'
 

@@ -117,3 +117,6 @@ def enable_api(request):
         context = dict(new_password=new_password, use_current_password=False)
         return render(request, 'assets/enable_api.html', context)
 
+def nonexisting_template(request):
+    context = {}
+    return render(request, 'comments/preview.html', context)

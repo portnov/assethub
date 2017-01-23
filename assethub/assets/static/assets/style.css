@@ -194,3 +194,52 @@ div.pagination {
   margin-top: 5ex;
   padding: 1em;
 }
+
+form table {
+  width: 100%;
+}
+
+input:required:invalid, select:required:invalid {
+  color: #eee;
+  border: thin #1C1111 solid;
+  background-color: #332A2A;
+}
+textarea:required:invalid {
+  color: #eee;
+  border: thin #1C1111 solid;
+}
+
+input, select, textarea {
+  color: #eee;
+  background-color: #333;
+  border: thin #191A1C solid;
+}
+
+form table tr th {
+  text-align: left;
+  padding-right: 1em;
+}
+
+form textarea {
+  width: 100%;
+}
+
+ul.as-list {
+  color: #eee;
+  background-color: #333 !important;
+}
+
+ul.as-list li.as-result-item {
+  background-color: #333 !important;
+  border: none;
+}
+
+ul.as-list li.as-result-item.active {
+  background-color: #333 !important;
+  border: thin #191A1C solid;
+}
+
+ul.as-list li.as-result-item.active em {
+  background-color: #111 !important;
+}
+
