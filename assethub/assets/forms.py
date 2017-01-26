@@ -12,7 +12,7 @@ from versionfield.forms import VersionField
 from taggit_autosuggest.widgets import TagAutoSuggest
 from taggit.models import Tag
 
-from models import Asset, License, Application, Component
+from models import Asset, License, Application, Component, Profile
 
 class AssetForm(ModelForm):
 
@@ -62,8 +62,12 @@ class AdvancedSearchForm(forms.Form):
 class SimpleSearchForm(forms.Form):
     query = forms.CharField(label=_l("Search"), required=False)
 
-class ProfileForm(ModelForm):
+class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['email_comments', 'email_assets', 'email_mention']

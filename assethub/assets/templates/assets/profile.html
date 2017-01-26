@@ -14,7 +14,7 @@
   <p>{% trans 'Rating' %}: {{buddy.profile.get_rating}}</p>
 
 {% if user != buddy %}
-  {% if used.is_authenticated %}
+  {% if user.is_authenticated %}
     {% if followed %}
       <p class="followtext">
       {% trans 'You are following this user.' %}

@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS=[]
 
 
 # Application definition
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'taggit_autosuggest',
     # Voting / rating / liking
     'vote',
+    'notifications',
     # Configurable top menu
     'flatmenu'
 ]
@@ -201,6 +202,8 @@ MARKDOWN_DEUX_STYLES = {
                 (re.compile(r'#(\d+)\b'), r"/asset/\1/"),
                 # convert #hashtag to link to /tag/hashtag/
                 (re.compile(r'#(\w+)\b'), r"/tag/\1/"),
+                # convert @user to link to /accounts/profile/user/
+                (re.compile(r'@([-\w]+)\b'), r"/accounts/profile/\1"),
             ],
             "extras": {
                 "code-friendly": None,

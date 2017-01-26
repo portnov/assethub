@@ -19,3 +19,4 @@ django-gravatar2
 django-versionfield2
 django-modeltranslation
 django-storages
+django-notifications-hq

@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from taggit.models import Tag
 
 from assets.models import Asset, Component, Application
-from assets.forms import AssetForm, ProfileForm
+from assets.forms import AssetForm, UserForm, ProfileForm
 from assets.views.common import get_page
 
 @login_required
@@ -51,7 +51,8 @@ def get_user_profile(request, user):
     most_rated_assets = user.asset_set.order_by('-num_votes')[:5]
     try:
         followed = request.user.profile.does_follow(user)
-    except AttributeError:
+    except AttributeError as e:
+        print(e)
         followed = False
     context = dict(buddy=user, followed=followed, title=title, most_rated_assets=most_rated_assets)
     return render(request, "assets/profile.html", context)
@@ -66,15 +67,17 @@ def get_users_list(request):
 def edit_profile(request):
     user = request.user
     if request.method == "POST":
-        form = ProfileForm(request.POST, instance=user)
-        if form.is_valid():
-            new_user = form.save()
-            new_user.save()
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, instance=user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             return HttpResponseRedirect(reverse('user_profile', args=[user.username]))
     else:
-        form = ProfileForm(instance=user)
+        user_form = UserForm(instance=user)
+        profile_form = ProfileForm(instance=user.profile)
 
     title = _("Edit profile")
-    context = dict(form=form, title=title, form_action=reverse('edit_profile'))
+    context = dict(user_form=user_form, profile_form=profile_form, title=title, form_action=reverse('edit_profile'))
     return render(request, 'assets/edit_profile.html', context)
 

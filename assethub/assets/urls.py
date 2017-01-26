@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 
 #from rest_framework import routers
+import notifications.urls
 
 import views.common
 import views.asset
@@ -41,6 +42,7 @@ urlpatterns = [
     url(r'^accounts/$', views.users.get_users_list, name='users_list'),
     url(r'^post/(?P<appslug>[-\w]+)/(?P<cslug>[-\w]+)/$', views.asset.post_asset, name='post_asset'),
     url(r'^pages/', include('django.contrib.flatpages.urls')),
+    url(r'^notifications/', include(notifications.urls, namespace='notifications')),
     url(r'^__nonexistent__/$', views.common.nonexisting_template),
     url(r'^(?P<appslug>[-\w]+)/$', views.asset.by_application, name='by_application'),
     url(r'^(?P<appslug>[-\w]+)/version/(?P<verstring>[0-9.]+)/$', views.asset.by_version, name='by_version'),

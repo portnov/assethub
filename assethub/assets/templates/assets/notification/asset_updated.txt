@@ -1,0 +1,9 @@
+Hello {{user.get_full_name}}!
+
+The asset "{{asset.title}}" by {{asset.author.get_full_name}} was updated:
+
+{{asset.notes}}
+
+Best regards,
+AssetHub.
+

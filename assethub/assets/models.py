@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from os.path import basename, join, splitext
 from glob import fnmatch
 from hashlib import sha1
+import re
 
 from django.conf import settings
 from django.db import models
@@ -11,17 +12,24 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 from django.contrib.auth.models import User, Group
-from django_comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import ugettext_lazy as _, pgettext_lazy
+from django.contrib.sites.models import Site
+from django_comments.models import Comment
+#from django.contrib.sites import get_current_site
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy, ugettext
 from django.utils import timezone
+from django.template import loader
 
 from taggit_autosuggest.managers import TaggableManager
 from vote.managers import VotableManager
 from versionfield import VersionField
+from notifications.signals import notify
 
 from assets.thumbnailers import get_thumbnailer_classes, get_default_thumbnailer, get_thumbnailer, thumbnail_from_big_image
+
+mention_re = re.compile(r'^@([-\w]+)')
 
 def get_api_group_name():
     # TODO: this should be configurable
@@ -211,6 +219,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField(User, blank=True, related_name="follower")
     enable_api = models.BooleanField(_("Enable API"), default=False)
+    email_comments = models.BooleanField(_("Send email notifications about comments for my assets"), default=False)
+    email_assets = models.BooleanField(_("Send email notifications about new assets in my feed"), default=False)
+    email_mention = models.BooleanField(_("Send email notifications about me being mentioned"), default=False)
 
     def get_rating(self):
         return Asset.objects.filter(author=self.user).aggregate(Sum('num_votes'))['num_votes__sum']
@@ -231,6 +242,27 @@ class Profile(models.Model):
                 self.enable_api == True and \
                 self.user.groups.filter(name=get_api_group_name()).exists()
 
+def find_mentions(text):
+    if not text:
+        return []
+    result = []
+    for word in text.split():
+        match = mention_re.match(word)
+        if match:
+            name = match.group(1)
+            try:
+                user = User.objects.get(username=name)
+                result.append(user)
+            except User.DoesNotExist:
+                pass
+    return result
+
+def notify_by_mentions(instance, text):
+    for user in find_mentions(text):
+        notify.send(instance, verb='mentioned', recipient=user)
+
+### Signal handlers
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -242,4 +274,68 @@ def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
     except ObjectDoesNotExist:
         instance.profile = Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=Comment)
+def on_comment_posted(sender, instance, created, **kwargs):
+    comment = instance
+    print("on_comment_posted: instance={}, created={}".format(instance, created))
+    if created:
+        print("Comment was posted for: {}".format(comment.content_object))
+        # Comment posted for asset
+        if comment.user == comment.content_object.author:
+            print("Dont notify the author")
+        else:
+            notify.send(comment, verb='was posted', recipient=comment.content_object.author)
+    notify_by_mentions(comment, comment.comment)
+
+@receiver(post_save, sender=Asset)
+def on_asset_posted(sender, instance, created, **kwargs):
+    print("on_asset_posted: instance={}, created={}".format(instance, created))
+    asset = instance
+    if created:
+        verb = 'was posted'
+        print("New asset was posted: {}".format(asset))
+    else:
+        verb = 'was updated'
+    print(dir(asset.author))
+    for profile in asset.author.follower.all():
+        notify.send(asset, verb=verb, recipient=profile.user)
+    notify_by_mentions(asset, asset.notes)
+
+@receiver(notify)
+def on_notify(verb, recipient, sender, **kwargs):
+    print("Notify {0} about {1} {2}".format(recipient.email, sender, verb))
+    subject = None
+    body = None
+    template = None
+    if isinstance(sender, Comment):
+        comment = sender
+        asset = sender.content_object
+        if verb == 'was posted' and recipient.profile.email_comments:
+            subject = ugettext("[{site}]: New comment posted on {asset}").format(site = comment.site.name, asset = asset)
+            template = loader.get_template('assets/notification/new_comment_posted.txt')
+        elif verb == 'mentioned' and recipient.profile.email_mention:
+            subject = ugettext("[{site}]: You were mentioned").format(site = comment.site.name)
+            template = loader.get_template('assets/notification/mention.txt')
+        if template:
+            context = dict(comment=comment, asset=asset, user=recipient)
+            body = template.render(context)
+
+    if isinstance(sender, Asset):
+        asset = sender
+        if verb == 'was posted' and recipient.profile.email_assets:
+            subject = ugettext("[{site}]: New asset posted: {asset}").format(site = Site.objects.get_current(), asset = asset)
+            template = loader.get_template('assets/notification/new_asset_posted.txt')
+        elif verb == 'was updated' and recipient.profile.email_assets:
+            subject = ugettext("[{site}]: Asset updated: {asset}").format(site = Site.objects.get_current(), asset = asset)
+            template = loader.get_template('assets/notification/asset_updated.txt')
+        elif verb == 'mentioned' and recipient.profile.email_mention:
+            subject = ugettext("[{site}]: You were mentioned").format(site = comment.site.name)
+            template = loader.get_template('assets/notification/mention.txt')
+        if template:
+            context = dict(asset=asset, user=recipient)
+            body = template.render(context)
+
+    if subject and body:
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [recipient.email], fail_silently = False)
 

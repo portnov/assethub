@@ -1,0 +1,8 @@
+Hello {{user.get_full_name}}!
+
+There is a new comment on your asset {{asset.title}}, posted by {{comment.user.get_full_name}}:
+
+{{comment}}
+
+Best regards,
+AssetHub.
