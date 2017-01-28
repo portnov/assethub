@@ -24,7 +24,7 @@
       : {% asset_title asset False %}
   </p>
   {% if asset.original_author %}
-  <p><strong>{% trans 'Uploaded by' %}<strong> {% user_link asset.author %}</p>
+  <p><strong>{% trans 'Uploaded by' %}</strong> {% user_link asset.author %}</p>
   {% endif %}
   {% if asset.license %}
   <p><strong>{% trans 'License' %}</strong>: <a href="{% url 'license' asset.license.slug %}">{{asset.license}}</a></p>
