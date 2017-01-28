@@ -64,13 +64,13 @@ def get_assets_query(appslug=None, app=None,
         qry = qry & Q(tags__in=tags)
     if asset_title:
         auto_title.append(_("title contains `{}'").format(asset_title))
-        qry = qry & Q(title__contains=asset_title)
+        qry = qry & Q(title__icontains=asset_title)
     if author is not None:
         auto_title.append(_("author is {}").format(author.get_full_name()))
         qry = qry & Q(author=author)
     if original_author:
         auto_title.append(_("original author {}").format(original_author))
-        qry = qry & Q(original_author__contains=original_author)
+        qry = qry & Q(original_author__icontains=original_author)
     if license is not None:
         auto_title.append(_("license {}").format(license))
         qry = qry & Q(license=license)
@@ -94,11 +94,11 @@ def get_assets_query(appslug=None, app=None,
     return qry, auto_title
 
 def get_simple_search_qry(query):
-    qry = Q(title__contains=query)
+    qry = Q(title__icontains=query)
     qry = qry | Q(application__slug=query)
     qry = qry | Q(component__slug=query)
-    qry = qry | Q(author__username__contains=query)
-    qry = qry | Q(original_author__contains=query)
+    qry = qry | Q(author__username__icontains=query)
+    qry = qry | Q(original_author__icontains=query)
     try:
         tag = Tag.objects.get(slug=query)
     except Tag.DoesNotExist:
