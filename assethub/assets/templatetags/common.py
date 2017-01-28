@@ -24,4 +24,3 @@ def asset_common(user, asset, verbose):
 @register.inclusion_tag('assets/asset_thumbnail.html')
 def asset_thumbnail(asset, as_link=True):
     return {'asset': asset, 'as_link': as_link}
-

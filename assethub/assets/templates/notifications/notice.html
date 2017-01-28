@@ -1,0 +1,10 @@
+{% load i18n %}
+<div class="notice">
+  <span class="actor">{{ notice.actor }}</span>
+    {{ notice.verb }}
+    {% if notice.target %}
+      of {{ notice.target }}
+  {{notice.timesince}}
+  {{notice.data.template}}
+{% endif %}
+</div>

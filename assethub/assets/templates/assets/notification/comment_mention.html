@@ -1,0 +1,19 @@
+{% extends 'assets/notification/notice.html' %}
+{% load i18n %}
+{% load markdown_deux_tags %}
+{% load common %}
+
+{% block notice %}
+<p class="notice-title">
+      {% user_link author %}
+      {% trans 'mentioned you in comment for' %}
+      <a href="{{notice.data.url}}">
+        {{ parent.title }}
+      </a>
+      {{notice.timesince}} {% trans 'ago' %}
+</p>
+<div>
+  {{instance.comment|markdown}}
+</div>
+{% endblock %}
+

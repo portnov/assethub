@@ -21,7 +21,7 @@
       {% if asset.component %}
       <a href="{% url 'by_component' asset.application.slug asset.component.slug %}">{{asset.component.title}}</a>
       {% endif %}
-      : {% asset_title asset False %}</p>
+      : {% asset_title asset False %}
   </p>
   {% if asset.original_author %}
   <p><strong>{% trans 'Uploaded by' %}<strong> {% user_link asset.author %}</p>
@@ -38,7 +38,7 @@
       <p><a href="#" onclick="vote({{asset.pk}}, 'down')"><img src="{% static 'assets/vote-down.png' %}" title="{% trans 'Down' context "voting" %}"/></a></p>
     {% endif %}
   </div>
-  <p class="notes">{{asset.notes|markdown}}</p>
+  <div class="notes">{{asset.notes|markdown}}</div>
   {% if asset.url %}
     <p>{% trans 'URL' %}: <a href="{{asset.url}}">{{asset.url}}</a></p>
   {% endif %}

@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load navigation %}
 {% load social_auth %}
+{% load notifications_tags %}
 {% load common %}
 {% load flatmenu_tags %}
 
@@ -108,6 +109,10 @@ function unfollow(username) {
     <li class="menuitem"><a href="/admin/">{% trans 'Administration' %}</a></li>
   {% endif %}
   {% if user.is_authenticated %}
+    {% notifications_unread as unread_count %}
+    <li class="menuitem{% if unread_count > 0 %} unread{% endif %}">
+      <a href="{% url 'notifications:all' %}">{% trans 'Notifications' %}</a>
+    </li>
     <li class="menuitem"><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
   {% else %}
     <li class="menuitem"><a href="{% url 'login' %}">{% trans 'Log in' %}</a></li>

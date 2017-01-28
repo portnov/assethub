@@ -14,6 +14,7 @@ from taggit.models import Tag
 from versionfield.utils import convert_version_string_to_int
 
 from assets.models import Asset, Component, Application, License
+import assets.notification
 
 # TODO; this should be configurable
 PER_PAGE=30

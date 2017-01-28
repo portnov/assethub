@@ -1,14 +1,8 @@
 Hello {{user.get_full_name}}!
 
-{% if comment %}
 You were mentioned in comment for {{asset.title}}:
 
 {{comment}}
-{% else %}
-You were mentioned in notes for {{asset.title}}:
-
-{{asset.notes}}
-{% endif %}
 
 Best regards,
 AssetHub.

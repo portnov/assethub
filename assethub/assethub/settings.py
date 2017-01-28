@@ -112,6 +112,8 @@ PAGEDOWN_WIDGET_CSS=("assets/pagedown.css", )
 
 COMMENTS_APP = "assets"
 
+NOTIFICATIONS_USE_JSONFIELD=True
+
 WSGI_APPLICATION = 'assethub.wsgi.application'
 
 # Configuration for REST API framework

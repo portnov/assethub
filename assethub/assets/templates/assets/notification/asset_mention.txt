@@ -1,0 +1,10 @@
+Hello {{user.get_full_name}}!
+
+You were mentioned in notes for {{asset.title}}:
+
+{{asset.notes}}
+
+Best regards,
+AssetHub.
+
+

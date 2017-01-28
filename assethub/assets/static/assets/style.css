@@ -15,7 +15,10 @@ div#content {
 }
 
 div.comment {
-  border-top: #222 thin solid;
+  border: #222 thin solid;
+  border-radius: 6px;
+  padding: 1ex;
+  margin: 1ex;
 }
 
 div#navtree {
@@ -271,3 +274,22 @@ ul.as-list li.as-result-item.active em {
   background-color: #111 !important;
 }
 
+div.notice {
+  padding: 1ex;
+  margin: 1ex;
+  text-align: left;
+  border: #222 thin solid;
+  border-radius: 6px;
+  overflow: auto;
+  clear: both;
+}
+
+p.notice-actions {
+  text-align: right;
+  float: right;
+  margin: 0;
+}
+
+.unread {
+  font-weight: bold;
+}

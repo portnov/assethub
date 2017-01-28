@@ -1,0 +1,16 @@
+{% extends 'assets/notification/notice.html' %}
+{% load i18n %}
+{% load markdown_deux_tags %}
+{% load common %}
+
+{% block notice %}
+<p class="comment-title notice-title">
+      {% user_link author %}
+      {% trans 'commented' context "comment notification" %}
+      <a href="{{notice.data.url}}">{{parent.title}}</a>
+      {{instance.submit_date|timesince}} {% trans 'ago' %}
+</p>
+<div class="comment-text">
+  {{instance.comment|markdown}}
+</div>
+{% endblock %}

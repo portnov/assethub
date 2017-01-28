@@ -1,0 +1,24 @@
+{% extends 'assets/default.html' %}
+{% load i18n %}
+{% load notifications_tags %}
+{% load notification %}
+
+{% block pagetitle %}
+<title>{% blocktrans with name=user.get_full_name %}Notifications for {{name}}{% endblocktrans %}</title>
+{% endblock %}
+
+{% block h1 %}
+<h1>
+  <a href="/">/</a>
+  {% blocktrans with name=user.get_full_name %}Notifications for {{name}}{% endblocktrans %}
+</h1>
+{% endblock %}
+
+{% block content %}
+  <p class="notice-actions">
+    <a href="{% url 'notifications:mark_all_as_read' %}">{% trans 'Mark all as read' %}</a>
+  </p>
+  {% for notice in notifications %}
+    {% notify notice %}
+  {% endfor %}
+{% endblock %}
