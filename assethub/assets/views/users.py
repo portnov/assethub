@@ -49,12 +49,13 @@ def user_profile(request, username):
 def get_user_profile(request, user):
     title = _("{0}'s profile").format(user.username)
     most_rated_assets = user.asset_set.order_by('-num_votes')[:5]
+    notifications = user.notifications.unread()[:20]
     try:
         followed = request.user.profile.does_follow(user)
     except AttributeError as e:
         print(e)
         followed = False
-    context = dict(buddy=user, followed=followed, title=title, most_rated_assets=most_rated_assets)
+    context = dict(buddy=user, followed=followed, title=title, most_rated_assets=most_rated_assets, notifications=notifications)
     return render(request, "assets/profile.html", context)
 
 def get_users_list(request):

@@ -81,7 +81,7 @@ class Event(object):
                     context['user'] = recipient
                     body = template.render(context)
                     if subject and body:
-                        print("Send mail to {0}: {1}".format(recipient.email, subject))
+                        print("Send mail to {0}: {1}".format(recipient.email, subject).encode('utf-8'))
                         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [recipient.email], fail_silently = False)
 
 ### Specific events

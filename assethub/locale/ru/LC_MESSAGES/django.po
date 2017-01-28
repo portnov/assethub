@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-28 15:38+0000\n"
+"POT-Creation-Date: 2017-01-28 16:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,8 +20,7 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: assets/forms.py:41
-#,python-brace-format
-#| msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
+#, python-brace-format
 msgid "The thumbnail is too large: {0}x{1}; maximum size allowed is {2}px"
 msgstr ""
 "Миниатюра слишком большая: {0}x{1}; наибольший разрешенный размер {2}px"
@@ -83,7 +82,6 @@ msgid "Thumbnail is mandatory"
 msgstr "Предпросмотр обязателен"
 
 #: assets/models.py:82
-#| msgid "automatic thumbnail creation"
 msgid "Maximum thumbnail size"
 msgstr "Максимальный размер миниатюр"
 
@@ -197,7 +195,6 @@ msgid "It is not allowed to upload files of this type for this component"
 msgstr "Не разрешено загружать файлы этого типа для этого компонента"
 
 #: assets/models.py:154
-#| msgid "It is not allowed to upload files of this type for this component"
 msgid "It is not allowed to upload big images for this component"
 msgstr "Не разрешено загружать большие изображения для этого компонента"
 
@@ -351,7 +348,6 @@ msgid "Administration"
 msgstr "Администрирование"
 
 #: assets/templates/assets/default.html:114
-#| msgid "applications"
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -399,7 +395,9 @@ msgstr "Вы можете использовать API"
 msgid ""
 "API usage currently is not enabled. Please follow <a href="
 "\"%(enable_api_url)s\">this link</a> to enable API usage."
-msgstr "API сейчас не включено. Пожалуйста пройдите <a href=\"%(enable_api_url)s\">по ссылке</a>, чтобы включить API."
+msgstr ""
+"API сейчас не включено. Пожалуйста пройдите <a href=\"%(enable_api_url)s"
+"\">по ссылке</a>, чтобы включить API."
 
 #: assets/templates/assets/enable_api.html:5
 msgid "API usage is now enabled."
@@ -417,14 +415,18 @@ msgstr "Пожалуйста, используйте следующий паро
 msgid ""
 "Pleas save this password in safe place. This password will not be shown you "
 "again if you visit this page next time."
-msgstr "Пожалуйста, сохраните этот пароль в надёжном месте. Этот пароль не будет показан вам снова, если вы посетите эту страницу ещё раз."
+msgstr ""
+"Пожалуйста, сохраните этот пароль в надёжном месте. Этот пароль не будет "
+"показан вам снова, если вы посетите эту страницу ещё раз."
 
 #: assets/templates/assets/enable_api.html:21
 #, python-format
 msgid ""
 "You may <a href=\"%(change_password_url)s\">change your password</a> if you "
 "wish."
-msgstr "Вы можете <a href=\"%(change_password_url)s\">изменить ваш пароль</a>, если хотите."
+msgstr ""
+"Вы можете <a href=\"%(change_password_url)s\">изменить ваш пароль</a>, если "
+"хотите."
 
 #: assets/templates/assets/index.html:12 assets/templates/assets/post.html:7
 msgid "Application"
@@ -477,6 +479,15 @@ msgctxt "comment notification"
 msgid "commented"
 msgstr "прокомментировал"
 
+#: assets/templates/assets/notification/notice.html:5
+#| msgid "Mark all as read"
+msgid "mark as read"
+msgstr "пометить как прочитанное"
+
+#: assets/templates/assets/notification/notice.html:7
+msgid "delete"
+msgstr "удалить"
+
 #: assets/templates/assets/pagination.html:5
 msgid "previous"
 msgstr "предыдущая"
@@ -490,48 +501,57 @@ msgstr "Страница %(current)s из %(total)s."
 msgid "next"
 msgstr "следующая"
 
-#: assets/templates/assets/profile.html:12
+#: assets/templates/assets/profile.html:13
 msgid "Login"
 msgstr "Логин"
 
-#: assets/templates/assets/profile.html:13
+#: assets/templates/assets/profile.html:14
 msgid "Name"
 msgstr "Имя"
 
-#: assets/templates/assets/profile.html:14
+#: assets/templates/assets/profile.html:15
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: assets/templates/assets/profile.html:20
+#: assets/templates/assets/profile.html:21
 msgid "You are following this user."
 msgstr "Вы отслеживаете этого пользователя."
 
-#: assets/templates/assets/profile.html:21
+#: assets/templates/assets/profile.html:22
 msgid "Do not follow this user"
 msgstr "Не отслеживать этого пользователя"
 
-#: assets/templates/assets/profile.html:23
+#: assets/templates/assets/profile.html:24
 msgid "Follow this user"
 msgstr "Отслеживать этого пользователя"
 
-#: assets/templates/assets/profile.html:27
+#: assets/templates/assets/profile.html:28
 msgid "This is you."
 msgstr "Это вы."
 
-#: assets/templates/assets/profile.html:28
+#: assets/templates/assets/profile.html:29
 msgid "Edit your profile details"
 msgstr "Редактировать ваш профиль"
 
-#: assets/templates/assets/profile.html:31
+#: assets/templates/assets/profile.html:32
 #, python-format
 msgid "Go to %(name)s's feed"
 msgstr "Перейти к ленте %(name)s"
 
-#: assets/templates/assets/profile.html:35
+#: assets/templates/assets/profile.html:37
+msgid "Last unread notifications"
+msgstr "Последние непрочитанные уведомления"
+
+#: assets/templates/assets/profile.html:39
+#: assets/templates/notifications/list.html:19
+msgid "Mark all as read"
+msgstr "Пометить все как прочитанные"
+
+#: assets/templates/assets/profile.html:48
 msgid "Most rated assets"
 msgstr "Наиболее высоко оцененные файлы"
 
-#: assets/templates/assets/profile.html:48
+#: assets/templates/assets/profile.html:61
 msgid "This buddy did not post any assets yet."
 msgstr "Этот пользователь ещё не поместил никаких файлов."
 
@@ -566,8 +586,6 @@ msgstr[3] ""
 
 #: assets/templates/comments/assets/Asset/preview.html:28
 #: assets/templates/comments/preview.html:27
-#| msgctxt "application version"
-#| msgid "any"
 msgid "and"
 msgstr "и"
 
@@ -591,10 +609,6 @@ msgstr "Предпросмотр"
 #, python-format
 msgid "Notifications for %(name)s"
 msgstr "Уведомления для %(name)s"
-
-#: assets/templates/notifications/list.html:19
-msgid "Mark all as read"
-msgstr "Пометить все как прочитанные"
 
 #: assets/templates/pagedown/widgets/default.html:8
 msgid "Click here to show or hide preview"
@@ -683,11 +697,11 @@ msgstr "версия {}"
 msgid "{0}'s profile"
 msgstr "Профиль {0}"
 
-#: assets/views/users.py:63
+#: assets/views/users.py:64
 msgid "List of users"
 msgstr "Список пользователей"
 
-#: assets/views/users.py:80
+#: assets/views/users.py:81
 msgid "Edit profile"
 msgstr "Редактирование профиля"
 

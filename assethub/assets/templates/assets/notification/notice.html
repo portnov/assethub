@@ -1,9 +1,10 @@
 {% load i18n %}
-<div class="notice">
+<div class="notice {%if notice.unread %}unread{%endif%}">
   <p class="notice-actions">
     {% if notice.unread %}
-    <a href="{% url 'notifications:mark_as_read' notice.slug %}">x</a>
+    <a href="{% url 'notifications:mark_as_read' notice.slug %}" title="{%trans 'mark as read' %}">v</a>
     {% endif %}
+    <a href="{% url 'notifications:delete' notice.slug %}" title="{%trans 'delete' %}">x</a>
   </p>
   {% block notice %}
   {% endblock %}

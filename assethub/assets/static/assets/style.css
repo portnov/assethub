@@ -284,12 +284,16 @@ div.notice {
   clear: both;
 }
 
+div.notice.unread {
+  border: #222 2px solid;
+}
+
 p.notice-actions {
   text-align: right;
   float: right;
   margin: 0;
 }
 
-.unread {
+.menuitem.unread {
   font-weight: bold;
 }

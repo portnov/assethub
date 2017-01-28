@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load gravatar %}
 {% load common %}
+{% load notification %}
 
 {% block content %}
 
@@ -30,6 +31,18 @@
 <p><a href="{% url 'user_feed' buddy.username %}">
   {% blocktrans with name=buddy.get_full_name %}Go to {{name}}'s feed{% endblocktrans %}
 </a></p>
+
+{% if user == buddy %}
+{% if notifications %}
+<h2>{% trans 'Last unread notifications' %}</h2>
+  <p class="notice-actions">
+    <a href="{% url 'notifications:mark_all_as_read' %}">{% trans 'Mark all as read' %}</a>
+  </p>
+  {% for notice in notifications %}
+    {% notify notice %}
+  {% endfor %}
+{% endif %}
+{% endif %}
 
 {% if most_rated_assets %}
 <h2>{% trans 'Most rated assets' %}</h2>
