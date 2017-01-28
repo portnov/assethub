@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-08 13:54+0000\n"
+"POT-Creation-Date: 2017-01-28 15:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,261 +19,320 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: assets/forms.py:35
+#: assets/forms.py:41
+#,python-brace-format
+#| msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
+msgid "The thumbnail is too large: {0}x{1}; maximum size allowed is {2}px"
+msgstr ""
+"Миниатюра слишком большая: {0}x{1}; наибольший разрешенный размер {2}px"
+
+#: assets/forms.py:48
 #, python-brace-format
 msgid "The image is too large: {0}x{1}; maximum size allowed is {2}px"
 msgstr ""
 "Изображение слишком большое: {0}x{1}; наибольший разрешенный размер {2}px"
 
-#: assets/models.py:42 assets/models.py:62 assets/models.py:114
+#: assets/models.py:54 assets/models.py:74 assets/models.py:129
 msgid "application"
 msgstr "приложение"
 
-#: assets/models.py:43
+#: assets/models.py:55
 msgid "applications"
 msgstr "приложения"
 
-#: assets/models.py:46 assets/models.py:64 assets/models.py:119
+#: assets/models.py:58 assets/models.py:76 assets/models.py:134
 msgid "title"
 msgstr "название"
 
-#: assets/models.py:47 assets/models.py:65
+#: assets/models.py:59 assets/models.py:77
 msgid "notes"
 msgstr "примечания"
 
-#: assets/models.py:48
+#: assets/models.py:60
 msgid "application logo"
 msgstr "логотип приложения"
 
-#: assets/models.py:49 assets/models.py:123
-#: assets/templates/assets/asset.html:28 flatmenu/models.py:14
+#: assets/models.py:61 assets/models.py:139
+#: assets/templates/assets/asset.html:43 flatmenu/models.py:14
 msgid "URL"
 msgstr "URL"
 
-#: assets/models.py:59 assets/models.py:115
+#: assets/models.py:71 assets/models.py:130
 msgid "component"
 msgstr "компонент"
 
-#: assets/models.py:60
+#: assets/models.py:72
 msgid "components"
 msgstr "компоненты"
 
-#: assets/models.py:66 assets/templates/assets/post.html:14
+#: assets/models.py:78 assets/templates/assets/post.html:14
 msgid "Upload instructions"
 msgstr "Инструкции по загрузке"
 
-#: assets/models.py:67 assets/templates/assets/asset.html:56
+#: assets/models.py:79 assets/templates/assets/asset.html:68
 msgid "Installation instructions"
 msgstr "Инструкции по установке"
 
-#: assets/models.py:68
+#: assets/models.py:80
 msgid "automatic thumbnail creation"
 msgstr "автоматическое создание миниатюр"
 
-#: assets/models.py:69
+#: assets/models.py:81
 msgctxt "component field label"
 msgid "Thumbnail is mandatory"
 msgstr "Предпросмотр обязателен"
 
-#: assets/models.py:70
+#: assets/models.py:82
+#| msgid "automatic thumbnail creation"
+msgid "Maximum thumbnail size"
+msgstr "Максимальный размер миниатюр"
+
+#: assets/models.py:83
+msgctxt "component field label"
+msgid "Big images are allowed"
+msgstr "Разрешены большие изображения"
+
+#: assets/models.py:84
+msgid "Maximum larger image size"
+msgstr "Максимальный размер большого изображения"
+
+#: assets/models.py:85
 msgid "Allowed file masks"
 msgstr "Маски разрешённых файлов"
 
-#: assets/models.py:70
+#: assets/models.py:85
 msgid "space-separated list of file masks, e.g. *.jpg"
 msgstr "Список масок, разделённых пробелом, например *.jpg"
 
-#: assets/models.py:86 assets/models.py:89
+#: assets/models.py:101 assets/models.py:104
 #, python-brace-format
 msgctxt "component title"
 msgid "{0} {1}"
 msgstr "{1} {0}"
 
-#: assets/models.py:93 assets/models.py:116
+#: assets/models.py:108 assets/models.py:131
 msgid "license"
 msgstr "лицензия"
 
-#: assets/models.py:94
+#: assets/models.py:109
 msgid "licenses"
 msgstr "лицензии"
 
-#: assets/models.py:97 flatmenu/models.py:10
+#: assets/models.py:112 flatmenu/models.py:10
 msgid "Title"
 msgstr "Название"
 
-#: assets/models.py:98
+#: assets/models.py:113
 msgid "Notes"
 msgstr "Примечания"
 
-#: assets/models.py:99
+#: assets/models.py:114
 msgid "Legal text"
 msgstr "Юридический текст"
 
-#: assets/models.py:102 assets/models.py:105
+#: assets/models.py:117 assets/models.py:120
 #, python-brace-format
 msgctxt "license title"
 msgid "{0}: {1}"
 msgstr "{0}: {1}"
 
-#: assets/models.py:110
+#: assets/models.py:125
 msgid "asset"
 msgstr "файл"
 
-#: assets/models.py:111
+#: assets/models.py:126
 msgid "assets"
 msgstr "файлы"
 
-#: assets/models.py:113
+#: assets/models.py:128
 msgid "author"
 msgstr "автор"
 
-#: assets/models.py:117
+#: assets/models.py:132
 msgid "original author"
 msgstr "автор оригинала"
 
-#: assets/models.py:118
+#: assets/models.py:133
 msgid "Originally created"
 msgstr "изначально создан"
 
-#: assets/models.py:120
+#: assets/models.py:135
 msgid "description"
 msgstr "описание"
 
-#: assets/models.py:121
+#: assets/models.py:136
 msgid "thumbnail"
 msgstr "миниатюра"
 
-#: assets/models.py:122
+#: assets/models.py:137
+msgid "larger image"
+msgstr "большое изображение"
+
+#: assets/models.py:138
 msgid "data file"
 msgstr "файл с данными"
 
-#: assets/models.py:124
+#: assets/models.py:140
 msgid "date published"
 msgstr "дата публикации"
 
-#: assets/models.py:125
+#: assets/models.py:141
 msgid "asset version"
 msgstr "версия файла"
 
-#: assets/models.py:126
+#: assets/models.py:142
 msgid "Minimum compatible application version"
 msgstr "минимальная совместимая версия приложения"
 
-#: assets/models.py:127
+#: assets/models.py:143
 msgid "Maximum compatible application version"
 msgstr "Максимальная совместимая версия приложения"
 
-#: assets/models.py:128
+#: assets/models.py:144
 msgid "tags"
 msgstr "теги"
 
-#: assets/models.py:134
+#: assets/models.py:150
 msgid "It is not allowed to upload files of this type for this component"
 msgstr "Не разрешено загружать файлы этого типа для этого компонента"
 
-#: assets/models.py:138
-msgid "You should upload thumbnail file"
-msgstr "Необходимо загрузить файл предпросмотра"
+#: assets/models.py:154
+#| msgid "It is not allowed to upload files of this type for this component"
+msgid "It is not allowed to upload big images for this component"
+msgstr "Не разрешено загружать большие изображения для этого компонента"
 
-#: assets/models.py:157
+#: assets/models.py:158
+msgid "You should upload thumbnail file"
+msgstr "Необходимо загрузить файл миниатюры"
+
+#: assets/models.py:181
 msgctxt "application version"
 msgid "any"
 msgstr "любые"
 
-#: assets/models.py:159
+#: assets/models.py:183
 msgctxt "application version"
 msgid ">= {}"
 msgstr ">= {}"
 
-#: assets/models.py:161
+#: assets/models.py:185
 msgctxt "application version"
 msgid "<= {}"
 msgstr "<= {}"
 
-#: assets/models.py:162
+#: assets/models.py:186
 #, python-brace-format
 msgctxt "application version"
 msgid ">= {0} and <= {1}"
 msgstr ">= {0} и <= {1}"
 
-#: assets/templates/assets/asset.html:18
-msgid "Uploaded by"
-msgstr "Загружен"
+#: assets/models.py:217
+msgid "Enable API"
+msgstr "Включить API"
 
-#: assets/templates/assets/asset.html:21
-msgid "License"
-msgstr "Лицензия"
+#: assets/models.py:218
+msgid "Send email notifications about comments for my assets"
+msgstr "Посылать уведомления по email о комментариях к моим файлам"
 
-#: assets/templates/assets/asset.html:24
+#: assets/models.py:219
+msgid "Send email notifications about new assets in my feed"
+msgstr "Посылать уведомления по email о новых файлах в моей ленте"
+
+#: assets/models.py:220
+msgid "Send email notifications about me being mentioned"
+msgstr "Посылать уведомления по email об упоминаниях меня"
+
+#: assets/notification.py:97
+#, python-brace-format
+msgid "[{site}]: New comment posted on {asset}"
+msgstr "[{site}]: Новый комментарий к {asset}"
+
+#: assets/notification.py:116 assets/notification.py:173
+#, python-brace-format
+msgid "[{site}]: You were mentioned"
+msgstr "[{site}]: Вы были упомянуты"
+
+#: assets/notification.py:135
+#, python-brace-format
+msgid "[{site}]: New asset posted: {asset}"
+msgstr "[{site}]: Новый файл: {asset}"
+
+#: assets/notification.py:154
+#, python-brace-format
+msgid "[{site}]: Asset updated: {asset}"
+msgstr "[{site}]: Файл обновлён: {asset}"
+
+#: assets/templates/assets/asset.html:17
+#: assets/templates/assets/asset_common.html:7
 msgid "Edit"
 msgstr "Редактировать"
 
-#: assets/templates/assets/asset.html:32 assets/templates/assets/tags.html:3
-msgid "Tags"
-msgstr "Теги"
+#: assets/templates/assets/asset.html:27
+msgid "Uploaded by"
+msgstr "Загружен"
 
-#: assets/templates/assets/asset.html:38
-msgid "No tags are assigned to this asset."
-msgstr "Для этого файла не было назначено тегов."
+#: assets/templates/assets/asset.html:30
+msgid "License"
+msgstr "Лицензия"
 
-#: assets/templates/assets/asset.html:41
-#: assets/templates/assets/asset_common.html:13
-msgctxt "voting"
-msgid "Rating"
-msgstr "Рейтинг"
-
-#: assets/templates/assets/asset.html:43
-#: assets/templates/assets/asset_common.html:15
+#: assets/templates/assets/asset.html:34
+#: assets/templates/assets/asset_common.html:19
 msgctxt "voting"
 msgid "Up"
 msgstr "Увеличить"
 
-#: assets/templates/assets/asset.html:44
-#: assets/templates/assets/asset_common.html:16
+#: assets/templates/assets/asset.html:38
+#: assets/templates/assets/asset_common.html:23
 msgctxt "voting"
 msgid "Down"
 msgstr "Уменьшить"
 
-#: assets/templates/assets/asset.html:48
+#: assets/templates/assets/asset.html:47 assets/templates/assets/tags.html:3
+msgid "Tags"
+msgstr "Теги"
+
+#: assets/templates/assets/asset.html:53
+msgid "No tags are assigned to this asset."
+msgstr "Для этого файла не было назначено тегов."
+
+#: assets/templates/assets/asset.html:57
 msgid "Asset version"
 msgstr "Версия файла"
 
-#: assets/templates/assets/asset.html:50
+#: assets/templates/assets/asset.html:59
 msgid "Compatible application versions"
 msgstr "Совместимые версии приложения"
 
-#: assets/templates/assets/asset.html:52
+#: assets/templates/assets/asset.html:61
 #, python-format
 msgid "Download the asset (%(name)s, %(size)s)"
 msgstr "Скачать файл (%(name)s, %(size)s)"
 
-#: assets/templates/assets/asset.html:62
-#: assets/templates/assets/asset_common.html:18
+#: assets/templates/assets/asset.html:74
+#: assets/templates/assets/asset_common.html:26
 msgid "Comments"
 msgstr "Комментарии"
 
-#: assets/templates/assets/asset.html:70
+#: assets/templates/assets/asset.html:82
 msgctxt "comment post date"
 msgid "at"
 msgstr " "
 
-#: assets/templates/assets/asset.html:80
+#: assets/templates/assets/asset.html:92
 msgid "No comments yet."
 msgstr "Комментариев ещё нет."
 
-#: assets/templates/assets/asset.html:84
+#: assets/templates/assets/asset.html:96
 msgid "Leave a comment:"
 msgstr "Оставить комментарий:"
 
-#: assets/templates/assets/asset.html:95 assets/templates/assets/post.html:22
+#: assets/templates/assets/asset.html:107 assets/templates/assets/post.html:22
+#: assets/templates/comments/assets/Asset/preview.html:47
+#: assets/templates/comments/preview.html:46
 msgid "Post"
 msgstr "Отправить"
 
-#: assets/templates/assets/asset.html:96
-msgid "Preview"
-msgstr "Предпросмотр"
-
-#: assets/templates/assets/asset.html:102
+#: assets/templates/assets/asset.html:113
 msgid "Please <a href=\"{{login_url}}\">log in</a> to leave a comment."
 msgstr ""
 "Пожалуйста, <a href=\"{{login_url}}\">войдите</a>, чтобы оставить "
@@ -287,40 +346,85 @@ msgstr "Предпросмотр недоступен"
 msgid "by"
 msgstr "от"
 
-#: assets/templates/assets/default.html:100
-msgctxt "site_greeting"
-msgid "Hello,"
-msgstr "Приветствуем,"
-
-#: assets/templates/assets/default.html:102
+#: assets/templates/assets/default.html:109
 msgid "Administration"
 msgstr "Администрирование"
 
-#: assets/templates/assets/default.html:104
+#: assets/templates/assets/default.html:114
+#| msgid "applications"
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: assets/templates/assets/default.html:116
 msgid "Log out"
 msgstr "Выйти"
 
-#: assets/templates/assets/default.html:106
+#: assets/templates/assets/default.html:118
 #: assets/templates/registration/login.html:5
 #: assets/templates/registration/login.html:11
 msgid "Log in"
 msgstr "Войти"
 
-#: assets/templates/assets/default.html:134 assets/views/asset.py:189
+#: assets/templates/assets/default.html:119
+msgid "Register"
+msgstr "Регистрация"
+
+#: assets/templates/assets/default.html:126
+msgctxt "site_greeting"
+msgid "Hello,"
+msgstr "Приветствуем,"
+
+#: assets/templates/assets/default.html:145 assets/views/asset.py:149
 msgid "Post an asset"
 msgstr "Поместить файл"
 
-#: assets/templates/assets/default.html:142
+#: assets/templates/assets/default.html:153
 msgid "search"
 msgstr "поиск"
 
-#: assets/templates/assets/default.html:144
+#: assets/templates/assets/default.html:155
 msgid "Advanced search"
 msgstr "Расширенный поиск"
 
-#: assets/templates/assets/edit_profile.html:9
+#: assets/templates/assets/edit_profile.html:10
 msgid "Save"
 msgstr "Сохранить"
+
+#: assets/templates/assets/edit_profile.html:16
+msgid "You can use the API."
+msgstr "Вы можете использовать API"
+
+#: assets/templates/assets/edit_profile.html:20
+#, python-format
+msgid ""
+"API usage currently is not enabled. Please follow <a href="
+"\"%(enable_api_url)s\">this link</a> to enable API usage."
+msgstr "API сейчас не включено. Пожалуйста пройдите <a href=\"%(enable_api_url)s\">по ссылке</a>, чтобы включить API."
+
+#: assets/templates/assets/enable_api.html:5
+msgid "API usage is now enabled."
+msgstr "API теперь включено."
+
+#: assets/templates/assets/enable_api.html:8
+msgid "You can use your current password to access API."
+msgstr "Вы можете использовать ваш текущий пароль для доступа к API"
+
+#: assets/templates/assets/enable_api.html:12
+msgid "Please use the following password for API:"
+msgstr "Пожалуйста, используйте следующий пароль для API:"
+
+#: assets/templates/assets/enable_api.html:16
+msgid ""
+"Pleas save this password in safe place. This password will not be shown you "
+"again if you visit this page next time."
+msgstr "Пожалуйста, сохраните этот пароль в надёжном месте. Этот пароль не будет показан вам снова, если вы посетите эту страницу ещё раз."
+
+#: assets/templates/assets/enable_api.html:21
+#, python-format
+msgid ""
+"You may <a href=\"%(change_password_url)s\">change your password</a> if you "
+"wish."
+msgstr "Вы можете <a href=\"%(change_password_url)s\">изменить ваш пароль</a>, если хотите."
 
 #: assets/templates/assets/index.html:12 assets/templates/assets/post.html:7
 msgid "Application"
@@ -343,6 +447,35 @@ msgstr "Краткое описание"
 msgctxt "license"
 msgid "Legal text"
 msgstr "Юридический текст"
+
+#: assets/templates/assets/notification/asset_mention.html:9
+msgid "mentioned you in"
+msgstr "упомянул вас в"
+
+#: assets/templates/assets/notification/asset_mention.html:13
+#: assets/templates/assets/notification/asset_updated.html:13
+#: assets/templates/assets/notification/comment_mention.html:13
+#: assets/templates/assets/notification/new_asset_posted.html:13
+#: assets/templates/assets/notification/new_comment_posted.html:11
+msgid "ago"
+msgstr "назад"
+
+#: assets/templates/assets/notification/asset_updated.html:9
+msgid "updated"
+msgstr "обновлен"
+
+#: assets/templates/assets/notification/comment_mention.html:9
+msgid "mentioned you in comment for"
+msgstr "упомянул вас в комментарии к"
+
+#: assets/templates/assets/notification/new_asset_posted.html:9
+msgid "posted"
+msgstr "поместил"
+
+#: assets/templates/assets/notification/new_comment_posted.html:9
+msgctxt "comment notification"
+msgid "commented"
+msgstr "прокомментировал"
 
 #: assets/templates/assets/pagination.html:5
 msgid "previous"
@@ -414,90 +547,147 @@ msgstr "Навигация"
 msgid "All users"
 msgstr "Все пользователи"
 
+#: assets/templates/comments/assets/Asset/preview.html:8
+#: assets/templates/comments/assets/Asset/preview.html:14
+#: assets/templates/comments/assets/Asset/preview.html:25
+#: assets/templates/comments/preview.html:8
+#: assets/templates/comments/preview.html:14
+msgid "Preview your comment"
+msgstr "Просмотрите ваш комментарий"
+
+#: assets/templates/comments/assets/Asset/preview.html:23
+#: assets/templates/comments/preview.html:23
+msgid "Please correct the error below"
+msgid_plural "Please correct the errors below"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: assets/templates/comments/assets/Asset/preview.html:28
+#: assets/templates/comments/preview.html:27
+#| msgctxt "application version"
+#| msgid "any"
+msgid "and"
+msgstr "и"
+
+#: assets/templates/comments/assets/Asset/preview.html:29
+#: assets/templates/comments/preview.html:28
+msgid "Post your comment"
+msgstr "Оставьте ваш комментарий"
+
+#. Translators: This string follows the 'Post your comment' submit button.
+#: assets/templates/comments/assets/Asset/preview.html:31
+#: assets/templates/comments/preview.html:30
+msgid "or make changes"
+msgstr "или внесите изменения"
+
+#: assets/templates/comments/assets/Asset/preview.html:48
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: assets/templates/notifications/list.html:7
+#: assets/templates/notifications/list.html:13
+#, python-format
+msgid "Notifications for %(name)s"
+msgstr "Уведомления для %(name)s"
+
+#: assets/templates/notifications/list.html:19
+msgid "Mark all as read"
+msgstr "Пометить все как прочитанные"
+
+#: assets/templates/pagedown/widgets/default.html:8
+msgid "Click here to show or hide preview"
+msgstr "Нажмите здесь, чтобы показать или скрыть предпросмотр"
+
+#: assets/templates/pagedown/widgets/default.html:8
+msgid "Preview:"
+msgstr "Предпросмотр:"
+
 #: assets/templates/registration/registration_form.html:5
 #: assets/templates/registration/registration_form.html:11
 msgid "Registration"
 msgstr "Регистрация"
 
-#: assets/views/asset.py:47
-msgid "application {}"
-msgstr "приложение {}"
-
-#: assets/views/asset.py:52
-msgid "component {}"
-msgstr "компонент {}"
-
-#: assets/views/asset.py:56
-msgid "tag {}"
-msgstr "тег {}"
-
-#: assets/views/asset.py:60
-msgid "tags {}"
-msgstr "теги {}"
-
-#: assets/views/asset.py:63
-msgid "title contains `{}'"
-msgstr "название содержит `{}'"
-
-#: assets/views/asset.py:66
-msgid "author is {}"
-msgstr "автор {}"
-
-#: assets/views/asset.py:69
-msgid "original author {}"
-msgstr "автор оригинала {}"
-
-#: assets/views/asset.py:72
-msgid "license {}"
-msgstr "лицензия {}"
-
-#: assets/views/asset.py:76
-msgid "from users followed by {}"
-msgstr "от пользователей, отслеживаемых {}"
-
-#: assets/views/asset.py:85
-msgid "compatible with application version {}"
-msgstr "совместимые с версией приложения {}"
-
-#: assets/views/asset.py:88
-msgid "version is {}"
-msgstr "версия {}"
-
-#: assets/views/asset.py:95
+#: assets/views/asset.py:51
 msgid "Assets by criteria"
 msgstr "Файлы по критериям"
 
-#: assets/views/asset.py:114
+#: assets/views/asset.py:74
 msgid "Last uploads"
 msgstr "Последние загрузки"
 
-#: assets/views/asset.py:122
+#: assets/views/asset.py:82
 #, python-brace-format
 msgid "Feed for user {0}"
 msgstr "Лента пользователя {0}"
 
-#: assets/views/asset.py:208
+#: assets/views/asset.py:168
 msgid "Edit an asset"
 msgstr "Редактировать файл"
 
-#: assets/views/asset.py:245
+#: assets/views/asset.py:194
 msgid "Search results: {}"
 msgstr "Результаты поиска: {}"
 
-#: assets/views/asset.py:253 assets/views/asset.py:262
+#: assets/views/asset.py:202 assets/views/asset.py:211
 msgid "Search for assets"
 msgstr "Поиск файлов"
+
+#: assets/views/common.py:50
+msgid "application {}"
+msgstr "приложение {}"
+
+#: assets/views/common.py:55
+msgid "component {}"
+msgstr "компонент {}"
+
+#: assets/views/common.py:59
+msgid "tag {}"
+msgstr "тег {}"
+
+#: assets/views/common.py:63
+msgid "tags {}"
+msgstr "теги {}"
+
+#: assets/views/common.py:66
+msgid "title contains `{}'"
+msgstr "название содержит `{}'"
+
+#: assets/views/common.py:69
+msgid "author is {}"
+msgstr "автор {}"
+
+#: assets/views/common.py:72
+msgid "original author {}"
+msgstr "автор оригинала {}"
+
+#: assets/views/common.py:75
+msgid "license {}"
+msgstr "лицензия {}"
+
+#: assets/views/common.py:79
+msgid "from users followed by {}"
+msgstr "от пользователей, отслеживаемых {}"
+
+#: assets/views/common.py:88
+msgid "compatible with application version {}"
+msgstr "совместимые с версией приложения {}"
+
+#: assets/views/common.py:91
+msgid "version is {}"
+msgstr "версия {}"
 
 #: assets/views/users.py:50
 #, python-brace-format
 msgid "{0}'s profile"
 msgstr "Профиль {0}"
 
-#: assets/views/users.py:62
+#: assets/views/users.py:63
 msgid "List of users"
 msgstr "Список пользователей"
 
-#: assets/views/users.py:77
+#: assets/views/users.py:80
 msgid "Edit profile"
 msgstr "Редактирование профиля"
 
@@ -516,6 +706,10 @@ msgstr "Страница и URL не могут быть указаны одно
 #: flatmenu/models.py:21
 msgid "You should specify either page or URL"
 msgstr "Необходимо указать страницу или URL"
+
+#~ msgctxt "voting"
+#~ msgid "Rating"
+#~ msgstr "Рейтинг"
 
 #~| msgid "{} assets"
 #~ msgid "asses"
